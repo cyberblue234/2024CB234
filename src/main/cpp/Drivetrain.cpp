@@ -15,10 +15,10 @@ Drivetrain::Drivetrain() {
         [this](frc::ChassisSpeeds speeds){ Drive(speeds); }, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
         // Already did this in SwerveModule? Maybe can just use previous definitions
         pathplanner::HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-            pathplanner::PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
-            pathplanner::PIDConstants(5.0, 0.0, 0.0), // Rotation PID constants
-            4.5_mps, // Max module speed, in m/s
-            0.4_m, // Drive base radius in meters. Distance from robot center to furthest module.
+            pathplanner::PIDConstants(SwerveModule::kDriveP, SwerveModule::kDriveI, SwerveModule::kDriveD), // Translation PID constants
+            pathplanner::PIDConstants(SwerveModule::kAngleP, SwerveModule::kAngleI, SwerveModule::kAngleD), // Rotation PID constants
+            Drivetrain::MAX_SPEED, // Max module speed, in m/s
+            0.4191_m, // Drive base radius in meters. Distance from robot center to furthest module.
             pathplanner::ReplanningConfig() // Default path replanning config. See the API for the options here
         ),
         []() {
@@ -57,16 +57,6 @@ void Drivetrain::DriveControl()
     else
     {
         swerve.DriveWithJoystick(false);
-    }
-
-    double pitch = GetGyroPitch();
-    if (pitch > 2.5 || pitch < -2.5)
-    {
-        frc::SmartDashboard::PutBoolean("PITCH_LED", true);
-    }
-    else
-    {
-        frc::SmartDashboard::PutBoolean("PITCH_LED", false);
     }
 
     frc::SmartDashboard::PutNumber("GYRO_PITCH", GetGyroPitch());
