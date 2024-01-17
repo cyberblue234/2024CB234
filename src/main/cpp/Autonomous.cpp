@@ -1,5 +1,8 @@
+#include "Autonomous.h"
 
-void Autonomous::AutoControl()
+void Autonomous::RunAuto(std::string pathName) 
 {
-    
+    auto path = pathplanner::PathPlannerPath::fromPathFile(pathName);
+
+    pathplanner::AutoBuilder::followPath(path);
 }

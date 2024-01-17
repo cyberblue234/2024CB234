@@ -1,6 +1,8 @@
 #ifndef _DRIVETRAIN_H
 #define _DRIVETRAIN_H
 
+#include <numbers>
+
 #include <frc/XboxController.h>
 #include <frc/DriverStation.h>
 
@@ -20,12 +22,12 @@
 #include <pathplanner/lib/util/PIDConstants.h>
 #include <pathplanner/lib/util/ReplanningConfig.h>
 
-#include <numbers>
 #include "ctre/Phoenix.h"
 #include "AHRS.h"
 
 #include "RobotMap.h"
 #include "SwerveModule.h"
+
 // Pathplanner requires class to be a subclass of the frc2::Subsystem 
 //  - also gives way for us to use periodic in each subsystem (I think) as well as other benefits
 class Drivetrain : frc2::Subsystem
@@ -130,12 +132,21 @@ public:
     static constexpr double BL_DRIVE_ADJUSTMENT = 1.0;
     static constexpr double BR_DRIVE_ADJUSTMENT = 1.0;
 
-private:
-    frc::Translation2d frontLeftLocation{+16.5_in, +16.5_in};
-    frc::Translation2d frontRightLocation{+16.5_in, -16.5_in};
-    frc::Translation2d backLeftLocation{-16.5_in, +16.5_in};
-    frc::Translation2d backRightLocation{-16.5_in, -16.5_in};
+    pathplanner::HolonomicPathFollowerConfig holonomicConfig {
+            pathplanner::PIDConstants(SwerveModule::kDriveP, SwerveModule::kDriveI, SwerveModule::kDriveD), // Translation PID constants
+            pathplanner::PIDConstants(SwerveModule::kAngleP, SwerveModule::kAngleI, SwerveModule::kAngleD), // Rotation PID constants
+            MAX_SPEED, // Max module speed, in m/s
+            frontLeftLocation.Norm(), // Drive base radius in meters. Distance from robot center to furthest module.
+            pathplanner::ReplanningConfig() // Default path replanning config. See the API for the options here
+    };
 
+private:
+
+    frc::Translation2d frontLeftLocation{+0.4191_m, +0.4191_m}; 
+    frc::Translation2d frontRightLocation{+0.4191_m, -0.4191_m};
+    frc::Translation2d backLeftLocation{-0.4191_m, +0.4191_m};
+    frc::Translation2d backRightLocation{-0.4191_m, -0.4191_m};
+    
     SwerveModule frontLeft{FL_DRIVE_ADDRESS, FL_SWERVE_ADDRESS, FL_CANCODER_ADDRESS, FL_OFFSET_DEGREES};
     SwerveModule frontRight{FR_DRIVE_ADDRESS, FR_SWERVE_ADDRESS, FR_CANCODER_ADDRESS, FR_OFFSET_DEGREES};
     SwerveModule backLeft{BL_DRIVE_ADDRESS, BL_SWERVE_ADDRESS, BL_CANCODER_ADDRESS, BL_OFFSET_DEGREES};

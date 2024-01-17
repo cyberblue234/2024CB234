@@ -1,8 +1,9 @@
-#include <pathplanner/lib/commands/PathPlannerAuto.h>
-#include <pathplanner/lib/commands/FollowPathHolonomic.h>
+#include <pathplanner/lib/auto/AutoBuilder.h>
+#include <pathplanner/lib/path/PathPlannerPath.h>
 
 class Autonomous 
 {
     public:
         void AutoControl();
-}
+        void RunAuto(std::string pathName);
+};
