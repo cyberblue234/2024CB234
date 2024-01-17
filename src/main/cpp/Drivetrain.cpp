@@ -1,12 +1,31 @@
-
-#include "RobotExt.h"
-#include "SwerveModule.h"
 #include "Drivetrain.h"
-
-#include <frc/geometry/Rotation2d.h>
-#include <numbers>
+#include "RobotExt.h"
 
 bool fieldRelative = true;
+
+Drivetrain::Drivetrain() {
+    gyro.Reset();
+    // copies from https://pathplanner.dev/pplib-getting-started.html
+    pathplanner::AutoBuilder::configureHolonomic(
+        [this](){ return GetPose(); }, // Robot pose supplier
+        [this](frc::Pose2d pose){ ResetPose(pose); }, // Method to reset odometry (will be called if your auto has a starting pose)
+        [this](){ return GetCurrentSpeeds(); }, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+        [this](frc::ChassisSpeeds speeds){ Drive(speeds); }, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+        Drivetrain::holonomicConfig,
+        []() {
+            // Boolean supplier that controls when the path will be mirrored for the red alliance
+            // This will flip the path being followed to the red side of the field.
+            // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+            auto alliance = frc::DriverStation::GetAlliance();
+            if (alliance) {
+                return alliance.value() == frc::DriverStation::Alliance::kRed;
+            }
+            return false;
+        },
+        this // Reference to this subsystem to set requirements
+    );
+}
 
 void Drivetrain::DriveControl()
 {
@@ -29,16 +48,6 @@ void Drivetrain::DriveControl()
     else
     {
         swerve.DriveWithJoystick(false);
-    }
-
-    double pitch = GetGyroPitch();
-    if (pitch > 2.5 || pitch < -2.5)
-    {
-        frc::SmartDashboard::PutBoolean("PITCH_LED", true);
-    }
-    else
-    {
-        frc::SmartDashboard::PutBoolean("PITCH_LED", false);
     }
 
     frc::SmartDashboard::PutNumber("GYRO_PITCH", GetGyroPitch());
@@ -110,9 +119,11 @@ void Drivetrain::DriveWithJoystick(bool limitSpeed)
         ResetGyroAngle();
     }
 
-    Drive(xSpeed, ySpeed, rotation, fieldRelative);
+    frc::Rotation2d heading = gyro.GetRotation2d();
+    chassisSpeeds = fieldRelative ? frc::ChassisSpeeds::FromFieldRelativeSpeeds(ySpeed, xSpeed, rotation, heading)
+                                                                : frc::ChassisSpeeds{ySpeed, xSpeed, rotation};
 
-    GetDriveDistance();
+    Drive(chassisSpeeds);
 
     frc::SmartDashboard::PutNumber("FWD", fwd);
     frc::SmartDashboard::PutNumber("STF", stf);
@@ -122,13 +133,13 @@ void Drivetrain::DriveWithJoystick(bool limitSpeed)
     frc::SmartDashboard::PutNumber("ROTATION", (double)rotation);
 }
 
-void Drivetrain::Drive(units::meters_per_second_t xSpeed, units::meters_per_second_t ySpeed,
-                       units::radians_per_second_t rotation, bool fieldRelative)
-{
-    frc::Rotation2d heading = gyro.GetRotation2d();
+// We need to change Drive() to only take in a ChassisSpeeds parameter. 
 
-    auto states = kinematics.ToSwerveModuleStates(fieldRelative ? frc::ChassisSpeeds::FromFieldRelativeSpeeds(ySpeed, xSpeed, rotation, heading)
-                                                                : frc::ChassisSpeeds{ySpeed, xSpeed, rotation});
+// Pass in FromRelativeSpeeds if field oriented, so path planner can use robot centric
+
+void Drivetrain::Drive(frc::ChassisSpeeds speeds)
+{
+    auto states = kinematics.ToSwerveModuleStates(chassisSpeeds);
 
     kinematics.DesaturateWheelSpeeds(&states, MAX_SPEED);
 
@@ -148,8 +159,6 @@ void Drivetrain::Drive(units::meters_per_second_t xSpeed, units::meters_per_seco
     frc::SmartDashboard::PutNumber("BLSPEED", backLeft.GetDriveRPM() * 0.002234); 
     frc::SmartDashboard::PutNumber("BRSPEED", backRight.GetDriveRPM() * 0.002234);
     frc::SmartDashboard::PutNumber("GYRO", gyro.GetAngle());
-    frc::SmartDashboard::PutNumber("HEADING", (double)heading.Degrees());
-    frc::SmartDashboard::PutNumber("FL_RPM", frontLeft.GetDriveRPM());
 }
 
 frc::Pose2d Drivetrain::UpdateOdometry() 

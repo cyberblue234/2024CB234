@@ -11,6 +11,7 @@
 
 #include "Drivetrain.h"
 #include "Teleop.h"
+#include "Autonomous.h"
 #include "Limelight.h"
 
 frc::PowerDistribution pdp{1, frc::PowerDistribution::ModuleType::kRev};
@@ -18,6 +19,7 @@ frc::XboxController gamePad{0};
 frc::Joystick controls(1);
 
 Teleop teleop;
+Autonomous autonomous;
 Drivetrain swerve;
 Limelight limelight3("limelight");
 
@@ -37,6 +39,7 @@ public:
 
     void AutonomousPeriodic() override
     {
+        autonomous.RunAuto("Test Auto");
     }
 
     void TeleopInit() override

@@ -1,13 +1,5 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 #include "SwerveModule.h"
 #include "Drivetrain.h"
-
-#include "ctre/Phoenix.h"
-#include <frc/geometry/Rotation2d.h>
-#include <numbers>
 
 // SwerveModule constructor
 SwerveModule::SwerveModule(int driveMotorChannel, int swerveMotorChannel, int canCoderChannel, double offsetDegrees)
@@ -48,14 +40,6 @@ SwerveModule::SwerveModule(int driveMotorChannel, int swerveMotorChannel, int ca
     canCoder.ConfigMagnetOffset(offsetDegrees);
     canCoder.SetPosition(0);
     swerveMotor.SetSelectedSensorPosition(0);
-}
-
-// Gets the relative rotational position of the module
-// Return the relative rotational position of the angle motor in degrees
-// GetAbsolutePosition returns 0 - 360 degrees (default)
-frc::Rotation2d SwerveModule::GetAngle()
-{
-    return (frc::Rotation2d(units::angle::degree_t(canCoder.GetAbsolutePosition())));
 }
 
 // Set the speed + rotation of the swerve module from a SwerveModuleState object

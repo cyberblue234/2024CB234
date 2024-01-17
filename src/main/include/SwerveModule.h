@@ -1,19 +1,16 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 #pragma once
 
-// #include <frc/Encoder.h>
 #include <frc/kinematics/SwerveModuleState.h>
 #include <frc/kinematics/SwerveModulePosition.h>
+#include <frc/geometry/Rotation2d.h>
+
 #include <units/angular_velocity.h>
 #include <units/time.h>
 #include <units/velocity.h>
 #include <units/voltage.h>
 #include <units/length.h>
-#include <numbers>
 
+#include <numbers>
 #include "ctre/Phoenix.h"
 
 class SwerveModule
@@ -21,8 +18,11 @@ class SwerveModule
 public:
     SwerveModule(int driveMotorChannel, int swerveMotorChannel, int canCoderChannel, double offsetDegrees);
 
-    frc::Rotation2d GetAngle();
-
+    // Gets the relative rotational position of the module
+    // Return the relative rotational position of the angle motor in degrees
+    // GetAbsolutePosition returns 0 - 360 degrees (default)
+    frc::Rotation2d GetAngle() { return (frc::Rotation2d(units::angle::degree_t(canCoder.GetAbsolutePosition()))); }
+    
     void SetDesiredState(frc::SwerveModuleState desiredState, double speedAdjustment);
     // Returns the desired count for the swerve encoder
     double GetDesiredCount() { return desiredCount; }
@@ -63,17 +63,17 @@ public:
     static constexpr double ENCODER_METERS_PER_COUNT = ENCODER_INCHES_PER_COUNT / 39.37;
         // 6.54 : 1
 
+    static constexpr double kDriveP = 15.0;
+    static constexpr double kDriveI = 0.01;
+    static constexpr double kDriveD = 0.1;
+    static constexpr double kDriveF = 0.2;
+
+    static constexpr double kAngleP = 0.30;
+    static constexpr double kAngleI = 0.002;
+    static constexpr double kAngleD = 0.0;
+    static constexpr double kAngleF = 0.0;
+
 private:
-    const double kDriveP = 15.0;
-    const double kDriveI = 0.01;
-    const double kDriveD = 0.1;
-    const double kDriveF = 0.2;
-
-    const double kAngleP = 0.30;
-    const double kAngleI = 0.002;
-    const double kAngleD = 0.0;
-    const double kAngleF = 0.0;
-
     const double kCancoderCountsPerRotation = 4096;
     const double kCancoderFeedbackCoefficient = 0.087890625;
 

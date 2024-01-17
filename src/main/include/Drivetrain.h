@@ -1,37 +1,58 @@
 #ifndef _DRIVETRAIN_H
 #define _DRIVETRAIN_H
 
+#include <numbers>
+
 #include <frc/XboxController.h>
+#include <frc/DriverStation.h>
+
 #include <frc/smartdashboard/SmartDashboard.h>
-#include <frc/geometry/Translation2d.h>
+#include <frc/smartdashboard/SendableChooser.h>
+
 #include <frc/kinematics/SwerveDriveKinematics.h>
 #include <frc/kinematics/SwerveDriveOdometry.h>
-#include <frc/smartdashboard/SendableChooser.h>
 #include <frc/kinematics/ChassisSpeeds.h>
+
 #include <frc/geometry/Pose2d.h>
-#include <numbers>
+#include <frc/geometry/Rotation2d.h>
+#include <frc/geometry/Translation2d.h>
+
+#include <pathplanner/lib/auto/AutoBuilder.h>
+#include <pathplanner/lib/util/HolonomicPathFollowerConfig.h>
+#include <pathplanner/lib/util/PIDConstants.h>
+#include <pathplanner/lib/util/ReplanningConfig.h>
+
 #include "ctre/Phoenix.h"
 #include "AHRS.h"
 
 #include "RobotMap.h"
 #include "SwerveModule.h"
 
-class Drivetrain
+// Pathplanner requires class to be a subclass of the frc2::Subsystem 
+//  - also gives way for us to use periodic in each subsystem (I think) as well as other benefits
+class Drivetrain : frc2::Subsystem
 {
 public:
-    Drivetrain()
-    {
-        gyro.Reset();
-    }
+    Drivetrain();
 
     // Main function of the drivetrain, runs all things related to driving
     void DriveControl();
     // Gets all of the joystick values and does calculations, then runs Drive(). Provided bool slows down the speed if true
     void DriveWithJoystick(bool limitSpeed);
-    // Sets all of the motors using kinematics calulcations. Three provided speeds and a bool that determines field relative
-    void Drive(units::meters_per_second_t xSpeed, units::meters_per_second_t ySpeed,
-               units::radians_per_second_t rotation, bool fieldRelative);
+    // Sets all of the motors using kinematics calulcations. Uses the provided ChassisSpeeds for calculations
+    void Drive(frc::ChassisSpeeds speeds);
+    // Updates the odometry. Must be ran every cycle.
     frc::Pose2d UpdateOdometry();
+    // Returns the Pose2d of the robot
+    frc::Pose2d GetPose() { return odometry.GetPose(); };
+    // Resets the Pose2d of the robot
+    void ResetPose(frc::Pose2d newPose) { odometry.ResetPosition(gyro.GetRotation2d(),
+        {frontLeft.GetModulePosition(), frontRight.GetModulePosition(),
+        backLeft.GetModulePosition(), backRight.GetModulePosition()},
+        newPose); };
+    // Returns the current ChassisSpeeds of the robot
+    frc::ChassisSpeeds GetCurrentSpeeds() { return chassisSpeeds; };
+
     // Sets the motors in an X shape and sets the speed to zero
     void SetAnchorState();
     // Drives at a provided speed and angle
@@ -111,12 +132,21 @@ public:
     static constexpr double BL_DRIVE_ADJUSTMENT = 1.0;
     static constexpr double BR_DRIVE_ADJUSTMENT = 1.0;
 
-private:
-    frc::Translation2d frontLeftLocation{+16.5_in, +16.5_in};
-    frc::Translation2d frontRightLocation{+16.5_in, -16.5_in};
-    frc::Translation2d backLeftLocation{-16.5_in, +16.5_in};
-    frc::Translation2d backRightLocation{-16.5_in, -16.5_in};
+    pathplanner::HolonomicPathFollowerConfig holonomicConfig {
+            pathplanner::PIDConstants(SwerveModule::kDriveP, SwerveModule::kDriveI, SwerveModule::kDriveD), // Translation PID constants
+            pathplanner::PIDConstants(SwerveModule::kAngleP, SwerveModule::kAngleI, SwerveModule::kAngleD), // Rotation PID constants
+            MAX_SPEED, // Max module speed, in m/s
+            frontLeftLocation.Norm(), // Drive base radius in meters. Distance from robot center to furthest module.
+            pathplanner::ReplanningConfig() // Default path replanning config. See the API for the options here
+    };
 
+private:
+
+    frc::Translation2d frontLeftLocation{+0.4191_m, +0.4191_m}; 
+    frc::Translation2d frontRightLocation{+0.4191_m, -0.4191_m};
+    frc::Translation2d backLeftLocation{-0.4191_m, +0.4191_m};
+    frc::Translation2d backRightLocation{-0.4191_m, -0.4191_m};
+    
     SwerveModule frontLeft{FL_DRIVE_ADDRESS, FL_SWERVE_ADDRESS, FL_CANCODER_ADDRESS, FL_OFFSET_DEGREES};
     SwerveModule frontRight{FR_DRIVE_ADDRESS, FR_SWERVE_ADDRESS, FR_CANCODER_ADDRESS, FR_OFFSET_DEGREES};
     SwerveModule backLeft{BL_DRIVE_ADDRESS, BL_SWERVE_ADDRESS, BL_CANCODER_ADDRESS, BL_OFFSET_DEGREES};
@@ -127,6 +157,7 @@ private:
     double lastGyroRoll;
     bool alignmentOn = false;
     bool gyro_reset_reversed = false;
+    frc::ChassisSpeeds chassisSpeeds;
 
     frc::SwerveDriveKinematics<4> kinematics{
         frontLeftLocation, frontRightLocation, backLeftLocation, backRightLocation};
