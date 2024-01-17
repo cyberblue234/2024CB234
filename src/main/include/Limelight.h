@@ -12,6 +12,11 @@
 class Limelight
 {
 public:
+
+    //Constructors
+    Limelight(std::string name);
+    Limelight();
+
     enum LEDMode
     {
         kLEDPipline,
@@ -45,6 +50,7 @@ public:
     void UpdateLimelightDashboard();
 
 private:
+    std::string limelight_name;
     double target_x;
     double target_y;
     double target_area;

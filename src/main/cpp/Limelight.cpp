@@ -3,10 +3,21 @@
 #include "Limelight.h"
 
 
+//Constructors, Name is fed in for the NetworkTables name
+Limelight::Limelight(std::string name)
+{
+    limelight_name = name;
+}
+
+Limelight::Limelight()
+{
+    limelight_name = "limelight";
+}
+
 //Grabs Data from Limelight NetworkTables
 void Limelight::UpdateLimelightTracking()
 {
-    std::shared_ptr<nt::NetworkTable> table = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
+    std::shared_ptr<nt::NetworkTable> table = nt::NetworkTableInstance::GetDefault().GetTable(limelight_name);
 
     //Getting Single Numbers from Limelight NetworkTable
 
@@ -50,7 +61,9 @@ void Limelight::SetCamMode(CamMode m)
     nt::NetworkTableInstance::GetDefault().GetTable("limelight")->PutNumber("camMode", cam_mode);
 }
 
+
 //Gets Distance from an AprilTag in Meters
+//MAKE SURE THIS CAN SEE A TAG BEFORE CALLING
 auto Limelight::GetDistanceFromTarget()
 {
     //Grabs the distance to target on the x and z planes (forward/back, left/right)
@@ -68,6 +81,7 @@ auto Limelight::GetDistanceFromTarget()
 }
 
 //Returns the Robot Pose in Field space as a Pose2d Object
+//MAKE SURE THIS CAN SEE A TAG BEFORE CALLING
 frc::Pose2d Limelight::GetRobotPose()
 {
     auto x = units::meter_t(botpose.at(0)); //Gets X field coord from X limelight coord
