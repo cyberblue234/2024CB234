@@ -126,9 +126,9 @@ void Drivetrain::Drive(units::meters_per_second_t xSpeed, units::meters_per_seco
                        units::radians_per_second_t rotation, bool fieldRelative)
 {
     frc::Rotation2d heading = gyro.GetRotation2d();
-
-    auto states = kinematics.ToSwerveModuleStates(fieldRelative ? frc::ChassisSpeeds::FromFieldRelativeSpeeds(ySpeed, xSpeed, rotation, heading)
-                                                                : frc::ChassisSpeeds{ySpeed, xSpeed, rotation});
+    chassisSpeeds = fieldRelative ? frc::ChassisSpeeds::FromFieldRelativeSpeeds(ySpeed, xSpeed, rotation, heading)
+                                                                : frc::ChassisSpeeds{ySpeed, xSpeed, rotation};
+    auto states = kinematics.ToSwerveModuleStates(chassisSpeeds);
 
     kinematics.DesaturateWheelSpeeds(&states, MAX_SPEED);
 

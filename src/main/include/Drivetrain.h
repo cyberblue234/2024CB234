@@ -31,7 +31,18 @@ public:
     // Sets all of the motors using kinematics calulcations. Three provided speeds and a bool that determines field relative
     void Drive(units::meters_per_second_t xSpeed, units::meters_per_second_t ySpeed,
                units::radians_per_second_t rotation, bool fieldRelative);
+
     frc::Pose2d UpdateOdometry();
+
+    frc::Pose2d GetPose() { return odometry.GetPose(); };
+
+    void ResetPose(frc::Pose2d newPose) { odometry.ResetPosition(gyro.GetRotation2d(),
+        {frontLeft.GetModulePosition(), frontRight.GetModulePosition(),
+        backLeft.GetModulePosition(), backRight.GetModulePosition()},
+        newPose); };
+
+    frc::ChassisSpeeds GetCurrentSpeed() { return chassisSpeeds; };
+
     // Sets the motors in an X shape and sets the speed to zero
     void SetAnchorState();
     // Drives at a provided speed and angle
@@ -127,6 +138,7 @@ private:
     double lastGyroRoll;
     bool alignmentOn = false;
     bool gyro_reset_reversed = false;
+    frc::ChassisSpeeds chassisSpeeds;
 
     frc::SwerveDriveKinematics<4> kinematics{
         frontLeftLocation, frontRightLocation, backLeftLocation, backRightLocation};
