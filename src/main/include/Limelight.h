@@ -40,8 +40,9 @@ public:
     void SetLEDMode(LEDMode);
     void SetCamMode(CamMode);
     void SetPipelineID(PipelineID);
-    auto getDistanceFromTarget();
-    frc::Pose2d getRobotPose();
+    auto GetDistanceFromTarget();
+    frc::Pose2d GetRobotPose();
+    void UpdateLimelightDashboard();
 
 private:
     double target_x;
