@@ -39,6 +39,8 @@ public:
     void SetLEDMode(LEDMode);
     void SetCamMode(CamMode);
     void SetPipelineID(PipelineID);
+    auto getDistanceFromTarget();
+    // frc::Pose2d Limelight::getRobotPose();
 
 private:
     double target_x;
@@ -49,6 +51,7 @@ private:
     double april_tag_id;
 
     std::vector<double> bot_pose;
+    std::vector<double> targetpose_robotspace;
 };
 
 #endif
