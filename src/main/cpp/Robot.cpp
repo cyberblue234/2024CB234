@@ -11,6 +11,7 @@
 
 #include "Drivetrain.h"
 #include "Teleop.h"
+#include "Limelight.h"
 
 frc::PowerDistribution pdp{1, frc::PowerDistribution::ModuleType::kRev};
 frc::XboxController gamePad{0};
@@ -18,6 +19,7 @@ frc::Joystick controls(1);
 
 Teleop teleop;
 Drivetrain swerve;
+Limelight limelight3("limelight");
 
 class Robot : public frc::TimedRobot
 {
@@ -27,7 +29,6 @@ public:
         swerve.ResetGyroPitch();
         swerve.ResetGyroRoll();
         swerve.ResetGyroAngle();
-    
     }
 
     void AutonomousInit() override

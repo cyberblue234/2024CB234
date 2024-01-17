@@ -22,6 +22,9 @@ void Teleop::OperatorControls()
 	swerve.DriveControl();
 	swerve.UpdateOdometry();
 
+	limelight3.UpdateLimelightTracking(); //NetworkTables updating
+	limelight3.UpdateLimelightDashboard(); //Updates the dashboard with the new NetworkTables data
+
 	frc::SmartDashboard::PutNumber("COMPRESSOR_DRAW", pdp.GetCurrent(19));
 
 	LogTeleopData();
