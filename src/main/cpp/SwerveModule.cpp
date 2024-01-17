@@ -50,14 +50,6 @@ SwerveModule::SwerveModule(int driveMotorChannel, int swerveMotorChannel, int ca
     swerveMotor.SetSelectedSensorPosition(0);
 }
 
-// Gets the relative rotational position of the module
-// Return the relative rotational position of the angle motor in degrees
-// GetAbsolutePosition returns 0 - 360 degrees (default)
-frc::Rotation2d SwerveModule::GetAngle()
-{
-    return (frc::Rotation2d(units::angle::degree_t(canCoder.GetAbsolutePosition())));
-}
-
 // Set the speed + rotation of the swerve module from a SwerveModuleState object
 // param: desiredState - A SwerveModuleState representing the desired new state of the module
 void SwerveModule::SetDesiredState(const frc::SwerveModuleState desiredState, double speedAdjustment)

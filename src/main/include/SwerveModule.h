@@ -21,8 +21,11 @@ class SwerveModule
 public:
     SwerveModule(int driveMotorChannel, int swerveMotorChannel, int canCoderChannel, double offsetDegrees);
 
-    frc::Rotation2d GetAngle();
-
+    // Gets the relative rotational position of the module
+    // Return the relative rotational position of the angle motor in degrees
+    // GetAbsolutePosition returns 0 - 360 degrees (default)
+    frc::Rotation2d GetAngle() { return (frc::Rotation2d(units::angle::degree_t(canCoder.GetAbsolutePosition()))); }
+    
     void SetDesiredState(frc::SwerveModuleState desiredState, double speedAdjustment);
     // Returns the desired count for the swerve encoder
     double GetDesiredCount() { return desiredCount; }
