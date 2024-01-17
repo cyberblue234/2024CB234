@@ -36,21 +36,27 @@ public:
     double GetTargetY() { return target_y; };
     double GetTargetArea() { return target_area; };
     double GetAprilTagID() { return april_tag_id; };
+    double GetTotalLatency() { return pipeline_latency + capture_latency;}
     void SetLEDMode(LEDMode);
     void SetCamMode(CamMode);
     void SetPipelineID(PipelineID);
     auto getDistanceFromTarget();
-    // frc::Pose2d Limelight::getRobotPose();
+    frc::Pose2d getRobotPose();
 
 private:
     double target_x;
     double target_y;
     double target_area;
-    double target_skew;
+    double target_valid;
     double pipeline_id;
     double april_tag_id;
+    double pipeline_latency;
+    double capture_latency;
 
-    std::vector<double> bot_pose;
+    std::vector<double> botpose;
+    std::vector<double> botpose_blue;
+    std::vector<double> botpose_red;
+    
     std::vector<double> targetpose_robotspace;
 };
 
