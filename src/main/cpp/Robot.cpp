@@ -33,13 +33,19 @@ public:
         swerve.ResetGyroAngle();
     }
 
+    void RobotPeriodic() override
+    {
+        frc2::CommandScheduler::GetInstance().Run();
+    }
+
     void AutonomousInit() override
     {
+        
     }
 
     void AutonomousPeriodic() override
     {
-        autonomous.RunAuto("Test Auto");
+        
     }
 
     void TeleopInit() override
