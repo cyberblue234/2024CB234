@@ -5,13 +5,14 @@
 #include <pathplanner/lib/auto/NamedCommands.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/Commands.h>
+#include "RobotExt.h"
 
 using namespace pathplanner;
 
 void Autonomous::ConfigureAuto() 
 {
     onTheFly = frc2::cmd::RunOnce([this]() {
-    frc::Pose2d currentPose = swerve.getPose();
+    frc::Pose2d currentPose = swerve.GetPose();
 
     // The rotation component in these poses represents the direction of travel
     frc::Pose2d startPos = frc::Pose2d(currentPose.Translation(), frc::Rotation2d());
@@ -31,5 +32,5 @@ void Autonomous::ConfigureAuto()
     this->followOnTheFly = AutoBuilder::followPath(path).Unwrap();
     this->followOnTheFly->Schedule();
   }).Unwrap();
-  frc::SmartDashboard::PutData("On-the-fly path", onTheFly.get());
+  onTheFly->Schedule();
 }
