@@ -2,11 +2,11 @@
 
 class Autonomous 
 {
-    public:
-        Autonomous();
-        
-    private:
-        void ConfigureAuto();
-        std::unique_ptr<frc2::Command> onTheFly;
-        std::unique_ptr<frc2::Command> followOnTheFly;
+public:
+    void ConfigureAuto(); 
+    std::unique_ptr<frc2::Command> onTheFly;
+private:
+    
+    
+    std::unique_ptr<frc2::Command> followOnTheFly;
 };

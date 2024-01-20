@@ -51,11 +51,13 @@ public:
     void TeleopInit() override
     {
         teleop.TeleopInit();
+        autonomous.ConfigureAuto();
     }
 
     void TeleopPeriodic() override
     {
         teleop.OperatorControls();
+
     }
 
     void DisabledInit() override {}
