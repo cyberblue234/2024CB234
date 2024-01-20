@@ -1,6 +1,9 @@
 #include "RobotExt.h"
 #include "Teleop.h"
 #include "Drivetrain.h"
+#include <frc2/command/CommandPtr.h>
+#include <frc2/command/Command.h>
+#include "Robot.h"
 
 Teleop::Teleop()
 {
@@ -15,12 +18,12 @@ void Teleop::TeleopInit()
 	swerve.ResetGyroRoll();
 	swerve.ResetDriveEncoders();
 	swerve.SetDriveOpenLoopRamp(0.0);
+	
 }
 
 void Teleop::OperatorControls()
 {
 	swerve.DriveControl();
-	swerve.UpdateOdometry();
 
 	limelight3.UpdateLimelightTracking(); //NetworkTables updating
 	limelight3.UpdateLimelightDashboard(); //Updates the dashboard with the new NetworkTables data

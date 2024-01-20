@@ -17,6 +17,8 @@
 #include <frc/geometry/Rotation2d.h>
 #include <frc/geometry/Translation2d.h>
 
+#include <frc2/command/SubsystemBase.h>
+
 #include <pathplanner/lib/auto/AutoBuilder.h>
 #include <pathplanner/lib/util/HolonomicPathFollowerConfig.h>
 #include <pathplanner/lib/util/PIDConstants.h>
@@ -28,28 +30,28 @@
 #include "RobotMap.h"
 #include "SwerveModule.h"
 
-// Pathplanner requires class to be a subclass of the frc2::Subsystem 
-//  - also gives way for us to use periodic in each subsystem (I think) as well as other benefits
-class Drivetrain : frc2::Subsystem
+class Drivetrain : frc2::SubsystemBase
 {
 public:
     Drivetrain();
+
+    void Periodic() override;
 
     // Main function of the drivetrain, runs all things related to driving
     void DriveControl();
     // Gets all of the joystick values and does calculations, then runs Drive(). Provided bool slows down the speed if true
     void DriveWithJoystick(bool limitSpeed);
     // Sets all of the motors using kinematics calulcations. Uses the provided ChassisSpeeds for calculations
-    void Drive(frc::ChassisSpeeds speeds);
+    void Drive(const frc::ChassisSpeeds& speeds);
     // Updates the odometry. Must be ran every cycle.
     frc::Pose2d UpdateOdometry();
     // Returns the Pose2d of the robot
-    frc::Pose2d GetPose() { return odometry.GetPose(); };
+    const frc::Pose2d& GetPose() const { return odometry.GetPose(); };
     // Resets the Pose2d of the robot
-    void ResetPose(frc::Pose2d newPose) { odometry.ResetPosition(gyro.GetRotation2d(),
+    void ResetPose(const frc::Pose2d& pose) { odometry.ResetPosition(gyro.GetRotation2d(),
         {frontLeft.GetModulePosition(), frontRight.GetModulePosition(),
         backLeft.GetModulePosition(), backRight.GetModulePosition()},
-        newPose); };
+        pose); };
     // Returns the current ChassisSpeeds of the robot
     frc::ChassisSpeeds GetCurrentSpeeds() { return chassisSpeeds; };
 
@@ -147,12 +149,12 @@ private:
     frc::Translation2d backLeftLocation{-0.4191_m, +0.4191_m};
     frc::Translation2d backRightLocation{-0.4191_m, -0.4191_m};
     
-    SwerveModule frontLeft{FL_DRIVE_ADDRESS, FL_SWERVE_ADDRESS, FL_CANCODER_ADDRESS, FL_OFFSET_DEGREES};
-    SwerveModule frontRight{FR_DRIVE_ADDRESS, FR_SWERVE_ADDRESS, FR_CANCODER_ADDRESS, FR_OFFSET_DEGREES};
-    SwerveModule backLeft{BL_DRIVE_ADDRESS, BL_SWERVE_ADDRESS, BL_CANCODER_ADDRESS, BL_OFFSET_DEGREES};
-    SwerveModule backRight{BR_DRIVE_ADDRESS, BR_SWERVE_ADDRESS, BR_CANCODER_ADDRESS, BR_OFFSET_DEGREES};
+    SwerveModule frontLeft;
+    SwerveModule frontRight;
+    SwerveModule backLeft;
+    SwerveModule backRight;
 
-    AHRS gyro{frc::SPI::Port::kMXP};
+    AHRS gyro;
     double lastGyroPitch;
     double lastGyroRoll;
     bool alignmentOn = false;
@@ -162,10 +164,7 @@ private:
     frc::SwerveDriveKinematics<4> kinematics{
         frontLeftLocation, frontRightLocation, backLeftLocation, backRightLocation};
 
-    frc::SwerveDriveOdometry<4> odometry{kinematics, gyro.GetRotation2d(),
-        {frontLeft.GetModulePosition(), frontRight.GetModulePosition(),
-        backLeft.GetModulePosition(), backRight.GetModulePosition()},
-        frc::Pose2d{0_m, 0_m, 0_rad}};
+    frc::SwerveDriveOdometry<4> odometry;
 };
 
 #endif
