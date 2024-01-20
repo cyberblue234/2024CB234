@@ -134,13 +134,13 @@ public:
     static constexpr double BL_DRIVE_ADJUSTMENT = 1.0;
     static constexpr double BR_DRIVE_ADJUSTMENT = 1.0;
 
-    pathplanner::HolonomicPathFollowerConfig holonomicConfig {
-            pathplanner::PIDConstants(SwerveModule::kDriveP, SwerveModule::kDriveI, SwerveModule::kDriveD), // Translation PID constants
-            pathplanner::PIDConstants(SwerveModule::kAngleP, SwerveModule::kAngleI, SwerveModule::kAngleD), // Rotation PID constants
-            MAX_SPEED, // Max module speed, in m/s
-            frontLeftLocation.Norm(), // Drive base radius in meters. Distance from robot center to furthest module.
-            pathplanner::ReplanningConfig() // Default path replanning config. See the API for the options here
-    };
+    // pathplanner::HolonomicPathFollowerConfig holonomicConfig {
+    //         pathplanner::PIDConstants(SwerveModule::kDriveP, SwerveModule::kDriveI, SwerveModule::kDriveD), // Translation PID constants
+    //         pathplanner::PIDConstants(SwerveModule::kAngleP, SwerveModule::kAngleI, SwerveModule::kAngleD), // Rotation PID constants
+    //         MAX_SPEED, // Max module speed, in m/s
+    //         frontLeftLocation.Norm(), // Drive base radius in meters. Distance from robot center to furthest module.
+    //         pathplanner::ReplanningConfig() // Default path replanning config. See the API for the options here
+    // };
 
 private:
 
