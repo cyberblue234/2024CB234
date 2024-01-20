@@ -3,14 +3,25 @@
 
 bool fieldRelative = true;
 
-Drivetrain::Drivetrain() {
+Drivetrain::Drivetrain() : 
+frontLeft(FL_DRIVE_ADDRESS, FL_SWERVE_ADDRESS, FL_CANCODER_ADDRESS, FL_OFFSET_DEGREES), 
+frontRight(FR_DRIVE_ADDRESS, FR_SWERVE_ADDRESS, FR_CANCODER_ADDRESS, FR_OFFSET_DEGREES), 
+backLeft(BL_DRIVE_ADDRESS, BL_SWERVE_ADDRESS, BL_CANCODER_ADDRESS, BL_OFFSET_DEGREES), 
+backRight(BR_DRIVE_ADDRESS, BR_SWERVE_ADDRESS, BR_CANCODER_ADDRESS, BR_OFFSET_DEGREES), 
+gyro(frc::SPI::Port::kMXP),
+odometry(
+    kinematics, gyro.GetRotation2d(),
+    { frontLeft.GetModulePosition(), frontRight.GetModulePosition(),
+    backLeft.GetModulePosition(), backRight.GetModulePosition() },
+    frc::Pose2d() )
+{
     gyro.Reset();
     // copies from https://pathplanner.dev/pplib-getting-started.html
     pathplanner::AutoBuilder::configureHolonomic(
-        [this](){ return GetPose(); }, // Robot pose supplier
-        [this](frc::Pose2d pose){ ResetPose(pose); }, // Method to reset odometry (will be called if your auto has a starting pose)
-        [this](){ return GetCurrentSpeeds(); }, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-        [this](frc::ChassisSpeeds speeds){ Drive(speeds); }, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+        [this](){ return this->GetPose(); }, // Robot pose supplier
+        [this](frc::Pose2d pose){ this->ResetPose(pose); }, // Method to reset odometry (will be called if your auto has a starting pose)
+        [this](){ return this->GetCurrentSpeeds(); }, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+        [this](frc::ChassisSpeeds speeds){ this->Drive(speeds); }, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
         Drivetrain::holonomicConfig,
         []() {
             // Boolean supplier that controls when the path will be mirrored for the red alliance
@@ -27,6 +38,11 @@ Drivetrain::Drivetrain() {
     );
 }
 
+void Drivetrain::Periodic() 
+{
+    UpdateOdometry();
+}
+
 void Drivetrain::DriveControl()
 {
     alignmentOn = frc::SmartDashboard::GetBoolean("ALIGNMENT_ON", false);
@@ -39,15 +55,15 @@ void Drivetrain::DriveControl()
     }
     else if (controls.GetRawButton(DRIVE_ANCHOR_SWITCH) == true)
     {
-        swerve.SetAnchorState();
+        SetAnchorState();
     }
     else if (gamePad.GetRightTriggerAxis() > 0.2)
     {
-        swerve.DriveWithJoystick(true);
+        DriveWithJoystick(true);
     }
     else
     {
-        swerve.DriveWithJoystick(false);
+        DriveWithJoystick(false);
     }
 
     frc::SmartDashboard::PutNumber("GYRO_PITCH", GetGyroPitch());
@@ -137,7 +153,7 @@ void Drivetrain::DriveWithJoystick(bool limitSpeed)
 
 // Pass in FromRelativeSpeeds if field oriented, so path planner can use robot centric
 
-void Drivetrain::Drive(frc::ChassisSpeeds speeds)
+void Drivetrain::Drive(const frc::ChassisSpeeds& speeds)
 {
     auto states = kinematics.ToSwerveModuleStates(chassisSpeeds);
 
@@ -208,26 +224,6 @@ void Drivetrain::SetDriveStop()
     frontRight.SetDesiredState(fr, 0.0);
     backLeft.SetDesiredState(bl, 0.0);
     backRight.SetDesiredState(br, 0.0);
-}
-
-void Drivetrain::DriveSidewaysSlow()
-{
-    double stf = pow(gamePad.GetLeftX(), 1) * 0.2; // Strafe
-
-    if (abs(stf) < 0.05)
-    {
-        stf = 0.0;
-    }
-
-    frc::SwerveModuleState fl = {units::meters_per_second_t(-stf * Drivetrain::MAX_SPEED), frc::Rotation2d(units::angle::degree_t(90))};
-    frc::SwerveModuleState fr = {units::meters_per_second_t(-stf * Drivetrain::MAX_SPEED), frc::Rotation2d(units::angle::degree_t(90))};
-    frc::SwerveModuleState bl = {units::meters_per_second_t(-stf * Drivetrain::MAX_SPEED), frc::Rotation2d(units::angle::degree_t(90))};
-    frc::SwerveModuleState br = {units::meters_per_second_t(-stf * Drivetrain::MAX_SPEED), frc::Rotation2d(units::angle::degree_t(90))};
-
-    frontLeft.SetDesiredState(fl, FL_DRIVE_ADJUSTMENT);
-    frontRight.SetDesiredState(fr, FR_DRIVE_ADJUSTMENT);
-    backLeft.SetDesiredState(bl, BL_DRIVE_ADJUSTMENT);
-    backRight.SetDesiredState(br, BR_DRIVE_ADJUSTMENT);
 }
 
 void Drivetrain::SetDriveOpenLoopRamp(double ramp)
