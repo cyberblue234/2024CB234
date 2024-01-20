@@ -22,6 +22,7 @@ odometry(
         [this](frc::Pose2d pose){ this->ResetPose(pose); }, // Method to reset odometry (will be called if your auto has a starting pose)
         [this](){ return this->GetCurrentSpeeds(); }, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
         [this](frc::ChassisSpeeds speeds){ this->Drive(speeds); }, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+<<<<<<< HEAD
         pathplanner::HolonomicPathFollowerConfig (
             pathplanner::PIDConstants(1, 0, 0), // Translation PID constants
             pathplanner::PIDConstants(1, 0, 0), // Rotation PID constants
@@ -29,6 +30,9 @@ odometry(
             1_m, // Drive base radius in meters. Distance from robot center to furthest module.
             pathplanner::ReplanningConfig() // Default path replanning config. See the API for the options here
         ),
+=======
+        Drivetrain::holonomicConfig,
+>>>>>>> 7142fbc2a2237c3185878651cdfb4e92ab4d6bdd
         []() {
             // Boolean supplier that controls when the path will be mirrored for the red alliance
             // This will flip the path being followed to the red side of the field.
