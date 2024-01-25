@@ -1,49 +1,43 @@
-
-#include "Teleop.h"
-#include "Autonomous.h"
-#include <frc/TimedRobot.h>
 #include "Robot.h"
 
-Teleop teleop;
-Autonomous autonomous;
+#include <frc2/command/CommandScheduler.h>
 
-void Robot::RobotInit()
-{
-    swerve.ResetGyroPitch();
-    swerve.ResetGyroRoll();
-    swerve.ResetGyroAngle();
+void Robot::RobotInit() {}
+
+void Robot::RobotPeriodic() {
+  frc2::CommandScheduler::GetInstance().Run();
 }
 
-void Robot::RobotPeriodic()
-{
-    frc2::CommandScheduler::GetInstance().Run();
+void Robot::DisabledInit() {}
+
+void Robot::DisabledPeriodic() {}
+
+void Robot::AutonomousInit() {
+  autonomousCommand = container.GetAutonomousCommand();
+
+  if (autonomousCommand) {
+    autonomousCommand->Schedule();
+  }
 }
 
-void Robot::AutonomousInit()
-{
-    std::unique_ptr<frc2::Command> pathfindToPickup = pathplanner::AutoBuilder::followPath(pathplanner::PathPlannerPath::fromPathFile("Example Path")).Unwrap();
-    // frc::SmartDashboard::PutData("Pathfind to Scoring Pos", pathfindToPickup.get());
+void Robot::AutonomousPeriodic() {}
+
+void Robot::TeleopInit() {
+  if (autonomousCommand) {
+    autonomousCommand->Cancel();
+  }
 }
 
-void Robot::AutonomousPeriodic()
-{
-}
+void Robot::TeleopPeriodic() {}
 
-void Robot::TeleopInit()
-{
-    teleop.TeleopInit();
-}
+void Robot::TestPeriodic() {}
 
-void Robot::TeleopPeriodic()
-{
-    // teleop.OperatorControls();
-    frc2::CommandPtr testCmd = frc2::cmd::Print("Test");
-    testCmd.Schedule();
-}
+void Robot::SimulationInit() {}
+
+void Robot::SimulationPeriodic() {}
 
 #ifndef RUNNING_FRC_TESTS
-int main()
-{
-    return frc::StartRobot<Robot>();
+int main() {
+  return frc::StartRobot<Robot>();
 }
 #endif
