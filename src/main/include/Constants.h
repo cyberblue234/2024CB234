@@ -20,8 +20,8 @@ inline constexpr units::meters_per_second_t MAX_SPEED = 4.084_mps;
 inline constexpr units::radians_per_second_t MAX_ANGULAR_SPEED{std::numbers::pi};
 
 inline constexpr pathplanner::HolonomicPathFollowerConfig holonomicConfig  = pathplanner::HolonomicPathFollowerConfig(
-    pathplanner::PIDConstants(SwerveModule::kDriveP, SwerveModule::kDriveI, SwerveModule::kDriveD), // Translation PID constants
-    pathplanner::PIDConstants(SwerveModule::kAngleP, SwerveModule::kAngleI, SwerveModule::kAngleD), // Rotation PID constants
+    pathplanner::PIDConstants(SwerveModuleConstants::kDriveP, SwerveModuleConstants::kDriveI, SwerveModuleConstants::kDriveD), // Translation PID constants
+    pathplanner::PIDConstants(SwerveModuleConstants::kAngleP, SwerveModuleConstants::kAngleI, SwerveModuleConstants::kAngleD), // Rotation PID constants
     MAX_SPEED, // Max module speed, in m/s
     frontLeftLocation.Norm(), // Drive base radius in meters. Distance from robot center to furthest module.
     pathplanner::ReplanningConfig() // Default path replanning config. See the API for the options here
