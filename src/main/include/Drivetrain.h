@@ -27,7 +27,6 @@
 #include "ctre/Phoenix.h"
 #include "AHRS.h"
 
-#include "RobotMap.h"
 #include "SwerveModule.h"
 #include "Constants.h"
 

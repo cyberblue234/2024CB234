@@ -20,7 +20,15 @@
   },
   "NTProvider": {
     "types": {
-      "/FMSInfo": "FMSInfo"
+      "/FMSInfo": "FMSInfo",
+      "/SmartDashboard/Test Auto": "Command"
+    },
+    "windows": {
+      "/SmartDashboard/Test Auto": {
+        "window": {
+          "visible": true
+        }
+      }
     }
   },
   "NetworkTables Info": {
