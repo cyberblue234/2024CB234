@@ -6,7 +6,7 @@ name: CI
 # events but only for the main branch.
 on:
   push:
-    branches: [ main, overhaul ]
+    branches: [ main ]
   pull_request:
     branches: [ main ]
 
@@ -35,4 +35,4 @@ jobs:
 
     # Runs a single command using the runners shell
     - name: Compile and run tests on robot code
-      run: ./gradlew build --stacktrace
+      run: ./gradlew build
