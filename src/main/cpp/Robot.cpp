@@ -13,10 +13,15 @@ frc::Joystick controls(1);
 
 Drivetrain swerve;
 
+void Robot::RobotInit() {}
+
 void Robot::RobotPeriodic() 
 {
   frc2::CommandScheduler::GetInstance().Run();
 }
+
+void Robot::SimulationInit () {}
+void Robot::SimulationPeriodic () {}
 
 void Robot::AutonomousInit() 
 {
@@ -28,6 +33,8 @@ void Robot::AutonomousInit()
     autonomousCommand->Schedule();
   }
 }
+
+void Robot::AutonomousPeriodic() {}
 
 void Robot::TeleopInit() 
 {
@@ -41,6 +48,10 @@ void Robot::TeleopPeriodic()
 {
   teleop.OperatorControls();
 }
+
+void Robot::TestPeriodic() {}
+void Robot::SimulationInit() {}
+void Robot::SimulationPeriodic() {}
 
 #ifndef RUNNING_FRC_TESTS
 int main() {
