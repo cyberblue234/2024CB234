@@ -89,6 +89,12 @@ void Drivetrain::DriveWithJoystick(bool limitSpeed)
     {
         rot = 0.0;
     }
+    if (controls.GetRawButton(3))
+    {
+        limelight3.SetPipelineID(Limelight::kSpeakerDetection);
+        rot = AlignToAprilTag();
+    }
+    else limelight3.SetPipelineID(Limelight::kAprilTag);
     if (limitSpeed == true)
     {
         rot *= DrivetrainConstants::DRIVE_SLOW_ADJUSTMENT;
@@ -146,6 +152,57 @@ void Drivetrain::Drive(const frc::ChassisSpeeds& speeds)
     frontRight.SetDesiredState(fr, DrivetrainConstants::FR_DRIVE_ADJUSTMENT);
     backLeft.SetDesiredState(bl, DrivetrainConstants::BL_DRIVE_ADJUSTMENT);
     backRight.SetDesiredState(br, DrivetrainConstants::BR_DRIVE_ADJUSTMENT);
+}
+
+frc::Pose2d Drivetrain::UpdateOdometry() 
+{
+    return odometry.Update(gyro.GetRotation2d(),
+    {
+      frontLeft.GetModulePosition(), frontRight.GetModulePosition(),
+      backLeft.GetModulePosition(), backRight.GetModulePosition()
+    }
+  );
+}
+
+frc::Pose2d Drivetrain::UpdateOdometryWithVision(bool poseOverride)
+{   
+    //1. Checks if there is an AprilTag that the Limelight is seeing
+    //2. Checks if the active Pipeline is AprilTags
+    if (limelight3.GetTargetValid() == 1 && limelight3.GetActivePipeline() == Limelight::kAprilTag)
+    {
+        //Checks if Vision X/Y is within a meter of estimated current X/Y
+        //Prevents Outlier Data
+        if (abs((double) limelight3.GetRobotPose().X() - (double) GetPose().X()) < 1.0 && (abs((double) limelight3.GetRobotPose().Y() - (double) GetPose().Y()) < 1.0))
+            odometry.AddVisionMeasurement(limelight3.GetRobotPose(), frc::Timer::GetFPGATimestamp()); //Adds the Vision Measurement
+        else if (poseOverride)
+            odometry.ResetPosition( gyro.GetRotation2d(),
+            {frontLeft.GetModulePosition(), frontRight.GetModulePosition(),
+            backLeft.GetModulePosition(), backRight.GetModulePosition()},
+            limelight3.GetRobotPose());
+    }
+    
+    return UpdateOdometry(); //Updates the Odometry and returns it
+}
+
+double Drivetrain::AlignToAprilTag()
+{
+    double input = gamePad.GetRightX()*gamePad.GetRightX()*gamePad.GetRightX();
+    if (limelight3.GetTargetValid() == 1)
+    {
+        
+        double rotError = (double) gyro.GetRotation2d().Degrees() - limelight3.GetTargetRotation(); //Find the Error
+        frc::SmartDashboard::PutNumber("AlignTo Rotation Error", rotError);
+        if (abs(rotError) < 0.05) return 0.0; //Deadzone
+        double output = rotcontrol.Calculate(rotError, 0); //PID control to Target
+
+        //Print to dashboard for debugging
+        
+        frc::SmartDashboard::PutNumber("AlignTo Output", output);
+
+        return std::clamp(output, -0.75, 0.75); //Sets the Max and Min values that can be returned
+    }
+    else if (abs(input) > 0.05) return input;
+    else return 0.0;
 }
 
 void Drivetrain::SetDriveOpenLoopRamp(double ramp)

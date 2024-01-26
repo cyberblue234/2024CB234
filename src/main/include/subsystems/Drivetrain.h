@@ -13,9 +13,13 @@
 #include <frc/kinematics/SwerveDriveOdometry.h>
 #include <frc/kinematics/ChassisSpeeds.h>
 
+#include <frc/estimator/SwerveDrivePoseEstimator.h>
+
 #include <frc/geometry/Pose2d.h>
 #include <frc/geometry/Rotation2d.h>
 #include <frc/geometry/Translation2d.h>
+
+#include <frc/controller/PIDController.h>
 
 #include <frc2/command/SubsystemBase.h>
 
@@ -43,8 +47,14 @@ public:
     void DriveWithJoystick(bool limitSpeed);
     // Sets all of the motors using kinematics calulcations. Uses the provided ChassisSpeeds for calculations
     void Drive(const frc::ChassisSpeeds& speeds);
+    // Updates the odometry. Must be ran every cycle.
+    frc::Pose2d UpdateOdometry();
+    //Adds Vision data to odometry and returns the newest pose estimation. Also sets the pipeline ID to Apriltags
+    frc::Pose2d UpdateOdometryWithVision(bool poseOverride);
+    //Returns a rot value to align with Target Apriltag
+    double AlignToAprilTag();
     // Returns the Pose2d of the robot
-    const frc::Pose2d& GetPose() const { return odometry.GetPose(); };
+    const frc::Pose2d& GetPose() const { return odometry.GetEstimatedPosition(); };
     // Resets the Pose2d of the robot
     void ResetPose(const frc::Pose2d& pose) { odometry.ResetPosition(gyro.GetRotation2d(), { frontLeft.GetModulePosition(), frontRight.GetModulePosition(), backLeft.GetModulePosition(), backRight.GetModulePosition() }, pose ); };
     // Returns the current ChassisSpeeds of the robot
@@ -114,6 +124,13 @@ public:
     // Sets all motors to a speed of zero
     void AlignSwerveDrive();
 
+    double rotationP = 0.3;
+    double rotationI = 0.0;
+    double rotationD = 0.027;
+
+    frc::PIDController rotcontrol{rotationP, rotationI, rotationD, 20_ms};
+
+
 private:
     SwerveModule frontLeft;
     SwerveModule frontRight;
@@ -135,7 +152,7 @@ private:
         DrivetrainConstants::backRightLocation
     };
 
-    frc::SwerveDriveOdometry<4> odometry;
+    frc::SwerveDrivePoseEstimator<4> odometry;
 };
 
 #endif

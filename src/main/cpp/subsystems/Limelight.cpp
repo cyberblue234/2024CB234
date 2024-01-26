@@ -86,6 +86,7 @@ double Limelight::GetTargetRotation()
 {
     double offset = atan(targetpose_robotspace.at(0) / targetpose_robotspace.at(2));
     frc::SmartDashboard::PutNumber("Target Rotatation Offset", offset);
+    offset *= 180/PI;
     return (double) swerve.GetGyro2d().Degrees() + offset;
 }
 

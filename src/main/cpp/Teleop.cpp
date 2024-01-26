@@ -15,11 +15,29 @@ void Teleop::TeleopInit()
 	swerve.ResetGyroRoll();
 	swerve.ResetDriveEncoders();
 	swerve.SetDriveOpenLoopRamp(0.0);
+
+	limelight3.SetPipelineID(Limelight::kAprilTag);
+
+	//"Aimbot" PID controller config stuff, remove later
+	frc::SmartDashboard::PutNumber("Rotation P", swerve.rotationP);
+	frc::SmartDashboard::PutNumber("Rotation I", swerve.rotationI);
+	frc::SmartDashboard::PutNumber("Rotation D", swerve.rotationD);
 }
 
 void Teleop::OperatorControls()
 {
 	swerve.DriveControl();
+
+	limelight3.UpdateLimelightTracking(); //NetworkTables updating
+	limelight3.UpdateLimelightDashboard(); //Updates the dashboard with the new NetworkTables data
+
+	swerve.UpdateOdometry(); //Updates Odometry with Vision Data in mind (Make this occur on a timer later, so we can use other Pipelines as well)
+	
+	//"Aimbot" PID controller config stuff, remove later
+	swerve.rotationP = frc::SmartDashboard::GetNumber("Rotation P", swerve.rotationP);
+    swerve.rotationI = frc::SmartDashboard::GetNumber("Rotation I", swerve.rotationI);
+    swerve.rotationD = frc::SmartDashboard::GetNumber("Rotation D", swerve.rotationD);
+	swerve.rotcontrol.SetPID(swerve.rotationP, swerve.rotationI, swerve.rotationD);
 
 	LogTeleopData();
 }

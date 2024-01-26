@@ -15,6 +15,9 @@ void Autonomous::AutoInit()
     swerve.ResetGyroRoll();
     swerve.ResetDriveEncoders();
     swerve.SetDriveOpenLoopRamp(2.0);
+
+    limelight3.SetPipelineID(Limelight::kAprilTag);
+    swerve.UpdateOdometryWithVision(true);
 }
 
 frc2::CommandPtr Autonomous::GetAutonomousCommand()
