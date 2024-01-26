@@ -27,7 +27,7 @@
 #include "ctre/Phoenix.h"
 #include "AHRS.h"
 
-#include "SwerveModule.h"
+#include "subsystems/SwerveModule.h"
 #include "Constants.h"
 
 class Drivetrain : frc2::SubsystemBase

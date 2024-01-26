@@ -5,7 +5,8 @@
 #include <frc/TimedRobot.h>
 #include <frc2/command/CommandPtr.h>
 
-#include "RobotContainer.h"
+#include "Teleop.h"
+#include "Autonomous.h"
 #include "Constants.h"
 
 class Robot : public frc::TimedRobot 
@@ -26,8 +27,8 @@ public:
     void SimulationPeriodic() override;
 
 private:
+    Teleop teleop;
+    Autonomous autonomous;  
 
     std::optional<frc2::CommandPtr> autonomousCommand;
-    RobotContainer container;
-    
 };
