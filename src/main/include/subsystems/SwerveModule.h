@@ -11,7 +11,8 @@
 #include <units/length.h>
 
 #include <numbers>
-#include "ctre/Phoenix.h"
+#include <ctre/phoenix6/TalonFX.hpp>
+#include <ctre/phoenix6/CANcoder.hpp>
 #include "Constants.h"
 
 class SwerveModule
@@ -50,9 +51,9 @@ public:
     // Returns the current being pulled by the swerve motor
     double GetSwerveCurrent() { return swerveMotor.GetOutputCurrent(); };
     // Sets the drive motor to a provided speed
-    void SetDriveMotor(double speed) { driveMotor.Set(TalonFXControlMode::PercentOutput, speed); };
+    void SetDriveMotor(double speed) { driveMotor.Set(speed); };
     // Sets the swerve motor to a provided speed
-    void SetSwerveMotor(double speed) { swerveMotor.Set(TalonFXControlMode::PercentOutput, speed); };
+    void SetSwerveMotor(double speed) { swerveMotor.Set(speed); };
     // Sets the ramp for the drive motor (the minimun time to accelerate to full throttle)
     void SetDriveOpenLoopRamp(double ramp) { driveMotor.ConfigOpenloopRamp(ramp); };
     // Resets the swerve motor's cancoder
@@ -68,7 +69,7 @@ private:
     frc::Rotation2d currentAngle;
     frc::Rotation2d deltaAngle;
 
-    WPI_TalonFX driveMotor;
-    WPI_TalonFX swerveMotor;
-    WPI_CANCoder canCoder;
+    ctre::phoenix6::hardware::TalonFX driveMotor;
+    ctre::phoenix6::hardware::TalonFX swerveMotor;
+    ctre::phoenix6::hardware::TalonFX canCoder;
 };
