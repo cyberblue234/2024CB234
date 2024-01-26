@@ -1,4 +1,3 @@
-#include "RobotContainer.h"
 #include <pathplanner/lib/commands/PathPlannerAuto.h>
 
 Autonomous::Autonomous()
