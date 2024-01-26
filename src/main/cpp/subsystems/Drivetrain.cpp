@@ -36,7 +36,9 @@ odometry(
 
 void Drivetrain::Periodic() 
 {
-    odometry.Update(gyro.GetRotation2d(), { frontLeft.GetModulePosition(), frontRight.GetModulePosition(), backLeft.GetModulePosition(), backRight.GetModulePosition() });
+    UpdateOdometryWithVision(false);
+    limelight3.UpdateLimelightTracking(); //NetworkTables updating
+	limelight3.UpdateLimelightDashboard(); //Updates the dashboard with the new NetworkTables data
 }
 
 void Drivetrain::DriveControl()
@@ -172,13 +174,24 @@ frc::Pose2d Drivetrain::UpdateOdometryWithVision(bool poseOverride)
     {
         //Checks if Vision X/Y is within a meter of estimated current X/Y
         //Prevents Outlier Data
-        if (abs((double) limelight3.GetRobotPose().X() - (double) GetPose().X()) < 1.0 && (abs((double) limelight3.GetRobotPose().Y() - (double) GetPose().Y()) < 1.0))
+        bool in_range = abs((double) limelight3.GetRobotPose().X() - (double) GetPose().X()) < 1.0 && (abs((double) limelight3.GetRobotPose().Y() - (double) GetPose().Y()) < 1.0);
+        //checks if it has been at least 150ms since last call
+        bool in_time = (double) odometryCooldown.Get() > 0.15;
+        if (in_range && in_time)
+        {
             odometry.AddVisionMeasurement(limelight3.GetRobotPose(), frc::Timer::GetFPGATimestamp()); //Adds the Vision Measurement
+            odometryCooldown.Reset();
+        }
+        //This gets called on auton initialization
         else if (poseOverride)
+        {
             odometry.ResetPosition( gyro.GetRotation2d(),
             {frontLeft.GetModulePosition(), frontRight.GetModulePosition(),
             backLeft.GetModulePosition(), backRight.GetModulePosition()},
             limelight3.GetRobotPose());
+
+            odometryCooldown.Start();
+        }
     }
     
     return UpdateOdometry(); //Updates the Odometry and returns it

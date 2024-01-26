@@ -5,6 +5,7 @@
 
 #include <frc/XboxController.h>
 #include <frc/DriverStation.h>
+#include <frc/Timer.h>
 
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/smartdashboard/SendableChooser.h>
@@ -153,6 +154,8 @@ private:
     };
 
     frc::SwerveDrivePoseEstimator<4> odometry;
+
+    frc::Timer odometryCooldown;
 };
 
 #endif
