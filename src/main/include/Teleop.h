@@ -1,7 +1,5 @@
-#ifndef _TELEOP_H
-#define _TELEOP_H
+#include <frc/Timer.h>
 
-#include <frc/Compressor.h>
 class Teleop
 {
 public:
@@ -14,5 +12,3 @@ private:
     FILE *t_output;
     frc::Timer logTimer;
 };
-
-#endif

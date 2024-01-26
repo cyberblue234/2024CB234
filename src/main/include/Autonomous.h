@@ -1,9 +1,17 @@
-#include <pathplanner/lib/auto/AutoBuilder.h>
-#include <pathplanner/lib/path/PathPlannerPath.h>
+#include <frc2/command/CommandPtr.h>
+#include <frc/Timer.h>
 
 class Autonomous 
 {
-    public:
-        void AutoControl();
-        void RunAuto(std::string pathName);
+public:
+    Autonomous();
+    void AutoInit();
+    void AutoControl();
+    frc2::CommandPtr GetAutonomousCommand();
+    void LogAutoData();
+private:
+    FILE *a_output;
+    frc::Timer autoTimer;
+    frc::Timer autoLogTimer;
+
 };

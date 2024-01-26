@@ -1,5 +1,4 @@
-#include "SwerveModule.h"
-#include "Drivetrain.h"
+#include "subsystems/SwerveModule.h"
 
 // SwerveModule constructor
 SwerveModule::SwerveModule(int driveMotorChannel, int swerveMotorChannel, int canCoderChannel, double offsetDegrees)
@@ -20,10 +19,10 @@ SwerveModule::SwerveModule(int driveMotorChannel, int swerveMotorChannel, int ca
     swerveMotor.EnableVoltageCompensation(true);
 
     // Set PID values for angle motor
-    swerveMotor.Config_kP(0, kAngleP);
-    swerveMotor.Config_kI(0, kAngleI);
-    swerveMotor.Config_kD(0, kAngleD);
-    swerveMotor.Config_kF(0, kAngleF);
+    swerveMotor.Config_kP(0, SwerveModuleConstants::kAngleP);
+    swerveMotor.Config_kI(0, SwerveModuleConstants::kAngleI);
+    swerveMotor.Config_kD(0, SwerveModuleConstants::kAngleD);
+    swerveMotor.Config_kF(0, SwerveModuleConstants::kAngleF);
 
     driveMotor.ConfigFactoryDefault();
     driveMotor.SetSelectedSensorPosition(0);
@@ -31,10 +30,10 @@ SwerveModule::SwerveModule(int driveMotorChannel, int swerveMotorChannel, int ca
     driveMotor.EnableVoltageCompensation(true);
     driveMotor.SetNeutralMode(NeutralMode::Brake);
 
-    driveMotor.Config_kP(0, kDriveP);
-    driveMotor.Config_kI(0, kDriveI);
-    driveMotor.Config_kD(0, kDriveD);
-    driveMotor.Config_kF(0, kDriveF);
+    driveMotor.Config_kP(0, SwerveModuleConstants::kDriveP);
+    driveMotor.Config_kI(0, SwerveModuleConstants::kDriveI);
+    driveMotor.Config_kD(0, SwerveModuleConstants::kDriveD);
+    driveMotor.Config_kF(0, SwerveModuleConstants::kDriveF);
 
     canCoder.ConfigFactoryDefault();
     canCoder.ConfigMagnetOffset(offsetDegrees);
@@ -55,12 +54,12 @@ void SwerveModule::SetDesiredState(const frc::SwerveModuleState desiredState, do
     deltaAngle = optimizedState.angle.operator-(currentAngle);
 
     // Find how much to turn the module in CANCoder ticks
-    deltaCount = ((double)deltaAngle.Degrees() / 360.0) * kCancoderCountsPerRotation;
+    deltaCount = ((double)deltaAngle.Degrees() / 360.0) * SwerveModuleConstants::kCancoderCountsPerRotation;
 
     // Get the current position of the module in CANCoder ticks
     // Divide by the feedback coefficient to convert from degrees to ticks
     // GetPosition defaults to return degrees.
-    currentCount = canCoder.GetPosition() / kCancoderFeedbackCoefficient;
+    currentCount = canCoder.GetPosition() / SwerveModuleConstants::kCancoderFeedbackCoefficient;
 
     // The new module position will be the the current ticks plus the change in ticks
     desiredCount = currentCount + deltaCount;
@@ -68,6 +67,6 @@ void SwerveModule::SetDesiredState(const frc::SwerveModuleState desiredState, do
 
     // Set the drive motor to the optimized state speed
 
-    percentSpeed = optimizedState.speed / Drivetrain::MAX_SPEED;
+    percentSpeed = optimizedState.speed / DrivetrainConstants::MAX_SPEED;
     driveMotor.Set(TalonFXControlMode::PercentOutput, percentSpeed * speedAdjustment);
 }

@@ -12,6 +12,7 @@
 
 #include <numbers>
 #include "ctre/Phoenix.h"
+#include "Constants.h"
 
 class SwerveModule
 {
@@ -41,7 +42,7 @@ public:
     // Returns the encoder position of the drive motor
     double GetDriveEncoder() { return driveMotor.GetSelectedSensorPosition(); };
     // Returns the current SwerveModulePosition
-    frc::SwerveModulePosition GetModulePosition() { return frc::SwerveModulePosition{units::length::meter_t(GetDriveEncoder() * ENCODER_METERS_PER_COUNT), GetAngle()}; };
+    frc::SwerveModulePosition GetModulePosition() { return frc::SwerveModulePosition{units::length::meter_t(GetDriveEncoder() * SwerveModuleConstants::ENCODER_METERS_PER_COUNT), GetAngle()}; };
     // Returns the RPM of the drive motor
     double GetDriveRPM() { return driveMotor.GetSelectedSensorVelocity() * 600.0 / 2048.0; };
     // Returns the current being pulled by the drive motor
@@ -59,24 +60,7 @@ public:
     // Resets the drive motor's encoder
     void ResetEncoder() { driveMotor.SetSelectedSensorPosition(0); };
 
-    static constexpr double ENCODER_INCHES_PER_COUNT = 0.00090689;
-    static constexpr double ENCODER_METERS_PER_COUNT = ENCODER_INCHES_PER_COUNT / 39.37;
-        // 6.54 : 1
-
-    static constexpr double kDriveP = 15.0;
-    static constexpr double kDriveI = 0.01;
-    static constexpr double kDriveD = 0.1;
-    static constexpr double kDriveF = 0.2;
-
-    static constexpr double kAngleP = 0.30;
-    static constexpr double kAngleI = 0.002;
-    static constexpr double kAngleD = 0.0;
-    static constexpr double kAngleF = 0.0;
-
 private:
-    const double kCancoderCountsPerRotation = 4096;
-    const double kCancoderFeedbackCoefficient = 0.087890625;
-
     double desiredCount;
     double currentCount;
     double deltaCount;

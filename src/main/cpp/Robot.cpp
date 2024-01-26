@@ -1,67 +1,60 @@
-#include <frc/MathUtil.h>
-#include <frc/TimedRobot.h>
+#include "Robot.h"
+
+#include <frc2/command/CommandScheduler.h>
+
 #include <frc/XboxController.h>
 #include <frc/Joystick.h>
-#include <frc/filter/SlewRateLimiter.h>
-#include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/PowerDistribution.h>
-#include <frc/DriverStation.h>
-
-#include "ctre/Phoenix.h"
-
-#include "Drivetrain.h"
-#include "Teleop.h"
-#include "Autonomous.h"
-#include "Limelight.h"
+#include "subsystems/Drivetrain.h"
 
 frc::PowerDistribution pdp{1, frc::PowerDistribution::ModuleType::kRev};
 frc::XboxController gamePad{0};
 frc::Joystick controls(1);
 
-Teleop teleop;
-Autonomous autonomous;
 Drivetrain swerve;
-Limelight limelight3("limelight");
 
-class Robot : public frc::TimedRobot
+void Robot::RobotInit() {}
+
+void Robot::RobotPeriodic() 
 {
-public:
-    void RobotInit() override
-    {
-        swerve.ResetGyroPitch();
-        swerve.ResetGyroRoll();
-        swerve.ResetGyroAngle();
-    }
+  frc2::CommandScheduler::GetInstance().Run();
+}
 
-    void AutonomousInit() override
-    {
-    }
+void Robot::DisabledInit() {}
+void Robot::DisabledPeriodic() {}
 
-    void AutonomousPeriodic() override
-    {
-        autonomous.RunAuto("Test Auto");
-    }
+void Robot::AutonomousInit() 
+{
+  autonomous.AutoInit();
 
-    void TeleopInit() override
-    {
-        teleop.TeleopInit();
-    }
+  autonomousCommand = autonomous.GetAutonomousCommand();
 
-    void TeleopPeriodic() override
-    {
-        teleop.OperatorControls();
-    }
+  if (autonomousCommand) {
+    autonomousCommand->Schedule();
+  }
+}
 
-    void DisabledInit() override {}
+void Robot::AutonomousPeriodic() {}
 
-    void DisabledPeriodic() override {}
+void Robot::TeleopInit() 
+{
+  if (autonomousCommand) {
+    autonomousCommand->Cancel();
+  }
+  teleop.TeleopInit();
+}
 
-private:
-};
+void Robot::TeleopPeriodic() 
+{
+  teleop.OperatorControls();
+}
+
+void Robot::TestPeriodic() {}
+void Robot::SimulationInit() {}
+void Robot::SimulationPeriodic() {}
 
 #ifndef RUNNING_FRC_TESTS
-int main()
-{
-    return frc::StartRobot<Robot>();
+int main() {
+  return frc::StartRobot<Robot>();
 }
 #endif

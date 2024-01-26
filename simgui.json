@@ -1,0 +1,37 @@
+{
+  "HALProvider": {
+    "Other Devices": {
+      "Talon FX[8]": {
+        "header": {
+          "open": true
+        }
+      },
+      "navX-Sensor[4]": {
+        "header": {
+          "open": true
+        }
+      }
+    },
+    "RoboRIO": {
+      "window": {
+        "visible": true
+      }
+    }
+  },
+  "NTProvider": {
+    "types": {
+      "/FMSInfo": "FMSInfo",
+      "/SmartDashboard/Test Auto": "Command"
+    },
+    "windows": {
+      "/SmartDashboard/Test Auto": {
+        "window": {
+          "visible": true
+        }
+      }
+    }
+  },
+  "NetworkTables Info": {
+    "visible": true
+  }
+}
