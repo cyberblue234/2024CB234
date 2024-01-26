@@ -20,7 +20,6 @@ void Teleop::TeleopInit()
 void Teleop::OperatorControls()
 {
 	swerve.DriveControl();
-	swerve.UpdateOdometry();
 
 	LogTeleopData();
 }
