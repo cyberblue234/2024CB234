@@ -20,8 +20,8 @@ void Robot::RobotPeriodic()
   frc2::CommandScheduler::GetInstance().Run();
 }
 
-void Robot::SimulationInit () {}
-void Robot::SimulationPeriodic () {}
+void Robot::DisabledInit() {}
+void Robot::DisabledPeriodic() {}
 
 void Robot::AutonomousInit() 
 {
