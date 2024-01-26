@@ -2,6 +2,14 @@
 
 #include <frc2/command/CommandScheduler.h>
 
+#include <frc/XboxController.h>
+#include <frc/Joystick.h>
+#include <frc/PowerDistribution.h>
+
+frc::PowerDistribution pdp{1, frc::PowerDistribution::ModuleType::kRev};
+frc::XboxController gamePad{0};
+frc::Joystick controls(1);
+
 void Robot::RobotInit() {}
 
 void Robot::RobotPeriodic() {
@@ -28,7 +36,9 @@ void Robot::TeleopInit() {
   }
 }
 
-void Robot::TeleopPeriodic() {}
+void Robot::TeleopPeriodic() {
+  container.RunTeleop();
+}
 
 void Robot::TestPeriodic() {}
 

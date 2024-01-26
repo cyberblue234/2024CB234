@@ -10,6 +10,8 @@ class RobotContainer {
 
   frc2::CommandPtr GetAutonomousCommand();
 
+  void RunTeleop() { swerve.DriveControl(); };
+
  private:
   Drivetrain swerve;
 

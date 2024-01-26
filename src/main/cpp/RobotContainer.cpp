@@ -8,9 +8,10 @@
 
 using namespace pathplanner;
 
-RobotContainer::RobotContainer()
+RobotContainer::RobotContainer() : swerve()
 {
   ConfigureBindings();
+  
 }
 
 void RobotContainer::ConfigureBindings() 

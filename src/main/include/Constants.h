@@ -3,13 +3,7 @@
 #include <frc/geometry/Translation2d.h>
 #include <units/velocity.h>
 #include <pathplanner/lib/util/HolonomicPathFollowerConfig.h>
-#include <frc/XboxController.h>
-#include <frc/Joystick.h>
-#include <frc/PowerDistribution.h>
 
-static frc::PowerDistribution pdp{1, frc::PowerDistribution::ModuleType::kRev};
-static frc::XboxController gamePad{0};
-static frc::Joystick controls(1);
 
 namespace RobotMap
 {
@@ -51,14 +45,14 @@ namespace SwerveModuleConstants
     inline constexpr double ENCODER_INCHES_PER_COUNT = 0.00090689;
     inline constexpr double ENCODER_METERS_PER_COUNT = ENCODER_INCHES_PER_COUNT / 39.37;
     //6.54 : 1
-    inline constexpr double kDriveP = 15.0;
-    inline constexpr double kDriveI = 0.01;
+    inline constexpr double kDriveP = 10.0;
+    inline constexpr double kDriveI = 0.0;
     inline constexpr double kDriveD = 0.1;
     inline constexpr double kDriveF = 0.2;
 
     inline constexpr double kAngleP = 0.30;
-    inline constexpr double kAngleI = 0.002;
-    inline constexpr double kAngleD = 0.0;
+    inline constexpr double kAngleI = 0.0;
+    inline constexpr double kAngleD = 0.001;
     inline constexpr double kAngleF = 0.0;
 
     inline constexpr int kCancoderCountsPerRotation = 4096;
