@@ -13,4 +13,4 @@ private:
     frc::Timer autoTimer;
     frc::Timer autoLogTimer;
 
-}
+};

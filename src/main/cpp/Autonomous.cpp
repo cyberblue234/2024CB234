@@ -1,4 +1,6 @@
 #include <pathplanner/lib/commands/PathPlannerAuto.h>
+#include "Autonomous.h"
+#include "RobotExt.h"
 
 Autonomous::Autonomous()
 {
