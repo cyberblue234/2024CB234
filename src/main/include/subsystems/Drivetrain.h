@@ -58,6 +58,8 @@ public:
     void ResetGyroAngle();
     // Resets the gyro for auto
     void ResetGyroForAuto();
+    //Gets the gyro as a rotation2d
+    frc::Rotation2d GetGyro2d() { return gyro.GetRotation2d(); };
     // Returns the gyro's yaw
     double GetGyroAngle() { return gyro.GetYaw(); };
     // Returns the gyro's pitch
