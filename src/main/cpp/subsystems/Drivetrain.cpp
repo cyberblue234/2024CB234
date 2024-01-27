@@ -36,7 +36,16 @@ odometry(
 
 void Drivetrain::Periodic() 
 {
+    
+    limelight3.UpdateLimelightTracking();
     odometry.Update(gyro.GetRotation2d(), { frontLeft.GetModulePosition(), frontRight.GetModulePosition(), backLeft.GetModulePosition(), backRight.GetModulePosition() });
+    if (limelight3.GetTargetValid() == 1)
+        odometry.AddVisionMeasurement(limelight3.GetRobotPose(), frc::Timer::GetFPGATimestamp());
+    if (time < 10) ResetPose(limelight3.GetRobotPose()); 
+    frc::SmartDashboard::PutNumber("Odometry X", (double) GetPose().X());
+    frc::SmartDashboard::PutNumber("Odometry Y", (double) GetPose().Y());
+    frc::SmartDashboard::PutNumber("Odometry Rot", (double) GetPose().Rotation().Degrees());
+    time++;
 }
 
 void Drivetrain::DriveControl()

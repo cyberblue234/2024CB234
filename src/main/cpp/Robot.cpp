@@ -5,12 +5,17 @@
 #include <frc/XboxController.h>
 #include <frc/Joystick.h>
 #include <frc/PowerDistribution.h>
+#include "subsystems/Limelight.h"
 
 frc::PowerDistribution pdp{1, frc::PowerDistribution::ModuleType::kRev};
 frc::XboxController gamePad{0};
 frc::Joystick controls(1);
 
-void Robot::RobotInit() {}
+Limelight limelight3{"limelight"};
+
+void Robot::RobotInit() {
+  container.OdometryInit();
+}
 
 void Robot::RobotPeriodic() {
   frc2::CommandScheduler::GetInstance().Run();
@@ -21,6 +26,8 @@ void Robot::DisabledInit() {}
 void Robot::DisabledPeriodic() {}
 
 void Robot::AutonomousInit() {
+  container.OdometryInit();
+
   autonomousCommand = container.GetAutonomousCommand();
 
   if (autonomousCommand) {
@@ -31,6 +38,8 @@ void Robot::AutonomousInit() {
 void Robot::AutonomousPeriodic() {}
 
 void Robot::TeleopInit() {
+  container.OdometryInit();
+
   if (autonomousCommand) {
     autonomousCommand->Cancel();
   }

@@ -70,7 +70,7 @@ auto Limelight::GetDistanceFromTarget()
 {
     //Grabs the distance to target on the x and z planes (forward/back, left/right)
     double xDist = targetpose_robotspace.at(0);
-    double zDist = targetpose_robotspace.at(2);
+    double zDist = targetpose_robotspace.at(1);
 
     //Find hypotenuse (total distance) of x and z planes  
     auto distance = units::meter_t(sqrt((xDist*xDist)+(zDist*zDist)));

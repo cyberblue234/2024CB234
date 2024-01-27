@@ -13,6 +13,8 @@
 #include <frc/kinematics/SwerveDriveOdometry.h>
 #include <frc/kinematics/ChassisSpeeds.h>
 
+#include <frc/estimator/SwerveDrivePoseEstimator.h>
+
 #include <frc/geometry/Pose2d.h>
 #include <frc/geometry/Rotation2d.h>
 #include <frc/geometry/Translation2d.h>
@@ -50,9 +52,9 @@ public:
     //Returns a rot value to align with Target Apriltag
     double AlignToAprilTag();
     // Returns the Pose2d of the robot
-    const frc::Pose2d& GetPose() const { return odometry.GetPose(); };
+    frc::Pose2d GetPose() { return odometry.GetEstimatedPosition(); };
     // Resets the Pose2d of the robot
-    void ResetPose(const frc::Pose2d& pose) { odometry.ResetPosition(gyro.GetRotation2d(), { frontLeft.GetModulePosition(), frontRight.GetModulePosition(), backLeft.GetModulePosition(), backRight.GetModulePosition() }, pose ); };
+    void ResetPose(frc::Pose2d pose) { odometry.ResetPosition(gyro.GetRotation2d(), { frontLeft.GetModulePosition(), frontRight.GetModulePosition(), backLeft.GetModulePosition(), backRight.GetModulePosition() }, pose ); };
     // Returns the current ChassisSpeeds of the robot
     frc::ChassisSpeeds GetCurrentSpeeds() { return chassisSpeeds; };
 
@@ -141,7 +143,9 @@ private:
         DrivetrainConstants::backRightLocation
     };
 
-    frc::SwerveDriveOdometry<4> odometry;
+    frc::SwerveDrivePoseEstimator<4> odometry;
+
+    int time = 0;
 };
 
 #endif
