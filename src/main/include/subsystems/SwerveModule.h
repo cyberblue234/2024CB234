@@ -71,5 +71,5 @@ private:
 
     ctre::phoenix6::hardware::TalonFX driveMotor;
     ctre::phoenix6::hardware::TalonFX swerveMotor;
-    ctre::phoenix6::hardware::TalonFX canCoder;
+    ctre::phoenix6::hardware::CANcoder canCoder;
 };

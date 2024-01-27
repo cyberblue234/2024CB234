@@ -7,10 +7,10 @@ name: CI-Branch
 on:
   push:
     # put current branch name here
-    branches: [ phoenix-migration ]
+    branches: [  ]
   pull_request:
     # put current branch name here
-    branches: [ phoenix-migration ]
+    branches: [  ]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
