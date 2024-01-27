@@ -43,6 +43,12 @@ public:
     void DriveWithJoystick(bool limitSpeed);
     // Sets all of the motors using kinematics calulcations. Uses the provided ChassisSpeeds for calculations
     void Drive(const frc::ChassisSpeeds& speeds);
+    // Updates the odometry. Must be ran every cycle.
+    frc::Pose2d UpdateOdometry();
+    //Adds Vision data to odometry and returns the newest pose estimation. Also sets the pipeline ID to Apriltags
+    frc::Pose2d UpdateOdometryWithVision(bool poseOverride);
+    //Returns a rot value to align with Target Apriltag
+    double AlignToAprilTag();
     // Returns the Pose2d of the robot
     const frc::Pose2d& GetPose() const { return odometry.GetPose(); };
     // Resets the Pose2d of the robot
@@ -58,6 +64,8 @@ public:
     void ResetGyroAngle();
     // Resets the gyro for auto
     void ResetGyroForAuto();
+    //Gets the gyro as a rotation2d
+    frc::Rotation2d GetGyro2d() { return gyro.GetRotation2d(); };
     // Returns the gyro's yaw
     double GetGyroAngle() { return gyro.GetYaw(); };
     // Returns the gyro's pitch
