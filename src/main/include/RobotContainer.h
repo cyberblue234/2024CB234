@@ -3,6 +3,7 @@
 #include <frc2/command/CommandPtr.h>
 
 #include "subsystems/Drivetrain.h"
+#include "subsystems/Shooter.h"
 
 class RobotContainer {
  public:
@@ -10,12 +11,9 @@ class RobotContainer {
 
   frc2::CommandPtr GetAutonomousCommand();
 
-  void RunTeleop() { swerve.DriveControl(); };
+  void RunTeleop();
 
  private:
   Drivetrain swerve;
-
-  std::unique_ptr<frc2::Command> testAuto;
-
-  void ConfigureBindings();
+  Shooter shooter;
 };
