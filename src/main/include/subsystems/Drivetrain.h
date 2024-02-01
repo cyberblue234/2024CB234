@@ -64,8 +64,6 @@ public:
     void ResetCancoders();
     // Resets the gyro, if first time since auton reverses the angle
     void ResetGyroAngle();
-    // Resets the gyro for auto
-    void ResetGyroForAuto();
     //Gets the gyro as a rotation2d
     frc::Rotation2d GetGyro2d() { return gyro.GetRotation2d(); };
     // Returns the gyro's yaw

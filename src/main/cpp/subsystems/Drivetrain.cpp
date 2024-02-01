@@ -130,7 +130,7 @@ void Drivetrain::DriveWithJoystick(bool limitSpeed)
                                                                 : frc::ChassisSpeeds{ySpeed, xSpeed, rotation};
 
     Drive(speeds);
-
+    frc::SmartDashboard::PutNumber("Heading", (double)heading.Degrees());
     frc::SmartDashboard::PutNumber("FWD", fwd);
     frc::SmartDashboard::PutNumber("STF", stf);
     frc::SmartDashboard::PutNumber("ROT", rot);
@@ -198,19 +198,8 @@ void Drivetrain::ResetDriveEncoders()
 
 void Drivetrain::ResetGyroAngle()
 {
-    if (gyro_reset_reversed == true)
-    {
-        gyro.SetAngleAdjustment(gyro.GetAngle() - 180.0);
-        gyro_reset_reversed = false;
-    }
     gyro.Reset();
 };
-
-void Drivetrain::ResetGyroForAuto()
-{
-    gyro.Reset();
-    gyro_reset_reversed = true;
-}
 
 void Drivetrain::AlignSwerveDrive()
 {
