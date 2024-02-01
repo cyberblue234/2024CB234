@@ -4,6 +4,7 @@
 
 #include "subsystems/Drivetrain.h"
 #include "subsystems/Shooter.h"
+#include "subsystems/Intake.h"
 
 class RobotContainer {
  public:
@@ -16,4 +17,5 @@ class RobotContainer {
  private:
   Drivetrain swerve;
   Shooter shooter;
+  Intake intake;
 };

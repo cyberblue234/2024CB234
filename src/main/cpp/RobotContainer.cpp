@@ -19,4 +19,5 @@ void RobotContainer::RunTeleop()
 {
     swerve.DriveControl();
     shooter.ShooterControl();
+    intake.IntakeControl();
 }

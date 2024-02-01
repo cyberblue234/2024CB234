@@ -11,6 +11,7 @@ public:
     void ShooterControl();
     void SetShooterMotor1(double power) { shooter1.Set(power); };
     void SetShooterMotor2(double power) { shooter2.Set(power); };
+    double GetShooterAngle() { return absEncoder.GetAbsolutePosition(); };
 
 private:
     rev::CANSparkMax shooter1{RobotMap::SHOOTER_MOTOR1_ADDRESS, rev::CANSparkMax::MotorType::kBrushless};
