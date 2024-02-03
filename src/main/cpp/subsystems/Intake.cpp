@@ -4,6 +4,7 @@
 Intake::Intake()
 {
     intake.RestoreFactoryDefaults();
+    frc::SmartDashboard::PutNumber("Intake Power", 0.0);
 }
 
 void Intake::IntakeControl()

@@ -10,8 +10,8 @@ public:
     Shooter();
     void ShooterControl();
     void SetShooterMotor1(double power) { shooter1.Set(power); };
-    void SetShooterMotor2(double power) { shooter2.Set(power); };
-    double GetShooterAngle() { return absEncoder.GetAbsolutePosition(); };
+    void SetShooterMotor2(double power) { shooter2.Set(power); }
+    double GetShooterAngle() { return shooterAngleEncoder.GetDistance(); };
 
 private:
     rev::CANSparkMax shooter1{RobotMap::SHOOTER_MOTOR1_ADDRESS, rev::CANSparkMax::MotorType::kBrushless};
@@ -21,7 +21,7 @@ private:
     rev::SparkMaxPIDController shooter1PID = shooter1.GetPIDController();
     rev::SparkMaxPIDController shooter2PID = shooter2.GetPIDController();
 
-    frc::DutyCycleEncoder absEncoder{1};
+    frc::DutyCycleEncoder shooterAngleEncoder{1};
 
     double power1;
     double power2;

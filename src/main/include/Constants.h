@@ -89,4 +89,6 @@ namespace ShooterConstants
     inline constexpr double kShooterI = 0.0;
     inline constexpr double kShooterD = 0.0;
     inline constexpr double kShooterF = 0.0;
+
+    inline constexpr double SHOOTER_ANGLE_OFFSET = 0.0;
 }

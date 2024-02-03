@@ -19,7 +19,8 @@ Shooter::Shooter()
     frc::SmartDashboard::PutNumber("Shooter1 Power", 0.0);
     frc::SmartDashboard::PutNumber("Shooter2 Power", 0.0);
 
-
+    shooterAngleEncoder.SetPositionOffset(ShooterConstants::SHOOTER_ANGLE_OFFSET);
+    shooterAngleEncoder.SetDistancePerRotation(-360);
 }
 
 void Shooter::ShooterControl()
@@ -35,7 +36,8 @@ void Shooter::ShooterControl()
     frc::SmartDashboard::PutNumber("Shooter2 RPM", shooter2Encoder.GetVelocity());
     frc::SmartDashboard::PutNumber("Shooter2 RPM * Gear Ratio", shooter2Encoder.GetVelocity() * 28 / 30);
 
-    frc::SmartDashboard::PutNumber("Encoder", absEncoder.GetAbsolutePosition());
+    frc::SmartDashboard::PutNumber("Shooter Encoder Count", shooterAngleEncoder.GetAbsolutePosition());
+    frc::SmartDashboard::PutNumber("Shooter Angle Degrees", GetShooterAngle());
 
     frc::SmartDashboard::PutNumber("Shooter1 Current", shooter1.GetOutputCurrent());
     frc::SmartDashboard::PutNumber("Shooter2 Current", shooter2.GetOutputCurrent());
