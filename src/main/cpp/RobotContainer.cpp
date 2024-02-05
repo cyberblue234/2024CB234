@@ -10,18 +10,17 @@ using namespace pathplanner;
 
 RobotContainer::RobotContainer() : swerve()
 {
-  ConfigureBindings();
-  
+	ConfigureBindings();
 }
 
-void RobotContainer::ConfigureBindings() 
+void RobotContainer::ConfigureBindings()
 {
-  // Add a button to run the example auto to SmartDashboard, this will also be in the GetAutonomousCommand method below
-  testAuto = PathPlannerAuto("Test Auto").ToPtr().Unwrap();
-  frc::SmartDashboard::PutData("Test Auto", testAuto.get());
+	// Add a button to run the example auto to SmartDashboard, this will also be in the GetAutonomousCommand method below
+	testAuto = PathPlannerAuto("Test Auto").ToPtr().Unwrap();
+	frc::SmartDashboard::PutData("Test Auto", testAuto.get());
 }
 
-frc2::CommandPtr RobotContainer::GetAutonomousCommand() 
+frc2::CommandPtr RobotContainer::GetAutonomousCommand()
 {
-  return PathPlannerAuto("Test Auto").ToPtr();
+	return PathPlannerAuto("Test Auto").ToPtr();
 }
