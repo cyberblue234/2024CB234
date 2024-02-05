@@ -52,7 +52,6 @@ void Drivetrain::DriveControl()
 {
     alignmentOn = frc::SmartDashboard::GetBoolean("ALIGNMENT_ON", false);
     frc::SmartDashboard::PutBoolean("ALIGNMENT_ON", alignmentOn);
-    frc::SmartDashboard::PutBoolean("ALIGNMENT_LED", alignmentOn);
 
     if (alignmentOn)
     {
@@ -130,13 +129,6 @@ void Drivetrain::DriveWithJoystick(bool limitSpeed)
                                                                 : frc::ChassisSpeeds{ySpeed, xSpeed, rotation};
 
     Drive(speeds);
-    frc::SmartDashboard::PutNumber("Heading", (double)heading.Degrees());
-    frc::SmartDashboard::PutNumber("FWD", fwd);
-    frc::SmartDashboard::PutNumber("STF", stf);
-    frc::SmartDashboard::PutNumber("ROT", rot);
-    frc::SmartDashboard::PutNumber("XSPEED", (double)xSpeed);
-    frc::SmartDashboard::PutNumber("YSPEED", (double)ySpeed);
-    frc::SmartDashboard::PutNumber("ROTATION", (double)rotation);
 }
 
 void Drivetrain::Drive(const frc::ChassisSpeeds& speeds)
@@ -179,12 +171,6 @@ double Drivetrain::GetDriveDistance()
     double rcount = abs(backRight.GetDriveEncoder());
 
     double distance = ((lcount + rcount) / 2.0) * SwerveModuleConstants::ENCODER_INCHES_PER_COUNT;
-
-    frc::SmartDashboard::PutNumber("FLCOUNT", lcount);
-    frc::SmartDashboard::PutNumber("FRCOUNT", frontRight.GetDriveEncoder());
-    frc::SmartDashboard::PutNumber("BLCOUNT", backLeft.GetDriveEncoder());
-    frc::SmartDashboard::PutNumber("BRCOUNT", backRight.GetDriveEncoder());
-    frc::SmartDashboard::PutNumber("DISTANCE", distance);
     return distance;
 }
 

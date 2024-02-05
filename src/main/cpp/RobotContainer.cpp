@@ -24,3 +24,10 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
 {
 	return PathPlannerAuto("Test Auto").ToPtr();
 }
+
+void RobotContainer::RunTeleop()
+{
+    swerve.DriveControl();
+    shooter.ShooterControl();
+    intake.IntakeControl();
+}

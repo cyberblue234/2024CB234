@@ -2,7 +2,9 @@
 
 #include <frc/geometry/Translation2d.h>
 #include <units/velocity.h>
+#include <units/angular_velocity.h>
 #include <pathplanner/lib/util/HolonomicPathFollowerConfig.h>
+#include <numbers>
 
 
 namespace RobotMap
@@ -23,21 +25,11 @@ namespace RobotMap
     constexpr int BR_SWERVE_ADDRESS = 5;
     constexpr int BR_CANCODER_ADDRESS = 24;
 
+    constexpr int SHOOTER_MOTOR1_ADDRESS = 2;
+    constexpr int SHOOTER_MOTOR2_ADDRESS = 3;
+    constexpr int SHOOTER_FEED_ADDRESS = 13;
 
-    constexpr int ARM_MOTOR_ADDRESS = 99;
-    constexpr int ROTATOR_MOTOR_ADDRESS = 12;
-    constexpr int GRIPPER_MOTOR_ADDRESS = 13;
-
-    constexpr int ARM_PCM_ADDRESS = 0;
-    constexpr int LED_PCM_ADDRESS = 1;
-
-    // roboRIO Input Channels
-
-    constexpr int ARM_ENCODER_CHANNEL = 0;
-    constexpr int ROTATOR_ENCODER_CHANNEL = 1;
-    constexpr int GRIPPER_ENCODER_CHANNEL = 2;
-    constexpr int PRESSURE_SENSOR_CHANNEL = 3;
-    constexpr int ROTATOR_LIMIT_SWITCH_CHANNEL = 9;
+    constexpr int INTAKE_MOTOR_ADDRESS = 4;
 }
 
 namespace SwerveModuleConstants 
@@ -90,4 +82,14 @@ namespace DrivetrainConstants
     inline constexpr double BR_OFFSET_DEGREES = -90.60;
 
     inline constexpr double DRIVE_SLOW_ADJUSTMENT = 0.20;
+}
+
+namespace ShooterConstants
+{
+    inline constexpr double kShooterP = 0.25;
+    inline constexpr double kShooterI = 0.0;
+    inline constexpr double kShooterD = 0.0;
+    inline constexpr double kShooterF = 0.0;
+
+    inline constexpr double SHOOTER_ANGLE_OFFSET = 0.0;
 }
