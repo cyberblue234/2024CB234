@@ -95,7 +95,7 @@ double Limelight::GetAprilTagOffset()
 frc::Pose2d Limelight::GetRobotPose()
 {
     auto x = units::meter_t(botpose_blue.at(0)); //Gets X field coord from X limelight coord
-    auto y = units::meter_t(botpose_blue.at(2)); //Gets Y field coord from Z limelight coord (since 3d -> 2d)
+    auto y = units::meter_t(botpose_blue.at(1)); //Gets Y field coord from Z limelight coord (since 3d -> 2d)
     frc::Rotation2d rot = frc::Rotation2d(units::degree_t(botpose_blue.at(5))); //Gets Rotation estimate from Limelight
     return frc::Pose2d(x, y, rot); //Constructs and Returns the Pose 2d Object
 }

@@ -36,7 +36,16 @@ odometry(
 
 void Drivetrain::Periodic() 
 {
+    
+    limelight3.UpdateLimelightTracking();
     odometry.Update(gyro.GetRotation2d(), { frontLeft.GetModulePosition(), frontRight.GetModulePosition(), backLeft.GetModulePosition(), backRight.GetModulePosition() });
+    if (limelight3.GetTargetValid() == 1 && abs((double) limelight3.GetRobotPose().X() - (double) odometry.GetEstimatedPosition().X()) < 1)
+        odometry.AddVisionMeasurement(limelight3.GetRobotPose(), frc::Timer::GetFPGATimestamp());
+    if (time < 10) ResetPose(limelight3.GetRobotPose()); 
+    frc::SmartDashboard::PutNumber("Odometry X", (double) GetPose().X());
+    frc::SmartDashboard::PutNumber("Odometry Y", (double) GetPose().Y());
+    frc::SmartDashboard::PutNumber("Odometry Rot", (double) GetPose().Rotation().Degrees());
+    time++;
 }
 
 void Drivetrain::DriveControl()
@@ -175,19 +184,8 @@ void Drivetrain::ResetDriveEncoders()
 
 void Drivetrain::ResetGyroAngle()
 {
-    if (gyro_reset_reversed == true)
-    {
-        gyro.SetAngleAdjustment(gyro.GetAngle() - 180.0);
-        gyro_reset_reversed = false;
-    }
     gyro.Reset();
 };
-
-void Drivetrain::ResetGyroForAuto()
-{
-    gyro.Reset();
-    gyro_reset_reversed = true;
-}
 
 void Drivetrain::AlignSwerveDrive()
 {
