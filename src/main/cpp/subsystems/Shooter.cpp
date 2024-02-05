@@ -2,6 +2,7 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/InstantCommand.h>
+#include "RobotExt.h"
 
 Shooter::Shooter()
 {
@@ -32,10 +33,21 @@ void Shooter::ShooterControl()
     shooter2Power = frc::SmartDashboard::GetNumber("Shooter2 Power", shooter2Power);
     feedPower = frc::SmartDashboard::GetNumber("Feed Power", feedPower);
 
-    SetShooterMotor1(shooter1Power);
-    SetShooterMotor2(shooter2Power);
+    if (gamePad.GetAButton())
+    {
+        SetShooterMotor1(shooter1Power);
+        SetShooterMotor2(shooter2Power);
+    }
+    else
+    {
+        SetShooterMotor1(0.0);
+        SetShooterMotor2(0.0);
+    }
 
-    SetFeedMotor(feedPower);
+    if (gamePad.GetBButton())
+        SetFeedMotor(feedPower);
+    else
+        SetFeedMotor(0.0);
 
     frc::SmartDashboard::PutNumber("Shooter1 RPM", shooter1Encoder.GetVelocity());
     frc::SmartDashboard::PutNumber("Shooter1 RPM * Gear Ratio", shooter1Encoder.GetVelocity() * 50 / 30);

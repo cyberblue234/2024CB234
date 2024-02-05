@@ -20,7 +20,7 @@ public:
 		limelight3.UpdateLimelightDashboard();
 	};
 
-	void RunTeleop() { swerve.DriveControl(); };
+	void RunTeleop();
 
 private:
   	Drivetrain swerve;
