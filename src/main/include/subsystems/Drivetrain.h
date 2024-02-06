@@ -26,7 +26,6 @@
 #include <pathplanner/lib/util/PIDConstants.h>
 #include <pathplanner/lib/util/ReplanningConfig.h>
 
-#include "ctre/Phoenix.h"
 #include "AHRS.h"
 
 #include "SwerveModule.h"
