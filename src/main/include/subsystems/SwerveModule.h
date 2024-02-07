@@ -13,8 +13,9 @@
 #include <numbers>
 #include <ctre/phoenix6/CANcoder.hpp>
 #include <ctre/phoenix6/TalonFX.hpp>
-#include <ctre/phoenix6/
 #include "Constants.h"
+
+using namespace ctre::phoenix6;
 
 class SwerveModule
 {
@@ -34,9 +35,9 @@ public:
     // Returns the amount of encoder ticks needed to turn to the desired angle
     double GetDeltaCount() { return deltaCount; }
     // Returns the current angle of the robot
-    double GetCurrentAngle() { return (double)currentAngle.Degrees(); }
+    double GetCurrentAngle() { return (double) currentAngle.Degrees(); }
     // Returns the amount of degrees needed to turn to the desired angle
-    double GetDeltaAngle() { return (double)deltaAngle.Degrees(); }
+    double GetDeltaAngle() { return (double) deltaAngle.Degrees(); }
     // Returns the speed of the motor
     double GetPercentSpeed() { return percentSpeed; }
     // Returns the abosolute position of the swerve motor
@@ -56,11 +57,11 @@ public:
     // Sets the swerve motor to a provided speed
     void SetSwerveMotor(double speed) { swerveMotor.Set(speed); };
     // Sets the ramp for the drive motor (the minimum time to accelerate to full throttle)
-    void SetDriveOpenLoopRamp(double ramp) { ; };
+    void SetDriveOpenLoopRamp(double ramp);
     // Resets the swerve motor's cancoder
-    void ResetCancoder() { canCoder.SetPosition(0); }
+    void ResetCanCoder() { canCoder.SetPosition(units::angle::turn_t(0)); }
     // Resets the drive motor's encoder
-    void ResetEncoder() { driveMotor.SetSelectedSensorPosition(0); };
+    void ResetEncoder() { driveMotor.SetPosition(units::angle::turn_t(0)); };
 
 private:
     double desiredCount;
@@ -70,7 +71,7 @@ private:
     frc::Rotation2d currentAngle;
     frc::Rotation2d deltaAngle;
 
-    ctre::phoenix6::hardware::TalonFX driveMotor;
-    ctre::phoenix6::hardware::TalonFX swerveMotor;
-    ctre::phoenix6::hardware::CANcoder canCoder;
+    hardware::TalonFX driveMotor;
+    hardware::TalonFX swerveMotor;
+    hardware::CANcoder canCoder;
 };

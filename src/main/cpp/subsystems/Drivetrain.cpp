@@ -159,10 +159,10 @@ void Drivetrain::SetDriveOpenLoopRamp(double ramp)
 
 void Drivetrain::ResetCancoders()
 {
-    frontLeft.ResetCancoder();
-    frontRight.ResetCancoder();
-    backLeft.ResetCancoder();
-    backRight.ResetCancoder();
+    frontLeft.ResetCanCoder();
+    frontRight.ResetCanCoder();
+    backLeft.ResetCanCoder();
+    backRight.ResetCanCoder();
 }
 
 double Drivetrain::GetDriveDistance()
