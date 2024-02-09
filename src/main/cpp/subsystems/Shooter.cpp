@@ -59,5 +59,5 @@ void Shooter::ShooterControl()
 
     frc::SmartDashboard::PutNumber("Shooter1 Current", shooter1Motor.GetOutputCurrent());
     frc::SmartDashboard::PutNumber("Shooter2 Current", shooter2Motor.GetOutputCurrent());
-    frc::SmartDashboard::PutNumber("Feed Current", feedMotor.GetMotorOutputVoltage());
+    //frc::SmartDashboard::PutNumber("Feed Current", feedMotor.GetMotorOutputVoltage());
 }

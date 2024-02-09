@@ -1,4 +1,3 @@
-#pragma (warning (push, 0))
 
 #include "rev/CANSparkMax.h"
 #include "Constants.h"
