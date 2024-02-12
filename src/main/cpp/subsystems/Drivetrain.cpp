@@ -104,7 +104,7 @@ void Drivetrain::DriveWithJoystick(bool limitSpeed)
 
     // Get the y speed or forward speed. Invert this because Xbox controllers return negative values when pushed forward
     auto ySpeed = units::meters_per_second_t(-fwd * DrivetrainConstants::MAX_SPEED);
-
+    frc::SmartDashboard::PutNumber("ySpeed", (double) ySpeed);
     // Get the x speed or sideways/strafe speed. Needs to be inverted.
     auto xSpeed = units::meters_per_second_t(-stf * DrivetrainConstants::MAX_SPEED);
 
