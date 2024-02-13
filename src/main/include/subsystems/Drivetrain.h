@@ -13,6 +13,8 @@
 #include <frc/kinematics/SwerveDriveOdometry.h>
 #include <frc/kinematics/ChassisSpeeds.h>
 
+#include <frc/estimator/SwerveDrivePoseEstimator.h>
+
 #include <frc/geometry/Pose2d.h>
 #include <frc/geometry/Rotation2d.h>
 #include <frc/geometry/Translation2d.h>
@@ -24,10 +26,9 @@
 #include <pathplanner/lib/util/PIDConstants.h>
 #include <pathplanner/lib/util/ReplanningConfig.h>
 
-#include "ctre/Phoenix.h"
 #include "AHRS.h"
 
-#include "subsystems/SwerveModule.h"
+#include "SwerveModule.h"
 #include "Constants.h"
 
 class Drivetrain : frc2::SubsystemBase
@@ -43,10 +44,16 @@ public:
     void DriveWithJoystick(bool limitSpeed);
     // Sets all of the motors using kinematics calulcations. Uses the provided ChassisSpeeds for calculations
     void Drive(const frc::ChassisSpeeds& speeds);
+    // Updates the odometry. Must be ran every cycle.
+    frc::Pose2d UpdateOdometry();
+    //Adds Vision data to odometry and returns the newest pose estimation. Also sets the pipeline ID to Apriltags
+    frc::Pose2d UpdateOdometryWithVision(bool poseOverride);
+    //Returns a rot value to align with Target Apriltag
+    double AlignToAprilTag();
     // Returns the Pose2d of the robot
-    const frc::Pose2d& GetPose() const { return odometry.GetPose(); };
+    frc::Pose2d GetPose() { return odometry.GetEstimatedPosition(); };
     // Resets the Pose2d of the robot
-    void ResetPose(const frc::Pose2d& pose) { odometry.ResetPosition(gyro.GetRotation2d(), { frontLeft.GetModulePosition(), frontRight.GetModulePosition(), backLeft.GetModulePosition(), backRight.GetModulePosition() }, pose ); };
+    void ResetPose(frc::Pose2d pose) { odometry.ResetPosition(gyro.GetRotation2d(), { frontLeft.GetModulePosition(), frontRight.GetModulePosition(), backLeft.GetModulePosition(), backRight.GetModulePosition() }, pose ); };
     // Returns the current ChassisSpeeds of the robot
     frc::ChassisSpeeds GetCurrentSpeeds() { return chassisSpeeds; };
 
@@ -56,8 +63,8 @@ public:
     void ResetCancoders();
     // Resets the gyro, if first time since auton reverses the angle
     void ResetGyroAngle();
-    // Resets the gyro for auto
-    void ResetGyroForAuto();
+    //Gets the gyro as a rotation2d
+    frc::Rotation2d GetGyro2d() { return gyro.GetRotation2d(); };
     // Returns the gyro's yaw
     double GetGyroAngle() { return gyro.GetYaw(); };
     // Returns the gyro's pitch
@@ -133,7 +140,9 @@ private:
         DrivetrainConstants::backRightLocation
     };
 
-    frc::SwerveDriveOdometry<4> odometry;
+    frc::SwerveDrivePoseEstimator<4> odometry;
+
+    int time = 0;
 };
 
 #endif

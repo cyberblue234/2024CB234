@@ -36,14 +36,22 @@ odometry(
 
 void Drivetrain::Periodic() 
 {
+    
+    limelight3.UpdateLimelightTracking();
     odometry.Update(gyro.GetRotation2d(), { frontLeft.GetModulePosition(), frontRight.GetModulePosition(), backLeft.GetModulePosition(), backRight.GetModulePosition() });
+    if (limelight3.GetTargetValid() == 1 && abs((double) limelight3.GetRobotPose().X() - (double) odometry.GetEstimatedPosition().X()) < 1)
+        odometry.AddVisionMeasurement(limelight3.GetRobotPose(), frc::Timer::GetFPGATimestamp());
+    if (time < 10) ResetPose(limelight3.GetRobotPose()); 
+    frc::SmartDashboard::PutNumber("Odometry X", (double) GetPose().X());
+    frc::SmartDashboard::PutNumber("Odometry Y", (double) GetPose().Y());
+    frc::SmartDashboard::PutNumber("Odometry Rot", (double) GetPose().Rotation().Degrees());
+    time++;
 }
 
 void Drivetrain::DriveControl()
 {
     alignmentOn = frc::SmartDashboard::GetBoolean("ALIGNMENT_ON", false);
     frc::SmartDashboard::PutBoolean("ALIGNMENT_ON", alignmentOn);
-    frc::SmartDashboard::PutBoolean("ALIGNMENT_LED", alignmentOn);
 
     if (alignmentOn)
     {
@@ -121,13 +129,6 @@ void Drivetrain::DriveWithJoystick(bool limitSpeed)
                                                                 : frc::ChassisSpeeds{ySpeed, xSpeed, rotation};
 
     Drive(speeds);
-
-    frc::SmartDashboard::PutNumber("FWD", fwd);
-    frc::SmartDashboard::PutNumber("STF", stf);
-    frc::SmartDashboard::PutNumber("ROT", rot);
-    frc::SmartDashboard::PutNumber("XSPEED", (double)xSpeed);
-    frc::SmartDashboard::PutNumber("YSPEED", (double)ySpeed);
-    frc::SmartDashboard::PutNumber("ROTATION", (double)rotation);
 }
 
 void Drivetrain::Drive(const frc::ChassisSpeeds& speeds)
@@ -158,10 +159,10 @@ void Drivetrain::SetDriveOpenLoopRamp(double ramp)
 
 void Drivetrain::ResetCancoders()
 {
-    frontLeft.ResetCancoder();
-    frontRight.ResetCancoder();
-    backLeft.ResetCancoder();
-    backRight.ResetCancoder();
+    frontLeft.ResetCanCoder();
+    frontRight.ResetCanCoder();
+    backLeft.ResetCanCoder();
+    backRight.ResetCanCoder();
 }
 
 double Drivetrain::GetDriveDistance()
@@ -170,12 +171,6 @@ double Drivetrain::GetDriveDistance()
     double rcount = abs(backRight.GetDriveEncoder());
 
     double distance = ((lcount + rcount) / 2.0) * SwerveModuleConstants::ENCODER_INCHES_PER_COUNT;
-
-    frc::SmartDashboard::PutNumber("FLCOUNT", lcount);
-    frc::SmartDashboard::PutNumber("FRCOUNT", frontRight.GetDriveEncoder());
-    frc::SmartDashboard::PutNumber("BLCOUNT", backLeft.GetDriveEncoder());
-    frc::SmartDashboard::PutNumber("BRCOUNT", backRight.GetDriveEncoder());
-    frc::SmartDashboard::PutNumber("DISTANCE", distance);
     return distance;
 }
 
@@ -189,19 +184,8 @@ void Drivetrain::ResetDriveEncoders()
 
 void Drivetrain::ResetGyroAngle()
 {
-    if (gyro_reset_reversed == true)
-    {
-        gyro.SetAngleAdjustment(gyro.GetAngle() - 180.0);
-        gyro_reset_reversed = false;
-    }
     gyro.Reset();
 };
-
-void Drivetrain::ResetGyroForAuto()
-{
-    gyro.Reset();
-    gyro_reset_reversed = true;
-}
 
 void Drivetrain::AlignSwerveDrive()
 {
