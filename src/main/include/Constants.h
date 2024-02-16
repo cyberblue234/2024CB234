@@ -42,12 +42,12 @@ namespace SwerveModuleConstants
     inline constexpr double kDriveD = 0.5;
     inline constexpr double kDriveF = 0.2;
 
-    inline constexpr double kAngleP = 0.30;
+    inline constexpr double kAngleP = 5.0;  //0.30;
     inline constexpr double kAngleI = 0.0;
-    inline constexpr double kAngleD = 0.001;
+    inline constexpr double kAngleD = 0.5;  //0.001;
     inline constexpr double kAngleF = 0.0;
 
-    inline constexpr int kCancoderCountsPerRotation = 4096;
+    inline constexpr int kCancoderCountsPerRotation = 16384;
     inline constexpr double kCancoderFeedbackCoefficient = 0.087890625;
 }
 
@@ -76,10 +76,10 @@ namespace DrivetrainConstants
     inline constexpr double BL_DRIVE_ADJUSTMENT = 1.0;
     inline constexpr double BR_DRIVE_ADJUSTMENT = 1.0;
 
-    inline constexpr double FL_OFFSET_DEGREES = 75.81;
-    inline constexpr double FR_OFFSET_DEGREES = 146.30;
-    inline constexpr double BL_OFFSET_DEGREES = -8.70;
-    inline constexpr double BR_OFFSET_DEGREES = -90.60;
+    inline constexpr double FL_OFFSET_DEGREES = -0.2109;  //0.664;  //75.81;
+    inline constexpr double FR_OFFSET_DEGREES = -0.0962;  //0.031;  //146.30;
+    inline constexpr double BL_OFFSET_DEGREES = 0.0222;  //0.601;   //-8.70;
+    inline constexpr double BR_OFFSET_DEGREES = -0.2495;  //-0.171;   //-90.60;
 
     inline constexpr double DRIVE_SLOW_ADJUSTMENT = 0.20;
 }

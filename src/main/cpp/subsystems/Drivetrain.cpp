@@ -46,6 +46,16 @@ void Drivetrain::Periodic()
     frc::SmartDashboard::PutNumber("Odometry Y", (double) GetPose().Y());
     frc::SmartDashboard::PutNumber("Odometry Rot", (double) GetPose().Rotation().Degrees());
     time++;
+
+    frc::SmartDashboard::PutNumber("FL Swerve Pos", frontLeft.GetSwervePosition());
+    frc::SmartDashboard::PutNumber("FR Swerve Pos", frontRight.GetSwervePosition());
+    frc::SmartDashboard::PutNumber("BL Swerve Pos", backLeft.GetSwervePosition());
+    frc::SmartDashboard::PutNumber("BR Swerve Pos", backRight.GetSwervePosition());
+
+    frc::SmartDashboard::PutNumber("FL Delta", frontLeft.GetDesiredCount());
+    frc::SmartDashboard::PutNumber("FR Delta", frontRight.GetDesiredCount());
+    frc::SmartDashboard::PutNumber("BL Delta", backLeft.GetDesiredCount());
+    frc::SmartDashboard::PutNumber("BR Delta", backRight.GetDesiredCount());
 }
 
 void Drivetrain::DriveControl()

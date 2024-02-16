@@ -25,7 +25,7 @@ public:
     // Gets the relative rotational position of the module
     // Return the relative rotational position of the angle motor in degrees
     // GetAbsolutePosition returns 0 - 360 degrees (default)
-    frc::Rotation2d GetAngle() { return (frc::Rotation2d(units::angle::degree_t(canCoder.GetAbsolutePosition().GetValueAsDouble()))); }
+    frc::Rotation2d GetAngle() { return (frc::Rotation2d(units::angle::degree_t(GetSwervePosition()))); }
     
     void SetDesiredState(frc::SwerveModuleState desiredState, double speedAdjustment);
     // Returns the desired count for the swerve encoder
@@ -41,7 +41,7 @@ public:
     // Returns the speed of the motor
     double GetPercentSpeed() { return percentSpeed; }
     // Returns the abosolute position of the swerve motor
-    double GetSwervePosition() { return canCoder.GetAbsolutePosition().GetValueAsDouble(); }
+    double GetSwervePosition() { return canCoder.GetAbsolutePosition().GetValueAsDouble() * 360.0; }
     // Returns the encoder position of the drive motor
     double GetDriveEncoder() { return driveMotor.GetPosition().GetValueAsDouble(); };
     // Returns the current SwerveModulePosition
@@ -68,10 +68,14 @@ private:
     double currentCount;
     double deltaCount;
     double percentSpeed;
+
     frc::Rotation2d currentAngle;
     frc::Rotation2d deltaAngle;
 
     hardware::TalonFX driveMotor;
     hardware::TalonFX swerveMotor;
     hardware::CANcoder canCoder;
+
+    controls::PositionVoltage swervePositionOut{0_tr,0_tps,true,0_V,0,false};
+    //controls::DutyCycleOut driveMotorOut(0);
 };

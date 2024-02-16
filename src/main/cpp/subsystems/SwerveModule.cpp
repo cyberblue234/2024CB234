@@ -9,9 +9,12 @@ SwerveModule::SwerveModule(int driveMotorChannel, int swerveMotorChannel, int ca
 {
     swerveMotor.GetConfigurator().Apply(configs::TalonFXConfiguration{});
     configs::TalonFXConfiguration swerveMotorConfig{};
-
+    
     configs::FeedbackConfigs swerveMotorFeedback{};
     swerveMotorFeedback.WithRemoteCANcoder(canCoder);
+    
+    //swerveMotorFeedback.WithFeedbackSensorSource(signals::FeedbackSensorSourceValue::RemoteCANcoder);
+    //swerveMotorFeedback.WithFeedbackRemoteSensorID(canCoderChannel);
     swerveMotorConfig.WithFeedback(swerveMotorFeedback);
     
     configs::MotorOutputConfigs swerveMotorOutput{};
@@ -64,8 +67,11 @@ SwerveModule::SwerveModule(int driveMotorChannel, int swerveMotorChannel, int ca
 
     configs::MagnetSensorConfigs canCoderMagnetSensor{};
     canCoderMagnetSensor.WithMagnetOffset(offsetDegrees);
+    canCoderMagnetSensor.WithAbsoluteSensorRange(signals::AbsoluteSensorRangeValue::Unsigned_0To1);
 
+    canCoderConfig.WithMagnetSensor(canCoderMagnetSensor);
     canCoder.GetConfigurator().Apply(canCoderConfig);
+    
 
     //canCoder.SetPosition(0); -> ResetCanCoder();
     //swerveMotor.SetPosition(0);
@@ -84,21 +90,29 @@ void SwerveModule::SetDesiredState(const frc::SwerveModuleState desiredState, do
     deltaAngle = optimizedState.angle.operator-(currentAngle);
 
     // Find how much to turn the module in CANCoder ticks
-    deltaCount = ((double)deltaAngle.Degrees() / 360.0) * SwerveModuleConstants::kCancoderCountsPerRotation;
-
+    // deltaCount = ((double)deltaAngle.Degrees() / 360.0) * SwerveModuleConstants::kCancoderCountsPerRotation;
+    deltaCount = ((double)deltaAngle.Degrees() / 360.0);  // * SwerveModuleConstants::kCancoderCountsPerRotation;
+    
     // Get the current position of the module in CANCoder ticks
     // Divide by the feedback coefficient to convert from degrees to ticks
     // GetPosition defaults to return degrees.
-    currentCount = canCoder.GetPosition().GetValueAsDouble() / SwerveModuleConstants::kCancoderFeedbackCoefficient;
-
+    //currentCount = canCoder.GetPosition().GetValueAsDouble();//ef / SwerveModuleConstants::kCancoderFeedbackCoefficient;
+    
     // The new module position will be the the current ticks plus the change in ticks
-    desiredCount = currentCount + deltaCount;
-    swerveMotor.Set(desiredCount);
+    desiredCount = deltaCount;   //currentCount + deltaCount;
+    //swerveMotor.Set(desiredCount);
+    
+    // Get the fraction of a rotation we need to turn
+    auto rotations = (units::angle::turn_t) desiredCount / SwerveModuleConstants::kCancoderFeedbackCoefficient;
+
+    swerveMotor.SetControl(swervePositionOut.WithPosition(rotations));
 
     // Set the drive motor to the optimized state speed
 
     percentSpeed = optimizedState.speed / DrivetrainConstants::MAX_SPEED;
     driveMotor.Set(percentSpeed * speedAdjustment);
+    
+
 }
 
 void SwerveModule::SetDriveOpenLoopRamp(double ramp)

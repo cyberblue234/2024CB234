@@ -1,3 +1,5 @@
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+
 #include "rev/CANSparkMax.h"
 #include "Constants.h"
 #include <frc/DutyCycleEncoder.h>
