@@ -8,3 +8,4 @@ extern frc::XboxController gamePad;
 extern frc::Joystick controls;
 
 extern Limelight limelight3;
+extern Limelight limelight2;

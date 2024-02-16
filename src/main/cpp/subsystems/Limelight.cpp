@@ -46,37 +46,34 @@ void Limelight::UpdateLimelightTracking()
 //Sets the Pipeline ID (Check Enums in Limelight.h)
 void Limelight::SetPipelineID(PipelineID pid)
 {
-    nt::NetworkTableInstance::GetDefault().GetTable("limelight")->PutNumber("pipeline", int(pid));
+    nt::NetworkTableInstance::GetDefault().GetTable(limelight_name)->PutNumber("pipeline", int(pid));
 }
 
 //Sets LEDs (Check Enums in Limelight.h)
 void Limelight::SetLEDMode(LEDMode m)
 {
     int led_mode = m;
-    nt::NetworkTableInstance::GetDefault().GetTable("limelight")->PutNumber("ledMode", led_mode);
+    nt::NetworkTableInstance::GetDefault().GetTable(limelight_name)->PutNumber("ledMode", led_mode);
 }
 
 //Sets Operation Mode (Check Enums in Limelight.h)
 void Limelight::SetCamMode(CamMode m)
 {
     int cam_mode = m;
-    nt::NetworkTableInstance::GetDefault().GetTable("limelight")->PutNumber("camMode", cam_mode);
+    nt::NetworkTableInstance::GetDefault().GetTable(limelight_name)->PutNumber("camMode", cam_mode);
 }
 
 
 //Gets Distance from an AprilTag in Meters
 //MAKE SURE THIS CAN SEE A TAG BEFORE CALLING
-auto Limelight::GetDistanceFromTarget()
+double Limelight::GetDistanceFromTarget()
 {
     //Grabs the distance to target on the x and z planes (forward/back, left/right)
     double xDist = targetpose_robotspace.at(0);
     double zDist = targetpose_robotspace.at(2);
 
     //Find hypotenuse (total distance) of x and z planes  
-    auto distance = units::meter_t(sqrt((xDist*xDist)+(zDist*zDist)));
-
-    //Print out Distance to dashboard for debugging
-    // frc::SmartDashboard::PutNumber("TARGET_DISTANCE", (double) distance);
+    double distance = sqrt((xDist*xDist)+(zDist*zDist));
 
     //Return the total distance
     return distance;
@@ -104,20 +101,20 @@ frc::Pose2d Limelight::GetRobotPose()
 void Limelight::UpdateLimelightDashboard()
 {
     //April Tags
-    frc::SmartDashboard::PutNumber("APRIL_TAG_ID", april_tag_id);
-    frc::SmartDashboard::PutNumber("TARGET_VALID", target_valid);
-    frc::SmartDashboard::PutNumber("TARGET_DISTANCE", (double) GetDistanceFromTarget());
+    frc::SmartDashboard::PutNumber(limelight_name + "_TAG_ID", april_tag_id);
+    frc::SmartDashboard::PutNumber(limelight_name + "_TVALID", target_valid);
+    frc::SmartDashboard::PutNumber(limelight_name + "_DISTANCE", GetDistanceFromTarget());
 
     //Pose
-    frc::SmartDashboard::PutNumber("LL_POSE_X", (double) GetRobotPose().X());
-    frc::SmartDashboard::PutNumber("LL_POSE_Y", (double) GetRobotPose().Y());
-    frc::SmartDashboard::PutNumber("LL_POSE_ROT", (double) GetRobotPose().Rotation().Degrees());
+    frc::SmartDashboard::PutNumber(limelight_name + "_POSE_X", (double) GetRobotPose().X());
+    frc::SmartDashboard::PutNumber(limelight_name + "_POSE_Y", (double) GetRobotPose().Y());
+    frc::SmartDashboard::PutNumber(limelight_name + "_POSE_ROT", (double) GetRobotPose().Rotation().Degrees());
 
     //Pipelines
-    frc::SmartDashboard::PutNumber("TOTAL_LATENCY", GetTotalLatency());
-    frc::SmartDashboard::PutNumber("PIPE_ID", GetActivePipeline());
+    frc::SmartDashboard::PutNumber(limelight_name + "_LATENCY", GetTotalLatency());
+    frc::SmartDashboard::PutNumber(limelight_name + "_PIPE", GetActivePipeline());
 
     //Tracking
-    frc::SmartDashboard::PutNumber("TX", target_x);
-    frc::SmartDashboard::PutNumber("TY", target_y);
+    frc::SmartDashboard::PutNumber(limelight_name + "_TX", target_x);
+    frc::SmartDashboard::PutNumber(limelight_name + "_TY", target_y);
 }
