@@ -4,8 +4,9 @@
 #include "Constants.h"
 #include <frc/DutyCycleEncoder.h>
 #include <frc2/command/SubsystemBase.h>
-//#include <ctre/Phoenix.h>
 #include <ctre/phoenix/motorcontrol/can/WPI_VictorSPX.h>
+#include <frc/Timer.h>
+#include <frc/DigitalInput.h>
 
 class Shooter
 {
@@ -14,7 +15,7 @@ public:
     void ShooterControl();
     void SetShooterMotor1(double power) { shooter1Motor.Set(power); };
     void SetShooterMotor2(double power) { shooter2Motor.Set(power); };
-    void SetFeedMotor(double power) { /*feedMotor.Set(power);*/ };
+    void SetFeedMotor(double power) { feedMotor.Set(power); };
     double GetShooterAngle() { return shooterAngleEncoder.GetDistance(); };
 
 private:
@@ -24,6 +25,8 @@ private:
     rev::SparkRelativeEncoder shooter2Encoder = shooter2Motor.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor);
     rev::SparkPIDController shooter1PID = shooter1Motor.GetPIDController();
     rev::SparkPIDController shooter2PID = shooter2Motor.GetPIDController();
+    frc::DigitalInput intakeSensor{2};
+    frc::Timer intakeSensorTimer{};
 
     frc::DutyCycleEncoder shooterAngleEncoder{1};
 

@@ -45,7 +45,12 @@ void Shooter::ShooterControl()
     }
 
     if (gamePad.GetBButton())
-        SetFeedMotor(feedPower);
+    {
+        if(intakeSensor.Get() == true)
+            SetFeedMotor(feedPower);
+        else
+            SetFeedMotor(0.0);
+    }
     else
         SetFeedMotor(0.0);
 
