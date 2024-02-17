@@ -86,7 +86,7 @@ namespace DrivetrainConstants
 
 namespace ShooterConstants
 {
-    inline constexpr double kShooterP = 0.25;
+    inline constexpr double kShooterP = 0.0;
     inline constexpr double kShooterI = 0.0;
     inline constexpr double kShooterD = 0.0;
     inline constexpr double kShooterF = 0.0;
