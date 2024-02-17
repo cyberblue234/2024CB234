@@ -52,10 +52,18 @@ void Drivetrain::Periodic()
     frc::SmartDashboard::PutNumber("BL Swerve Pos", backLeft.GetSwervePosition());
     frc::SmartDashboard::PutNumber("BR Swerve Pos", backRight.GetSwervePosition());
 
-    frc::SmartDashboard::PutNumber("FL Delta", frontLeft.GetDesiredCount());
-    frc::SmartDashboard::PutNumber("FR Delta", frontRight.GetDesiredCount());
-    frc::SmartDashboard::PutNumber("BL Delta", backLeft.GetDesiredCount());
-    frc::SmartDashboard::PutNumber("BR Delta", backRight.GetDesiredCount());
+    frc::SmartDashboard::PutNumber("FL Desired", frontLeft.GetDesiredCount());
+    frc::SmartDashboard::PutNumber("FR Desired", frontRight.GetDesiredCount());
+    frc::SmartDashboard::PutNumber("BL Desired", backLeft.GetDesiredCount());
+    frc::SmartDashboard::PutNumber("BR Desired", backRight.GetDesiredCount());
+
+    frc::SmartDashboard::PutNumber("FL Delta", frontLeft.GetDeltaCount());
+    frc::SmartDashboard::PutNumber("FR Delta", frontRight.GetDeltaCount());
+    frc::SmartDashboard::PutNumber("BL Delta", backLeft.GetDeltaCount());
+    frc::SmartDashboard::PutNumber("BR Delta", backRight.GetDeltaCount());
+
+    frc::SmartDashboard::PutNumber("FL Delta Angle", frontLeft.GetDeltaAngle());
+    frc::SmartDashboard::PutNumber("FL Current Count", frontLeft.GetCurrentCount());
 }
 
 void Drivetrain::DriveControl()
@@ -137,7 +145,7 @@ void Drivetrain::DriveWithJoystick(bool limitSpeed)
     frc::Rotation2d heading = gyro.GetRotation2d();
     auto speeds = fieldRelative ? frc::ChassisSpeeds::FromFieldRelativeSpeeds(ySpeed, xSpeed, rotation, heading)
                                                                 : frc::ChassisSpeeds{ySpeed, xSpeed, rotation};
-
+    
     Drive(speeds);
 }
 
