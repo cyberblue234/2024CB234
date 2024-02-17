@@ -25,8 +25,8 @@ private:
     rev::SparkRelativeEncoder shooter2Encoder = shooter2Motor.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor);
     rev::SparkPIDController shooter1PID = shooter1Motor.GetPIDController();
     rev::SparkPIDController shooter2PID = shooter2Motor.GetPIDController();
-    frc::DigitalInput intakeSensor{2};
-    frc::Timer intakeSensorTimer{};
+    frc::DigitalInput feedSensor{2};
+    frc::Timer feedSensorTimer{};
 
     frc::DutyCycleEncoder shooterAngleEncoder{1};
 
