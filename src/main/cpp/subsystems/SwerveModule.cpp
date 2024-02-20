@@ -110,7 +110,7 @@ void SwerveModule::SetDesiredState(const frc::SwerveModuleState desiredState, do
     //auto rotations = (units::angle::turn_t) desiredCount / SwerveModuleConstants::kCancoderFeedbackCoefficient;
     auto rotations = (units::angle::turn_t) desiredCount * SwerveModuleConstants::kSwerveModuleGearRatio;
     
-    //swerveMotor.SetControl(swervePositionOut.WithPosition(rotations));
+    swerveMotor.SetControl(swervePositionOut.WithPosition(rotations));
 
     // Set the drive motor to the optimized state speed
 

@@ -22,9 +22,12 @@ Shooter::Shooter()
     frc::SmartDashboard::PutNumber("Shooter1 Power", 0.0);
     frc::SmartDashboard::PutNumber("Shooter2 Power", 0.0);
     frc::SmartDashboard::PutNumber("Feed Power", 0.0);
+    frc::SmartDashboard::PutNumber("Ramp Power",0.0);
 
     shooterAngleEncoder.SetPositionOffset(ShooterConstants::SHOOTER_ANGLE_OFFSET);
     shooterAngleEncoder.SetDistancePerRotation(-360);
+
+    feedSensorTimer.Start();
 }
 
 void Shooter::ShooterControl()
@@ -32,7 +35,9 @@ void Shooter::ShooterControl()
     shooter1Power = frc::SmartDashboard::GetNumber("Shooter1 Power", shooter1Power);
     shooter2Power = frc::SmartDashboard::GetNumber("Shooter2 Power", shooter2Power);
     feedPower = frc::SmartDashboard::GetNumber("Feed Power", feedPower);
+    rampPower = frc::SmartDashboard::GetNumber("Ramp Power",rampPower);
 
+//Shooter Control
     if (gamePad.GetAButton())
     {
         SetShooterMotor1(shooter1Power);
@@ -44,15 +49,44 @@ void Shooter::ShooterControl()
         SetShooterMotor2(0.0);
     }
 
+//Feeder Control
+    static int count = 0;
     if (gamePad.GetBButton())
     {
-        if(feedSensor.Get() == true)
+        if(feedSensor.Get() == true) 
+        {
             SetFeedMotor(feedPower);
+        }
         else
-            SetFeedMotor(0.0);
+        {
+            if (count == 0) 
+                feedSensorTimer.Reset();
+            count++;
+            if ((double) feedSensorTimer.Get() < .1)//leave at .1
+                SetFeedMotor(feedPower);
+            else
+                SetFeedMotor(0.0);
+        }
     }
     else
+    {
+        count = 0;
         SetFeedMotor(0.0);
+    }
+
+    //Ramp Control
+   /* if (gamePad.GetLeftBumper())
+    {
+        SetRampMotor(-rampPower);
+    }
+    else if (gamePad.GetRightBumper())
+    {
+        SetRampMotor(rampPower);
+    }
+    else
+    {
+        SetRampMotor(0.0);
+    }*/
 
     frc::SmartDashboard::PutNumber("Shooter1 RPM", shooter1Encoder.GetVelocity());
     frc::SmartDashboard::PutNumber("Shooter1 RPM * Gear Ratio", shooter1Encoder.GetVelocity() * 50 / 30);

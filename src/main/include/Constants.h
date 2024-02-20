@@ -27,9 +27,10 @@ namespace RobotMap
 
     constexpr int SHOOTER_MOTOR1_ADDRESS = 2;
     constexpr int SHOOTER_MOTOR2_ADDRESS = 3;
-    constexpr int SHOOTER_FEED_ADDRESS = 13;
+    constexpr int SHOOTER_FEED_ADDRESS = 5;
 
     constexpr int INTAKE_MOTOR_ADDRESS = 4;
+    //constexpr int RAMP_MOTOR_ADDRESS = 5;
 }
 
 namespace SwerveModuleConstants 
