@@ -108,7 +108,7 @@ void SwerveModule::SetDesiredState(const frc::SwerveModuleState desiredState, do
     
     // Get the number of a rotations we need to turn - motor rotations time gear ration
     //auto rotations = (units::angle::turn_t) desiredCount / SwerveModuleConstants::kCancoderFeedbackCoefficient;
-    auto rotations = (units::angle::turn_t) desiredCount * SwerveModuleConstants::kSwerveModuleGearRatio;
+    auto rotations = (units::angle::turn_t) desiredCount; // * SwerveModuleConstants::kSwerveModuleGearRatio;
     
     swerveMotor.SetControl(swervePositionOut.WithPosition(rotations));
 

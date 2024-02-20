@@ -43,14 +43,14 @@ namespace SwerveModuleConstants
     inline constexpr double kDriveD = 0.5;
     inline constexpr double kDriveF = 0.2;
 
-    inline constexpr double kAngleP = 5.0;  //0.30;
+    inline constexpr double kAngleP = 7.5;  //0.30;
     inline constexpr double kAngleI = 0.0;
     inline constexpr double kAngleD = 0.5;  //0.001;
     inline constexpr double kAngleF = 0.0;
 
     inline constexpr int kCancoderCountsPerRotation = 16384;
     inline constexpr double kCancoderFeedbackCoefficient = 0.087890625;
-    inline constexpr double kSwerveModuleGearRatio = 4.0;
+    inline constexpr double kSwerveModuleGearRatio = 15.4;
 }
 
 
