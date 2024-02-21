@@ -1,5 +1,3 @@
-//#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-
 #include "rev/CANSparkMax.h"
 #include "Constants.h"
 #include <frc/DutyCycleEncoder.h>
@@ -15,7 +13,7 @@ public:
     void ShooterControl();
     void SetShooterMotor1(double power) { shooter1Motor.Set(power); };
     void SetShooterMotor2(double power) { shooter2Motor.Set(power); };
-    void SetFeedMotor(double power) { feedMotor.Set(power); };
+    void SetFeedMotor(double power) { feedMotor.Set(TalonFXControlMode::PercentOutput, power); };
     double GetShooterAngle() { return shooterAngleEncoder.GetDistance(); };
 
     double GetShooterMotor1Power() { return shooter1Power; };
