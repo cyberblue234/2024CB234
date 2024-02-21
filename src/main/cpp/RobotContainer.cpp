@@ -10,6 +10,9 @@ using namespace pathplanner;
 
 RobotContainer::RobotContainer() : swerve()
 {
+	NamedCommands::registerCommand("Shoot", std::move(shooter.GetShooterCommand()));
+	NamedCommands::registerCommand("Intake", std::move(intake.GetIntakeCommand()));
+
 	ConfigureBindings();
 }
 

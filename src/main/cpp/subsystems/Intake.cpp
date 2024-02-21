@@ -22,3 +22,12 @@ void Intake::IntakeControl()
 
     frc::SmartDashboard::PutNumber("Intake Current", intake.GetOutputCurrent());
 }
+
+frc2::CommandPtr Intake::GetIntakeCommand()
+{
+    return this->RunOnce(
+        [this] {
+            SetIntakeMotor(power);
+        }
+    );
+}
