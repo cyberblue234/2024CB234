@@ -15,6 +15,8 @@ public:
     void SetShooterMotor2(double power) { shooter2Motor.Set(power); };
     void SetFeedMotor(double power) { feedMotor.Set(TalonFXControlMode::PercentOutput, power); };
     double GetShooterAngle() { return shooterAngleEncoder.GetDistance(); };
+    double GetShooter1RPM() { return shooter1Encoder.GetVelocity(); };
+    double GetShooter2RPM() { return shooter2Encoder.GetVelocity(); };
 
     double GetShooterMotor1Power() { return shooter1Power; };
     double GetShooterMotor2Power() { return shooter2Power; };

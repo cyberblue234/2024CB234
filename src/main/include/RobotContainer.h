@@ -22,12 +22,17 @@ public:
 
 	void RunTeleop();
 
+	void LogTeleopData();
+
 private:
   	Drivetrain swerve;
   	Shooter shooter;
   	Intake intake;
 
 	std::unique_ptr<frc2::Command> testAuto;
+
+	FILE *t_output;
+    frc::Timer logTimer;
 
 	void ConfigureBindings();
 };
