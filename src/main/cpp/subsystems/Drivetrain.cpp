@@ -1,7 +1,7 @@
 #include "subsystems/Drivetrain.h"
 #include "RobotExt.h"
 
-bool fieldRelative = true;
+bool fieldRelative = false;
 
 Drivetrain::Drivetrain() : 
 frontLeft(RobotMap::FL_DRIVE_ADDRESS, RobotMap::FL_SWERVE_ADDRESS, RobotMap::FL_CANCODER_ADDRESS, DrivetrainConstants::FL_OFFSET_DEGREES), 
@@ -136,14 +136,14 @@ void Drivetrain::DriveWithJoystick(bool limitSpeed)
     // Get the rate of angular rotation. Needs to be inverted. Remember CCW is positive in mathematics.
     auto rotation = units::radians_per_second_t(-rot * DrivetrainConstants::MAX_ANGULAR_SPEED);
 
-    if (gamePad.GetXButton() == true)
-    {
-        fieldRelative = true;
-    }
-    if (gamePad.GetBButton() == true)
-    {
-        fieldRelative = false;
-    }
+    // if (gamePad.GetXButton() == true)
+    // {
+    //     fieldRelative = true;
+    // }
+    // if (gamePad.GetBButton() == true)
+    // {
+    //     fieldRelative = false;
+    // }
     if (gamePad.GetYButton() == true)
     {
         ResetGyroAngle();

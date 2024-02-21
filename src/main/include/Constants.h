@@ -77,11 +77,12 @@ namespace DrivetrainConstants
     inline constexpr double FR_DRIVE_ADJUSTMENT = 1.0;
     inline constexpr double BL_DRIVE_ADJUSTMENT = 1.0;
     inline constexpr double BR_DRIVE_ADJUSTMENT = 1.0;
+    
+    inline constexpr double FL_OFFSET_DEGREES = 0.445;  //-0.2739; //-0.2109;  //0.664;  //75.81;
+    inline constexpr double FR_OFFSET_DEGREES = 0.149;  //-0.0979; //-0.0962;  //0.031;  //146.30;
+    inline constexpr double BL_OFFSET_DEGREES = -0.041;  //-0.5425; //0.0222;  //0.601;   //-8.70;
+    inline constexpr double BR_OFFSET_DEGREES = -0.256;  //-0.7263; //-0.2495;  //-0.171;   //-90.60;
 
-    inline constexpr double FL_OFFSET_DEGREES = -0.2739; //-0.2109;  //0.664;  //75.81;
-    inline constexpr double FR_OFFSET_DEGREES = -0.0979; //-0.0962;  //0.031;  //146.30;
-    inline constexpr double BL_OFFSET_DEGREES = -0.5425; //0.0222;  //0.601;   //-8.70;
-    inline constexpr double BR_OFFSET_DEGREES = -0.7263; //-0.2495;  //-0.171;   //-90.60;
 
     inline constexpr double DRIVE_SLOW_ADJUSTMENT = 0.20;
 }
