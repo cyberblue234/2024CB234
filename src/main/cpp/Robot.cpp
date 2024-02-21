@@ -12,6 +12,7 @@ frc::XboxController gamePad{0};
 frc::Joystick controls(1);
 
 Limelight limelight3{"limelight"};
+Feeder feeder{};
 
 void Robot::RobotInit()
 {

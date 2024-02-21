@@ -38,10 +38,8 @@ public:
 
     void Periodic() override;
 
-    // Main function of the drivetrain, runs all things related to driving
-    void DriveControl();
     // Gets all of the joystick values and does calculations, then runs Drive(). Provided bool slows down the speed if true
-    void DriveWithJoystick(bool limitSpeed);
+    void DriveWithInput(double fwd, double stf, double rot, bool limitSpeed);
     // Sets all of the motors using kinematics calulcations. Uses the provided ChassisSpeeds for calculations
     void Drive(const frc::ChassisSpeeds& speeds);
     // Updates the odometry. Must be ran every cycle.
@@ -57,8 +55,12 @@ public:
     // Returns the current ChassisSpeeds of the robot
     frc::ChassisSpeeds GetCurrentSpeeds() { return chassisSpeeds; };
 
+    void UpdateTelemetry();
+
     // Sets all of the motors ramp (the minimun time to accelerate to full throttle)
     void SetDriveOpenLoopRamp(double ramp);
+    // Sets the bool that determines if the robot drives field or robot relative
+    void SetFieldRelative(bool isFieldRelative) {fieldRelative = isFieldRelative; };
     // Resets all of the motors swerve cancoders
     void ResetCancoders();
     // Resets the gyro, if first time since auton reverses the angle
@@ -130,6 +132,8 @@ private:
     double lastGyroRoll;
     bool alignmentOn = false;
     bool gyro_reset_reversed = false;
+    bool fieldRelative = false;
+
     frc::ChassisSpeeds chassisSpeeds;
 
     frc::SwerveDriveKinematics<4> kinematics

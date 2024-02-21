@@ -5,25 +5,34 @@
 #include <frc2/command/CommandPtr.h>
 #include <frc/Timer.h>
 #include <frc/DigitalInput.h>
+#include "RobotExt.h"
 
 class Shooter : frc2::SubsystemBase
 {
 public:
     Shooter();
-    void ShooterControl();
+    void ShootAtSpeaker();
+    void ShootAtAmp();
+    void IntakeFromSource();
+
+    void UpdateTelemetry();
+
+    void SetShooterMotors(double power) { SetShooterMotor1(power); SetShooterMotor2(power); };
     void SetShooterMotor1(double power) { shooter1Motor.Set(power); };
     void SetShooterMotor2(double power) { shooter2Motor.Set(power); };
-    void SetFeedMotor(double power) { feedMotor.Set(TalonFXControlMode::PercentOutput, power); };
+
     double GetShooterAngle() { return shooterAngleEncoder.GetDistance(); };
+    double GetAverageRPM() { return (GetShooter1RPM() + GetShooter2RPM()) / 2.0; };
     double GetShooter1RPM() { return shooter1Encoder.GetVelocity(); };
     double GetShooter2RPM() { return shooter2Encoder.GetVelocity(); };
-
-    double GetShooterMotor1Power() { return shooter1Power; };
-    double GetShooterMotor2Power() { return shooter2Power; };
-    double GetFeedPower() { return feedPower; };
-    
+    double GetSpeakerSpeed() { return speakerSpeed; };
+    double GetAmpSpeed() { return ampSpeed; };
+    double GetIntakeSpeed() { return intakeSpeed; };
 
     frc2::CommandPtr GetShooterCommand();
+
+    // FOR DEBUGGING
+    bool shootAtSpeaker = true;
 
 private:
     rev::CANSparkMax shooter1Motor{RobotMap::SHOOTER_MOTOR1_ADDRESS, rev::CANSparkMax::MotorType::kBrushless};
@@ -32,14 +41,10 @@ private:
     rev::SparkRelativeEncoder shooter2Encoder = shooter2Motor.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor);
     rev::SparkPIDController shooter1PID = shooter1Motor.GetPIDController();
     rev::SparkPIDController shooter2PID = shooter2Motor.GetPIDController();
-    frc::DigitalInput feedSensor{2};
-    frc::Timer feedSensorTimer{};
 
-    frc::DutyCycleEncoder shooterAngleEncoder{1};
+    frc::DutyCycleEncoder shooterAngleEncoder{RobotMap::SHOOTER_ENCODER_ADDRESS};
 
-    rev::CANSparkMax feedMotor{RobotMap::SHOOTER_FEED_ADDRESS, rev::CANSparkMax::MotorType::kBrushless};
-
-    double shooter1Power;
-    double shooter2Power;
-    double feedPower;
+    double speakerSpeed;
+    double ampSpeed;
+    double intakeSpeed;
 };

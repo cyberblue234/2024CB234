@@ -53,7 +53,7 @@ public:
     auto GetDistanceFromTarget();
     double GetAprilTagOffset();
     frc::Pose2d GetRobotPose();
-    void UpdateLimelightDashboard();
+    void UpdateTelemetry();
 
 private:
     std::string limelight_name;

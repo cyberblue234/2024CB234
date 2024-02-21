@@ -27,10 +27,12 @@ namespace RobotMap
 
     constexpr int SHOOTER_MOTOR1_ADDRESS = 2;
     constexpr int SHOOTER_MOTOR2_ADDRESS = 3;
-    constexpr int SHOOTER_FEED_ADDRESS = 5;
+    constexpr int SHOOTER_ENCODER_ADDRESS = 1;
+    
+    constexpr int FEED_MOTOR_ADDRESS = 5;
+    constexpr int FEED_SENSOR_ADDRESS = 2;
 
     constexpr int INTAKE_MOTOR_ADDRESS = 4;
-    //constexpr int RAMP_MOTOR_ADDRESS = 5;
 }
 
 namespace SwerveModuleConstants 
@@ -82,7 +84,6 @@ namespace DrivetrainConstants
     inline constexpr double FR_OFFSET_DEGREES = 0.149;  //-0.0979; //-0.0962;  //0.031;  //146.30;
     inline constexpr double BL_OFFSET_DEGREES = -0.041;  //-0.5425; //0.0222;  //0.601;   //-8.70;
     inline constexpr double BR_OFFSET_DEGREES = -0.256;  //-0.7263; //-0.2495;  //-0.171;   //-90.60;
-
 
     inline constexpr double DRIVE_SLOW_ADJUSTMENT = 0.20;
 }

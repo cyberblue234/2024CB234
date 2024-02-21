@@ -101,7 +101,7 @@ frc::Pose2d Limelight::GetRobotPose()
 }
 
 //SmartDashboard Updater for Debugging Purposes
-void Limelight::UpdateLimelightDashboard()
+void Limelight::UpdateTelemetry()
 {
     //April Tags
     frc::SmartDashboard::PutNumber("APRIL_TAG_ID", april_tag_id);

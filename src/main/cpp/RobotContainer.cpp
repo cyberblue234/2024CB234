@@ -29,10 +29,48 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
 }
 
 void RobotContainer::RunTeleop()
-{
-    swerve.DriveControl();
-    shooter.ShooterControl();
-    intake.IntakeControl();
+{	
+	// Drivetrain Inputs
+	if (gamePad.GetXButton() == true)
+        swerve.SetFieldRelative(true);
+    if (gamePad.GetBButton() == true)
+        swerve.SetFieldRelative(false);
+    
+    if (gamePad.GetYButton() == true)
+	    swerve.ResetGyroAngle();
+    
+    if (alignmentOn) 
+		swerve.AlignSwerveDrive();
+    else 
+		swerve.DriveWithInput(gamePad.GetLeftY(), gamePad.GetLeftX(), gamePad.GetRightX(), gamePad.GetLeftStickButton());
+
+    // Intake
+	if (gamePad.GetLeftTriggerAxis() > 0.2) 
+		intake.IntakeFromGround();
+    else
+    {
+        intake.SetIntakeMotor(0.0);
+        feeder.SetFeedMotor(0.0);
+    }
+
+	// Shooter
+	shooter.shootAtSpeaker = frc::SmartDashboard::GetBoolean("Shoot At Speaker?", shooter.shootAtSpeaker);
+
+    if (gamePad.GetRightTriggerAxis() > 0.2)
+    {
+        if (shooter.shootAtSpeaker) 
+			shooter.ShootAtSpeaker();
+        else 
+			shooter.ShootAtAmp();
+    }
+    else if (gamePad.GetLeftBumper()) 
+		shooter.IntakeFromSource();
+    else
+    {
+        shooter.SetSwerveMotors(0.0);
+        feeder.SetFeedMotor(0.0);
+    }
+
 	LogTeleopData();
 }
 
