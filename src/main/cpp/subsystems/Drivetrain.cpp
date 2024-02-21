@@ -1,7 +1,7 @@
 #include "subsystems/Drivetrain.h"
 #include "RobotExt.h"
 
-bool fieldRelative = true;
+bool fieldRelative = false;
 
 Drivetrain::Drivetrain() : 
 frontLeft(RobotMap::FL_DRIVE_ADDRESS, RobotMap::FL_SWERVE_ADDRESS, RobotMap::FL_CANCODER_ADDRESS, DrivetrainConstants::FL_OFFSET_DEGREES), 
@@ -46,6 +46,31 @@ void Drivetrain::Periodic()
     frc::SmartDashboard::PutNumber("Odometry Y", (double) GetPose().Y());
     frc::SmartDashboard::PutNumber("Odometry Rot", (double) GetPose().Rotation().Degrees());
     time++;
+
+    frc::SmartDashboard::PutNumber("FL Swerve Pos", frontLeft.GetSwervePosition());
+    frc::SmartDashboard::PutNumber("FR Swerve Pos", frontRight.GetSwervePosition());
+    frc::SmartDashboard::PutNumber("BL Swerve Pos", backLeft.GetSwervePosition());
+    frc::SmartDashboard::PutNumber("BR Swerve Pos", backRight.GetSwervePosition());
+
+    frc::SmartDashboard::PutNumber("FL Desired", frontLeft.GetDesiredCount());
+    frc::SmartDashboard::PutNumber("FR Desired", frontRight.GetDesiredCount());
+    frc::SmartDashboard::PutNumber("BL Desired", backLeft.GetDesiredCount());
+    frc::SmartDashboard::PutNumber("BR Desired", backRight.GetDesiredCount());
+
+    frc::SmartDashboard::PutNumber("FL Delta", frontLeft.GetDeltaCount());
+    frc::SmartDashboard::PutNumber("FR Delta", frontRight.GetDeltaCount());
+    frc::SmartDashboard::PutNumber("BL Delta", backLeft.GetDeltaCount());
+    frc::SmartDashboard::PutNumber("BR Delta", backRight.GetDeltaCount());
+
+    frc::SmartDashboard::PutNumber("FL Delta Angle", frontLeft.GetDeltaAngle());
+    frc::SmartDashboard::PutNumber("FR Delta Angle", frontRight.GetDeltaAngle());
+    frc::SmartDashboard::PutNumber("BL Delta Angle", backLeft.GetDeltaAngle());
+    frc::SmartDashboard::PutNumber("BR Delta Angle", backRight.GetDeltaAngle());
+
+    frc::SmartDashboard::PutNumber("FL Current Count", frontLeft.GetCurrentCount());
+    frc::SmartDashboard::PutNumber("FR Current Count", frontRight.GetCurrentCount());
+    frc::SmartDashboard::PutNumber("BL Current Count", backLeft.GetCurrentCount());
+    frc::SmartDashboard::PutNumber("BR Current Count", backRight.GetCurrentCount());
 }
 
 void Drivetrain::DriveControl()
@@ -111,14 +136,14 @@ void Drivetrain::DriveWithJoystick(bool limitSpeed)
     // Get the rate of angular rotation. Needs to be inverted. Remember CCW is positive in mathematics.
     auto rotation = units::radians_per_second_t(-rot * DrivetrainConstants::MAX_ANGULAR_SPEED);
 
-    if (gamePad.GetXButton() == true)
-    {
-        fieldRelative = true;
-    }
-    if (gamePad.GetBButton() == true)
-    {
-        fieldRelative = false;
-    }
+    // if (gamePad.GetXButton() == true)
+    // {
+    //     fieldRelative = true;
+    // }
+    // if (gamePad.GetBButton() == true)
+    // {
+    //     fieldRelative = false;
+    // }
     if (gamePad.GetYButton() == true)
     {
         ResetGyroAngle();
@@ -129,6 +154,10 @@ void Drivetrain::DriveWithJoystick(bool limitSpeed)
                                                                 : frc::ChassisSpeeds{ySpeed, xSpeed, rotation};
 
     Drive(speeds);
+
+    frc::SmartDashboard::PutNumber("Y Speed", (double) ySpeed);
+    frc::SmartDashboard::PutNumber("X Speed", (double) xSpeed);
+    frc::SmartDashboard::PutNumber("Rot", (double) rot);
 }
 
 void Drivetrain::Drive(const frc::ChassisSpeeds& speeds)
@@ -142,6 +171,8 @@ void Drivetrain::Drive(const frc::ChassisSpeeds& speeds)
     frc::SwerveModuleState fr = states[1];
     frc::SwerveModuleState bl = states[2];
     frc::SwerveModuleState br = states[3];
+
+    frc::SmartDashboard::PutNumber("FL Desired Degrees", (double) fl.angle.Degrees());
 
     frontLeft.SetDesiredState(fl, DrivetrainConstants::FL_DRIVE_ADJUSTMENT);
     frontRight.SetDesiredState(fr, DrivetrainConstants::FR_DRIVE_ADJUSTMENT);
@@ -159,10 +190,10 @@ void Drivetrain::SetDriveOpenLoopRamp(double ramp)
 
 void Drivetrain::ResetCancoders()
 {
-    frontLeft.ResetCancoder();
-    frontRight.ResetCancoder();
-    backLeft.ResetCancoder();
-    backRight.ResetCancoder();
+    frontLeft.ResetCanCoder();
+    frontRight.ResetCanCoder();
+    backLeft.ResetCanCoder();
+    backRight.ResetCanCoder();
 }
 
 double Drivetrain::GetDriveDistance()

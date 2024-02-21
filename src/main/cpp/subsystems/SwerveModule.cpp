@@ -1,4 +1,5 @@
 #include "subsystems/SwerveModule.h"
+#include <ctre/phoenix6/configs/Configurator.hpp>
 
 // SwerveModule constructor
 SwerveModule::SwerveModule(int driveMotorChannel, int swerveMotorChannel, int canCoderChannel, double offsetDegrees)
@@ -6,39 +7,74 @@ SwerveModule::SwerveModule(int driveMotorChannel, int swerveMotorChannel, int ca
       swerveMotor(swerveMotorChannel, "rio"),
       canCoder(canCoderChannel, "rio")
 {
-    swerveMotor.ConfigFactoryDefault();
-    // Select the canCoder to assign to RemoteSensor0
-    swerveMotor.ConfigRemoteFeedbackFilter(canCoder, 0);
-    // Select RemoteSensor0 (canCoder) as the selected feedback sensor
-    swerveMotor.ConfigSelectedFeedbackSensor(RemoteFeedbackDevice::RemoteFeedbackDevice_RemoteSensor0);
-    // Set the sensor phase
-    swerveMotor.SetSensorPhase(true);
-    swerveMotor.SetInverted(true);
-    // Config max voltage to motor
-    swerveMotor.ConfigVoltageCompSaturation(11.0);
-    swerveMotor.EnableVoltageCompensation(true);
+    swerveMotor.GetConfigurator().Apply(configs::TalonFXConfiguration{});
+    configs::TalonFXConfiguration swerveMotorConfig{};
+    
+    configs::FeedbackConfigs swerveMotorFeedback{};
+    swerveMotorFeedback.WithRemoteCANcoder(canCoder);
+    
+    //swerveMotorFeedback.WithFeedbackSensorSource(signals::FeedbackSensorSourceValue::RemoteCANcoder);
+    //swerveMotorFeedback.WithFeedbackRemoteSensorID(canCoderChannel);
+    swerveMotorConfig.WithFeedback(swerveMotorFeedback);
+    
+    configs::MotorOutputConfigs swerveMotorOutput{};
+    swerveMotorOutput.WithInverted(signals::InvertedValue::Clockwise_Positive);
+    swerveMotorConfig.WithMotorOutput(swerveMotorOutput);
+
+    // TODO: find replacement
+    //swerveMotor.ConfigVoltageCompSaturation(11.0);
+    //swerveMotor.EnableVoltageCompensation(true);
+
+    swerveMotor.GetConfigurator().Apply(swerveMotorConfig);
 
     // Set PID values for angle motor
-    swerveMotor.Config_kP(0, SwerveModuleConstants::kAngleP);
-    swerveMotor.Config_kI(0, SwerveModuleConstants::kAngleI);
-    swerveMotor.Config_kD(0, SwerveModuleConstants::kAngleD);
-    swerveMotor.Config_kF(0, SwerveModuleConstants::kAngleF);
+    configs::SlotConfigs swervePIDFConfigs{};
+    swervePIDFConfigs.kP = SwerveModuleConstants::kAngleP;
+    swervePIDFConfigs.kI = SwerveModuleConstants::kAngleI;
+    swervePIDFConfigs.kD = SwerveModuleConstants::kAngleD;
+    swervePIDFConfigs.kV = SwerveModuleConstants::kAngleF;
 
-    driveMotor.ConfigFactoryDefault();
-    driveMotor.SetSelectedSensorPosition(0);
-    driveMotor.ConfigVoltageCompSaturation(11.0);
-    driveMotor.EnableVoltageCompensation(true);
-    driveMotor.SetNeutralMode(NeutralMode::Brake);
+    // apply gains, 50 ms total timeout
+    swerveMotor.GetConfigurator().Apply(swervePIDFConfigs);
 
-    driveMotor.Config_kP(0, SwerveModuleConstants::kDriveP);
-    driveMotor.Config_kI(0, SwerveModuleConstants::kDriveI);
-    driveMotor.Config_kD(0, SwerveModuleConstants::kDriveD);
-    driveMotor.Config_kF(0, SwerveModuleConstants::kDriveF);
+    driveMotor.GetConfigurator().Apply(configs::TalonFXConfiguration{});
+    configs::TalonFXConfiguration driveMotorConfig{};
 
-    canCoder.ConfigFactoryDefault();
-    canCoder.ConfigMagnetOffset(offsetDegrees);
-    canCoder.SetPosition(0);
-    swerveMotor.SetSelectedSensorPosition(0);
+    ResetEncoder();
+
+    // TODO: find replacement
+    // driveMotor.ConfigVoltageCompSaturation(11.0);
+    // driveMotor.EnableVoltageCompensation(true);
+
+    configs::MotorOutputConfigs driveMotorOutput{};
+    driveMotorOutput.WithNeutralMode(signals::NeutralModeValue::Brake);
+    driveMotorConfig.WithMotorOutput(driveMotorOutput);
+
+    driveMotor.GetConfigurator().Apply(driveMotorConfig);
+
+    // Set PID values for angle motor
+    configs::SlotConfigs drivePIDFConfigs{};
+    drivePIDFConfigs.kP = SwerveModuleConstants::kDriveP;
+    drivePIDFConfigs.kI = SwerveModuleConstants::kDriveI;
+    drivePIDFConfigs.kD = SwerveModuleConstants::kDriveD;
+    drivePIDFConfigs.kV = SwerveModuleConstants::kDriveF;
+
+    // apply gains, 50 ms total timeout
+    driveMotor.GetConfigurator().Apply(drivePIDFConfigs);
+
+    canCoder.GetConfigurator().Apply(configs::CANcoderConfiguration{});
+    configs::CANcoderConfiguration canCoderConfig{};
+
+    configs::MagnetSensorConfigs canCoderMagnetSensor{};
+    canCoderMagnetSensor.WithMagnetOffset(offsetDegrees);
+    canCoderMagnetSensor.WithAbsoluteSensorRange(signals::AbsoluteSensorRangeValue::Unsigned_0To1);
+
+    canCoderConfig.WithMagnetSensor(canCoderMagnetSensor);
+    canCoder.GetConfigurator().Apply(canCoderConfig);
+    
+
+    //canCoder.SetPosition(0); -> ResetCanCoder();
+    //swerveMotor.SetPosition(0);
 }
 
 // Set the speed + rotation of the swerve module from a SwerveModuleState object
@@ -54,19 +90,41 @@ void SwerveModule::SetDesiredState(const frc::SwerveModuleState desiredState, do
     deltaAngle = optimizedState.angle.operator-(currentAngle);
 
     // Find how much to turn the module in CANCoder ticks
-    deltaCount = ((double)deltaAngle.Degrees() / 360.0) * SwerveModuleConstants::kCancoderCountsPerRotation;
-
+    // deltaCount = ((double)deltaAngle.Degrees() / 360.0) * SwerveModuleConstants::kCancoderCountsPerRotation;
+    deltaCount = ((double)deltaAngle.Degrees() / 360.0); // * SwerveModuleConstants::kSwerveModuleGearRatio;  // * SwerveModuleConstants::kCancoderCountsPerRotation;
+    
     // Get the current position of the module in CANCoder ticks
     // Divide by the feedback coefficient to convert from degrees to ticks
     // GetPosition defaults to return degrees.
-    currentCount = canCoder.GetPosition() / SwerveModuleConstants::kCancoderFeedbackCoefficient;
+    //currentCount = canCoder.GetPosition().GetValueAsDouble();//ef / SwerveModuleConstants::kCancoderFeedbackCoefficient;
+    
+    // Get the current position of the module in CANCoder revolutions
+    // GetPosition returns revolutions
+    currentCount = canCoder.GetPosition().GetValueAsDouble();
 
     // The new module position will be the the current ticks plus the change in ticks
     desiredCount = currentCount + deltaCount;
-    swerveMotor.Set(TalonFXControlMode::Position, desiredCount);
+    //swerveMotor.Set(desiredCount);
+    
+    // Get the number of a rotations we need to turn - motor rotations time gear ration
+    //auto rotations = (units::angle::turn_t) desiredCount / SwerveModuleConstants::kCancoderFeedbackCoefficient;
+    auto rotations = (units::angle::turn_t) desiredCount; // * SwerveModuleConstants::kSwerveModuleGearRatio;
+    
+    swerveMotor.SetControl(swervePositionOut.WithPosition(rotations));
 
     // Set the drive motor to the optimized state speed
 
     percentSpeed = optimizedState.speed / DrivetrainConstants::MAX_SPEED;
-    driveMotor.Set(TalonFXControlMode::PercentOutput, percentSpeed * speedAdjustment);
+    driveMotor.Set(percentSpeed * speedAdjustment);
+    
+
+}
+
+void SwerveModule::SetDriveOpenLoopRamp(double ramp)
+{
+    configs::TalonFXConfiguration driveMotorConfig{};
+    configs::OpenLoopRampsConfigs driveMotorOpenLoopRamps{};
+    driveMotorOpenLoopRamps.WithDutyCycleOpenLoopRampPeriod(ramp);
+    driveMotorConfig.WithOpenLoopRamps(driveMotorOpenLoopRamps);
+    driveMotor.GetConfigurator().Apply(driveMotorConfig);
 }

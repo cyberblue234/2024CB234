@@ -19,12 +19,17 @@ Shooter::Shooter()
     shooter2PID.SetD(ShooterConstants::kShooterD);
     shooter2PID.SetFF(ShooterConstants::kShooterF);
 
+    shooter2Motor.SetInverted(true);
+    feedMotor.SetInverted(true);
+
     frc::SmartDashboard::PutNumber("Shooter1 Power", 0.0);
     frc::SmartDashboard::PutNumber("Shooter2 Power", 0.0);
-    frc::SmartDashboard::PutNumber("Feed Power", 0.0);
+    frc::SmartDashboard::PutNumber("Feed Power", 0.5);
 
     shooterAngleEncoder.SetPositionOffset(ShooterConstants::SHOOTER_ANGLE_OFFSET);
     shooterAngleEncoder.SetDistancePerRotation(-360);
+
+    feedSensorTimer.Start();
 }
 
 void Shooter::ShooterControl()
@@ -33,6 +38,7 @@ void Shooter::ShooterControl()
     shooter2Power = frc::SmartDashboard::GetNumber("Shooter2 Power", shooter2Power);
     feedPower = frc::SmartDashboard::GetNumber("Feed Power", feedPower);
 
+//Shooter Control
     if (gamePad.GetAButton())
     {
         SetShooterMotor1(shooter1Power);
@@ -44,10 +50,30 @@ void Shooter::ShooterControl()
         SetShooterMotor2(0.0);
     }
 
+//Feeder Control
+    static int count = 0;
     if (gamePad.GetBButton())
-        SetFeedMotor(feedPower);
+    {
+        if(feedSensor.Get() == true) 
+        {
+            SetFeedMotor(feedPower);
+        }
+        else
+        {
+            if (count == 0) 
+                feedSensorTimer.Reset();
+            count++;
+            if ((double) feedSensorTimer.Get() < .1)
+                SetFeedMotor(feedPower);
+            else
+                SetFeedMotor(0.0);
+        }
+    }
     else
+    {
+        count = 0;
         SetFeedMotor(0.0);
+    }
 
     frc::SmartDashboard::PutNumber("Shooter1 RPM", shooter1Encoder.GetVelocity());
     frc::SmartDashboard::PutNumber("Shooter1 RPM * Gear Ratio", shooter1Encoder.GetVelocity() * 50 / 30);
@@ -59,5 +85,14 @@ void Shooter::ShooterControl()
 
     frc::SmartDashboard::PutNumber("Shooter1 Current", shooter1Motor.GetOutputCurrent());
     frc::SmartDashboard::PutNumber("Shooter2 Current", shooter2Motor.GetOutputCurrent());
-    frc::SmartDashboard::PutNumber("Feed Current", feedMotor.GetMotorOutputVoltage());
+}
+
+frc2::CommandPtr Shooter::GetShooterCommand()
+{
+    return this->RunOnce(
+        [this] {
+            SetShooterMotor1(this->GetShooterMotor1Power());
+            SetShooterMotor2(this->GetShooterMotor2Power());
+        }
+    );
 }
