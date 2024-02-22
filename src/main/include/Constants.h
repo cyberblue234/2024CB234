@@ -33,6 +33,9 @@ namespace RobotMap
     constexpr int FEED_SENSOR_ADDRESS = 2;
 
     constexpr int INTAKE_MOTOR_ADDRESS = 4;
+
+    constexpr int ELEVATOR_MOTOR1_ADDRESS = 6;
+    constexpr int ELEVATOR_MOTOR2_ADDRESS = 7;
 }
 
 namespace SwerveModuleConstants 
