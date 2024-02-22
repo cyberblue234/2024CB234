@@ -44,7 +44,7 @@ private:
 
     frc::DutyCycleEncoder shooterAngleEncoder{RobotMap::SHOOTER_ENCODER_ADDRESS};
 
-    double speakerSpeed;
-    double ampSpeed;
-    double intakeSpeed;
+    double speakerSpeed = 0.8;
+    double ampSpeed = 0.5;
+    double intakeSpeed = 0.5;
 };

@@ -31,8 +31,8 @@ private:
     frc::Timer feedSensorTimer{};
     
     // Speeds should be from 0.0 - 1.0
-    double groundIntakeSpeed;
-    double sourceIntakeSpeed;
-    double speakerShooterSpeed;
-    double ampShooterSpeed;
+    double groundIntakeSpeed = 0.5;
+    double sourceIntakeSpeed = 0.5;
+    double speakerShooterSpeed = 0.5;
+    double ampShooterSpeed = 0.5;
 };

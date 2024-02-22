@@ -5,7 +5,7 @@
 Intake::Intake()
 {
     intake.RestoreFactoryDefaults();
-    frc::SmartDashboard::PutNumber("Intake Ground Speed", 0.0);
+    frc::SmartDashboard::PutNumber("Intake Ground Speed", groundSpeed);
 }
 
 void Intake::Periodic()

@@ -1,33 +1,28 @@
 {
   "HALProvider": {
+    "DIO": {
+      "window": {
+        "visible": true
+      }
+    },
     "Other Devices": {
-      " Talon FX (v6)[8]": {
-        "header": {
-          "open": true
-        }
-      },
-      "SPARK MAX [5]": {
-        "header": {
-          "open": true
-        }
-      },
-      "Talon FX (v6)[8]/Rotor Sensor": {
-        "header": {
-          "open": true
-        }
-      },
       "Talon FX[8]": {
-        "header": {
-          "open": true
-        }
-      },
-      "navX-Sensor[4]": {
         "header": {
           "open": true
         }
       }
     },
+    "PowerDistributions": {
+      "1": {
+        "PowerDistribution[1]": {
+          "open": true
+        }
+      }
+    },
     "RoboRIO": {
+      "6V Rail": {
+        "open": true
+      },
       "window": {
         "visible": true
       }
@@ -39,6 +34,11 @@
       "/SmartDashboard/Test Auto": "Command"
     },
     "windows": {
+      "/FMSInfo": {
+        "window": {
+          "visible": true
+        }
+      },
       "/SmartDashboard/Test Auto": {
         "window": {
           "visible": true
@@ -46,7 +46,23 @@
       }
     }
   },
+  "NetworkTables": {
+    "Persistent Values": {
+      "open": false
+    },
+    "transitory": {
+      "LiveWindow": {
+        "open": true
+      },
+      "SmartDashboard": {
+        "open": true
+      }
+    }
+  },
   "NetworkTables Info": {
+    "Server": {
+      "open": true
+    },
     "visible": true
   }
 }

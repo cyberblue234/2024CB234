@@ -23,9 +23,9 @@ Shooter::Shooter()
 
     shooter1Motor.SetInverted(true);
 
-    frc::SmartDashboard::PutNumber("Shooter Speaker Speed", 0.8);
-    frc::SmartDashboard::PutNumber("Shooter Amp Speed", 0.5);
-    frc::SmartDashboard::PutNumber("Shooter Intake Speed", 0.5);
+    frc::SmartDashboard::PutNumber("Shooter Speaker Speed", speakerSpeed);
+    frc::SmartDashboard::PutNumber("Shooter Amp Speed", ampSpeed);
+    frc::SmartDashboard::PutNumber("Shooter Intake Speed", intakeSpeed);
     
     frc::SmartDashboard::PutBoolean("Shoot At Speaker?", shootAtSpeaker);
 

@@ -7,10 +7,10 @@ Feeder::Feeder()
 
     feedMotor.SetInverted(true);
 
-    groundIntakeSpeed = frc::SmartDashboard::PutNumber("Feed Ground Speed", 0.5);
-    sourceIntakeSpeed = frc::SmartDashboard::PutNumber("Feed Source Speed", 0.5);
-    speakerShooterSpeed = frc::SmartDashboard::PutNumber("Feed Speaker Speed", 0.5);
-    ampShooterSpeed = frc::SmartDashboard::PutNumber("Feed Amp Speed", 0.5);
+    groundIntakeSpeed = frc::SmartDashboard::PutNumber("Feed Ground Speed", groundIntakeSpeed);
+    sourceIntakeSpeed = frc::SmartDashboard::PutNumber("Feed Source Speed", sourceIntakeSpeed);
+    speakerShooterSpeed = frc::SmartDashboard::PutNumber("Feed Speaker Speed", speakerShooterSpeed);
+    ampShooterSpeed = frc::SmartDashboard::PutNumber("Feed Amp Speed", ampShooterSpeed);
 
     feedSensorTimer.Start();
 }

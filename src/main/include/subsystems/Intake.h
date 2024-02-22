@@ -21,5 +21,5 @@ private:
     rev::CANSparkMax intake{RobotMap::INTAKE_MOTOR_ADDRESS, rev::CANSparkMax::MotorType::kBrushless};
     rev::SparkRelativeEncoder intakeEncoder = intake.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor);
     
-    double groundSpeed;
+    double groundSpeed = 0.5;
 };
