@@ -11,8 +11,11 @@
 #include <units/length.h>
 
 #include <numbers>
-#include "ctre/Phoenix.h"
+#include <ctre/phoenix6/CANcoder.hpp>
+#include <ctre/phoenix6/TalonFX.hpp>
 #include "Constants.h"
+
+using namespace ctre::phoenix6;
 
 class SwerveModule
 {
@@ -22,7 +25,7 @@ public:
     // Gets the relative rotational position of the module
     // Return the relative rotational position of the angle motor in degrees
     // GetAbsolutePosition returns 0 - 360 degrees (default)
-    frc::Rotation2d GetAngle() { return (frc::Rotation2d(units::angle::degree_t(canCoder.GetAbsolutePosition()))); }
+    frc::Rotation2d GetAngle() { return (frc::Rotation2d(units::angle::degree_t(GetSwervePosition()))); }
     
     void SetDesiredState(frc::SwerveModuleState desiredState, double speedAdjustment);
     // Returns the desired count for the swerve encoder
@@ -32,43 +35,47 @@ public:
     // Returns the amount of encoder ticks needed to turn to the desired angle
     double GetDeltaCount() { return deltaCount; }
     // Returns the current angle of the robot
-    double GetCurrentAngle() { return (double)currentAngle.Degrees(); }
+    double GetCurrentAngle() { return (double) currentAngle.Degrees(); }
     // Returns the amount of degrees needed to turn to the desired angle
-    double GetDeltaAngle() { return (double)deltaAngle.Degrees(); }
+    double GetDeltaAngle() { return (double) deltaAngle.Degrees(); }
     // Returns the speed of the motor
     double GetPercentSpeed() { return percentSpeed; }
     // Returns the abosolute position of the swerve motor
-    double GetSwervePosition() { return canCoder.GetAbsolutePosition(); }
+    double GetSwervePosition() { return canCoder.GetAbsolutePosition().GetValueAsDouble() * 360.0; }
     // Returns the encoder position of the drive motor
-    double GetDriveEncoder() { return driveMotor.GetSelectedSensorPosition(); };
+    double GetDriveEncoder() { return driveMotor.GetPosition().GetValueAsDouble(); };
     // Returns the current SwerveModulePosition
     frc::SwerveModulePosition GetModulePosition() { return frc::SwerveModulePosition{units::length::meter_t(GetDriveEncoder() * SwerveModuleConstants::ENCODER_METERS_PER_COUNT), GetAngle()}; };
     // Returns the RPM of the drive motor
-    double GetDriveRPM() { return driveMotor.GetSelectedSensorVelocity() * 600.0 / 2048.0; };
+    double GetDriveRPM() { return driveMotor.GetRotorVelocity().GetValueAsDouble() * 600.0 / 2048.0; };
     // Returns the current being pulled by the drive motor
-    double GetDriveCurrent() { return driveMotor.GetOutputCurrent(); };
+    double GetDriveCurrent() { return driveMotor.GetMotorVoltage().GetValueAsDouble(); };
     // Returns the current being pulled by the swerve motor
-    double GetSwerveCurrent() { return swerveMotor.GetOutputCurrent(); };
+    double GetSwerveCurrent() { return swerveMotor.GetMotorVoltage().GetValueAsDouble(); };
     // Sets the drive motor to a provided speed
-    void SetDriveMotor(double speed) { driveMotor.Set(TalonFXControlMode::PercentOutput, speed); };
+    void SetDriveMotor(double speed) { driveMotor.Set(speed); };
     // Sets the swerve motor to a provided speed
-    void SetSwerveMotor(double speed) { swerveMotor.Set(TalonFXControlMode::PercentOutput, speed); };
-    // Sets the ramp for the drive motor (the minimun time to accelerate to full throttle)
-    void SetDriveOpenLoopRamp(double ramp) { driveMotor.ConfigOpenloopRamp(ramp); };
+    void SetSwerveMotor(double speed) { swerveMotor.Set(speed); };
+    // Sets the ramp for the drive motor (the minimum time to accelerate to full throttle)
+    void SetDriveOpenLoopRamp(double ramp);
     // Resets the swerve motor's cancoder
-    void ResetCancoder() { canCoder.SetPosition(0); }
+    void ResetCanCoder() { canCoder.SetPosition(units::angle::turn_t(0)); }
     // Resets the drive motor's encoder
-    void ResetEncoder() { driveMotor.SetSelectedSensorPosition(0); };
+    void ResetEncoder() { driveMotor.SetPosition(units::angle::turn_t(0)); };
 
 private:
     double desiredCount;
     double currentCount;
     double deltaCount;
     double percentSpeed;
+
     frc::Rotation2d currentAngle;
     frc::Rotation2d deltaAngle;
 
-    WPI_TalonFX driveMotor;
-    WPI_TalonFX swerveMotor;
-    WPI_CANCoder canCoder;
+    hardware::TalonFX driveMotor;
+    hardware::TalonFX swerveMotor;
+    hardware::CANcoder canCoder;
+
+    controls::PositionVoltage swervePositionOut{0_tr,0_tps,true,0_V,0,false};
+    //controls::DutyCycleOut driveMotorOut(0);
 };

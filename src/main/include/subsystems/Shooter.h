@@ -1,34 +1,55 @@
-
 #include "rev/CANSparkMax.h"
 #include "Constants.h"
 #include <frc/DutyCycleEncoder.h>
 #include <frc2/command/SubsystemBase.h>
-#include <ctre/Phoenix.h>
+#include <frc2/command/CommandPtr.h>
+#include <frc/Timer.h>
+#include <frc/DigitalInput.h>
+#include "RobotExt.h"
 
-class Shooter
+class Shooter : frc2::SubsystemBase
 {
 public:
     Shooter();
-    void ShooterControl();
+    void Periodic() override;
+    void ShootAtSpeaker();
+    void ShootAtAmp();
+    void IntakeFromSource();
+
+    void UpdateTelemetry();
+
+    void SetShooterMotors(double power) { SetShooterMotor1(power); SetShooterMotor2(power); };
     void SetShooterMotor1(double power) { shooter1Motor.Set(power); };
     void SetShooterMotor2(double power) { shooter2Motor.Set(power); };
-    void SetFeedMotor(double power) { feedMotor.Set(TalonFXControlMode::PercentOutput, power); };
+    void SetShooterMotorsRPM(double rpm) { SetShooterMotor1RPM(rpm); SetShooterMotor2RPM(rpm); };
+    void SetShooterMotor1RPM(double rpm) { shooter1PID.SetReference(rpm, rev::CANSparkLowLevel::ControlType::kVelocity); };
+    void SetShooterMotor2RPM(double rpm) { shooter2PID.SetReference(rpm, rev::CANSparkLowLevel::ControlType::kVelocity); };
+    
+
     double GetShooterAngle() { return shooterAngleEncoder.GetDistance(); };
+    double GetAverageRPM() { return (GetShooter1RPM() + GetShooter2RPM()) / 2.0; };
+    double GetShooter1RPM() { return shooter1Encoder.GetVelocity(); };
+    double GetShooter2RPM() { return shooter2Encoder.GetVelocity(); };
+    double GetSpeakerRPM() { return speakerRPM; };
+    double GetAmpSpeed() { return ampSpeed; };
+    double GetIntakeSpeed() { return intakeRPM; };
+
+    frc2::CommandPtr GetShooterCommand();
+
+    // FOR DEBUGGING
+    bool shootAtSpeaker = true;
 
 private:
     rev::CANSparkMax shooter1Motor{RobotMap::SHOOTER_MOTOR1_ADDRESS, rev::CANSparkMax::MotorType::kBrushless};
     rev::CANSparkMax shooter2Motor{RobotMap::SHOOTER_MOTOR2_ADDRESS, rev::CANSparkMax::MotorType::kBrushless};
     rev::SparkRelativeEncoder shooter1Encoder = shooter1Motor.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor);
     rev::SparkRelativeEncoder shooter2Encoder = shooter2Motor.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor);
-    rev::SparkMaxPIDController shooter1PID = shooter1Motor.GetPIDController();
-    rev::SparkMaxPIDController shooter2PID = shooter2Motor.GetPIDController();
+    rev::SparkPIDController shooter1PID = shooter1Motor.GetPIDController();
+    rev::SparkPIDController shooter2PID = shooter2Motor.GetPIDController();
 
-    frc::DutyCycleEncoder shooterAngleEncoder{1};
+    frc::DutyCycleEncoder shooterAngleEncoder{RobotMap::SHOOTER_ENCODER_ADDRESS};
 
-    //WPI_VictorSPX feedMotor{RobotMap::SHOOTER_FEED_ADDRESS};
-    TalonFX feedMotor{RobotMap::SHOOTER_FEED_ADDRESS};
-
-    double shooter1Power;
-    double shooter2Power;
-    double feedPower;
+    double speakerRPM = 0.8;
+    double ampSpeed = 0.5;
+    double intakeSpeed = 0.5;
 };

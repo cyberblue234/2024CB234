@@ -13,6 +13,8 @@ frc::Joystick controls(1);
 
 Limelight limelight3{"limelight"};
 Limelight limelight2{"limelight-intake"};
+Feeder feeder{};
+
 
 void Robot::RobotInit()
 {

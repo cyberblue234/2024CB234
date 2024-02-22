@@ -27,7 +27,10 @@ namespace RobotMap
 
     constexpr int SHOOTER_MOTOR1_ADDRESS = 2;
     constexpr int SHOOTER_MOTOR2_ADDRESS = 3;
-    constexpr int SHOOTER_FEED_ADDRESS = 13;
+    constexpr int SHOOTER_ENCODER_ADDRESS = 1;
+    
+    constexpr int FEED_MOTOR_ADDRESS = 5;
+    constexpr int FEED_SENSOR_ADDRESS = 2;
 
     constexpr int INTAKE_MOTOR_ADDRESS = 4;
 }
@@ -42,13 +45,14 @@ namespace SwerveModuleConstants
     inline constexpr double kDriveD = 0.5;
     inline constexpr double kDriveF = 0.2;
 
-    inline constexpr double kAngleP = 0.30;
+    inline constexpr double kAngleP = 7.5;  //0.30;
     inline constexpr double kAngleI = 0.0;
-    inline constexpr double kAngleD = 0.001;
+    inline constexpr double kAngleD = 0.5;  //0.001;
     inline constexpr double kAngleF = 0.0;
 
-    inline constexpr int kCancoderCountsPerRotation = 4096;
+    inline constexpr int kCancoderCountsPerRotation = 16384;
     inline constexpr double kCancoderFeedbackCoefficient = 0.087890625;
+    inline constexpr double kSwerveModuleGearRatio = 15.4;
 }
 
 
@@ -75,11 +79,11 @@ namespace DrivetrainConstants
     inline constexpr double FR_DRIVE_ADJUSTMENT = 1.0;
     inline constexpr double BL_DRIVE_ADJUSTMENT = 1.0;
     inline constexpr double BR_DRIVE_ADJUSTMENT = 1.0;
-
-    inline constexpr double FL_OFFSET_DEGREES = 75.81;
-    inline constexpr double FR_OFFSET_DEGREES = 146.30;
-    inline constexpr double BL_OFFSET_DEGREES = -8.70;
-    inline constexpr double BR_OFFSET_DEGREES = -90.60;
+    
+    inline constexpr double FL_OFFSET_DEGREES = 0.445;  //-0.2739; //-0.2109;  //0.664;  //75.81;
+    inline constexpr double FR_OFFSET_DEGREES = 0.149;  //-0.0979; //-0.0962;  //0.031;  //146.30;
+    inline constexpr double BL_OFFSET_DEGREES = -0.041;  //-0.5425; //0.0222;  //0.601;   //-8.70;
+    inline constexpr double BR_OFFSET_DEGREES = -0.256;  //-0.7263; //-0.2495;  //-0.171;   //-90.60;
 
     inline constexpr double DRIVE_SLOW_ADJUSTMENT = 0.20;
 }

@@ -17,10 +17,12 @@ public:
 	{
 		limelight3.UpdateLimelightTracking();
 		swerve.ResetPose(limelight3.GetRobotPose());
-		limelight3.UpdateLimelightDashboard();
+		limelight3.UpdateTelemetry();
 	};
 
 	void RunTeleop();
+
+	void LogTeleopData();
 
 private:
   	Drivetrain swerve;
@@ -28,6 +30,9 @@ private:
   	Intake intake;
 
 	std::unique_ptr<frc2::Command> testAuto;
+
+	FILE *t_output;
+    frc::Timer logTimer;
 
 	void ConfigureBindings();
 };
