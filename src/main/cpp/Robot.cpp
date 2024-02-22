@@ -7,7 +7,7 @@
 #include <frc/PowerDistribution.h>
 #include "subsystems/Limelight.h"
 #include "subsystems/Feeder.h"
-#include "subsytems/Elevator.h"
+#include "subsystems/Elevator.h"
 
 frc::PowerDistribution pdp{1, frc::PowerDistribution::ModuleType::kRev};
 frc::XboxController gamePad{0};

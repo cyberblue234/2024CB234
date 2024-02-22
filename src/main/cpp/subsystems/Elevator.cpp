@@ -7,7 +7,7 @@ Elevator::Elevator()
     elevatorMotor1.RestoreFactoryDefaults();
     elevatorMotor2.RestoreFactoryDefaults();
 
-    elevatorMotor2.Follow(&elevatorMotor1, true);
+    elevatorMotor2.Follow(elevatorMotor1, true);
 
     frc::SmartDashboard::PutNumber("Elevator P", ElevatorConstants::kElevatorP);
     frc::SmartDashboard::PutNumber("Elevator I", ElevatorConstants::kElevatorI);

@@ -32,7 +32,7 @@ public:
     double GetShooter2RPM() { return shooter2Encoder.GetVelocity(); };
     double GetSpeakerRPM() { return speakerRPM; };
     double GetAmpSpeed() { return ampSpeed; };
-    double GetIntakeSpeed() { return intakeRPM; };
+    double GetIntakeSpeed() { return intakeSpeed; };
 
     frc2::CommandPtr GetShooterCommand();
 

@@ -82,8 +82,7 @@ frc2::CommandPtr Shooter::GetShooterCommand()
 {
     return this->RunOnce(
         [this] {
-            SetShooterMotor1(this->GetSpeakerSpeed());
-            SetShooterMotor2(this->GetSpeakerSpeed());
+            SetShooterMotorsRPM(this->GetSpeakerRPM());
         }
     );
 }
