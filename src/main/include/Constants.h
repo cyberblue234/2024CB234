@@ -97,3 +97,17 @@ namespace ShooterConstants
 
     inline constexpr double SHOOTER_ANGLE_OFFSET = 0.0;
 }
+
+namespace ElevatorConstants
+{
+    inline constexpr double kElevatorP = 1.0;
+    inline constexpr double kElevatorI = 1.0;
+    inline constexpr double kElevatorD = 1.0;
+    inline constexpr double kElevatorF = 1.0;
+
+    inline constexpr double kForce = 45.0;
+    inline constexpr double kKickup = 1.0;
+    inline constexpr double kGravity = 9.8;
+
+    inline constexpr double kSpeakerHeight = 1.0914; //Speaker height to target in meters
+}
