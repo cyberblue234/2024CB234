@@ -39,7 +39,7 @@ void RobotContainer::RunTeleop()
     if (gamePad.GetYButton() == true)
 	    swerve.ResetGyroAngle();
     
-    if (alignmentOn) 
+    if (swerve.IsAlignmentOn()) 
 		swerve.AlignSwerveDrive();
     else 
 		swerve.DriveWithInput(gamePad.GetLeftY(), gamePad.GetLeftX(), gamePad.GetRightX(), gamePad.GetLeftStickButton());
@@ -67,7 +67,7 @@ void RobotContainer::RunTeleop()
 		shooter.IntakeFromSource();
     else
     {
-        shooter.SetSwerveMotors(0.0);
+        shooter.SetShooterMotors(0.0);
         feeder.SetFeedMotor(0.0);
     }
 

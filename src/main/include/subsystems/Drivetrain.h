@@ -121,6 +121,8 @@ public:
     // Sets all motors to a speed of zero
     void AlignSwerveDrive();
 
+    bool IsAlignmentOn() { return alignmentOn; };
+
 private:
     SwerveModule frontLeft;
     SwerveModule frontRight;

@@ -1,6 +1,21 @@
 {
   "HALProvider": {
     "Other Devices": {
+      " Talon FX (v6)[8]": {
+        "header": {
+          "open": true
+        }
+      },
+      "SPARK MAX [5]": {
+        "header": {
+          "open": true
+        }
+      },
+      "Talon FX (v6)[8]/Rotor Sensor": {
+        "header": {
+          "open": true
+        }
+      },
       "Talon FX[8]": {
         "header": {
           "open": true

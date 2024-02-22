@@ -11,9 +11,10 @@ class Intake : frc2::SubsystemBase
 public:
     Intake();
     void Periodic() override;
-    void IntakeFromGound();
+    void IntakeFromGround();
     void SetIntakeMotor(double power) { intake.Set(power); };
     void UpdateTelemetry();
+    double GetGroundSpeed() { return groundSpeed; };
     frc2::CommandPtr GetIntakeCommand();
 
 private:

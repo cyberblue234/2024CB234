@@ -1,3 +1,5 @@
+#pragma once
+
 #include "rev/CANSparkMax.h"
 #include "Constants.h"
 #include <frc2/command/SubsystemBase.h>

@@ -36,21 +36,21 @@ Shooter::Shooter()
 void Shooter::ShootAtSpeaker()
 {
     speakerSpeed = frc::SmartDashboard::GetNumber("Shooter Speaker Speed", speakerSpeed);
-    SetSwerveMotors(speakerSpeed);
+    SetShooterMotors(speakerSpeed);
     if (GetAverageRPM() >= (VORTEX_MAX_RPM / speakerSpeed) - 100) feeder.ShootAtSpeaker();
 }
 
 void Shooter::ShootAtAmp()
 {
     ampSpeed = frc::SmartDashboard::GetNumber("Shooter Amp Speed", ampSpeed);
-    SetSwerveMotors(ampSpeed);
+    SetShooterMotors(ampSpeed);
     if (GetAverageRPM() >= (VORTEX_MAX_RPM / ampSpeed) - 100) feeder.ShootAtAmp();
 }
 
 void Shooter::IntakeFromSource()
 {
     intakeSpeed = frc::SmartDashboard::GetNumber("Shooter Intake Speed", intakeSpeed);
-    SetSwerveMotors(-intakeSpeed);
+    SetShooterMotors(-intakeSpeed);
     feeder.IntakeFromSource();
 }
 
@@ -74,8 +74,8 @@ frc2::CommandPtr Shooter::GetShooterCommand()
 {
     return this->RunOnce(
         [this] {
-            SetShooterMotor1(this->GetShooterMotor1Power());
-            SetShooterMotor2(this->GetShooterMotor2Power());
+            SetShooterMotor1(this->GetSpeakerSpeed());
+            SetShooterMotor2(this->GetSpeakerSpeed());
         }
     );
 }

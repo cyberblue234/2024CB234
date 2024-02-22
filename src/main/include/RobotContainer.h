@@ -17,7 +17,7 @@ public:
 	{
 		limelight3.UpdateLimelightTracking();
 		swerve.ResetPose(limelight3.GetRobotPose());
-		limelight3.UpdateLimelightDashboard();
+		limelight3.UpdateTelemetry();
 	};
 
 	void RunTeleop();

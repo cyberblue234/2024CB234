@@ -30,7 +30,7 @@ frc2::CommandPtr Intake::GetIntakeCommand()
 {
     return this->RunOnce(
         [this] {
-            SetIntakeMotor(power);
+            SetIntakeMotor(this->GetGroundSpeed());
         }
     );
 }
