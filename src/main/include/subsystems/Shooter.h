@@ -11,6 +11,7 @@ class Shooter : frc2::SubsystemBase
 {
 public:
     Shooter();
+    void Periodic() override;
     void ShootAtSpeaker();
     void ShootAtAmp();
     void IntakeFromSource();
@@ -20,14 +21,18 @@ public:
     void SetShooterMotors(double power) { SetShooterMotor1(power); SetShooterMotor2(power); };
     void SetShooterMotor1(double power) { shooter1Motor.Set(power); };
     void SetShooterMotor2(double power) { shooter2Motor.Set(power); };
+    void SetShooterMotorsRPM(double rpm) { SetShooterMotor1RPM(rpm); SetShooterMotor2RPM(rpm); };
+    void SetShooterMotor1RPM(double rpm) { shooter1PID.SetReference(rpm, rev::CANSparkLowLevel::ControlType::kVelocity); };
+    void SetShooterMotor2RPM(double rpm) { shooter2PID.SetReference(rpm, rev::CANSparkLowLevel::ControlType::kVelocity); };
+    
 
     double GetShooterAngle() { return shooterAngleEncoder.GetDistance(); };
     double GetAverageRPM() { return (GetShooter1RPM() + GetShooter2RPM()) / 2.0; };
     double GetShooter1RPM() { return shooter1Encoder.GetVelocity(); };
     double GetShooter2RPM() { return shooter2Encoder.GetVelocity(); };
-    double GetSpeakerSpeed() { return speakerSpeed; };
+    double GetSpeakerRPM() { return speakerRPM; };
     double GetAmpSpeed() { return ampSpeed; };
-    double GetIntakeSpeed() { return intakeSpeed; };
+    double GetIntakeSpeed() { return intakeRPM; };
 
     frc2::CommandPtr GetShooterCommand();
 
@@ -44,7 +49,7 @@ private:
 
     frc::DutyCycleEncoder shooterAngleEncoder{RobotMap::SHOOTER_ENCODER_ADDRESS};
 
-    double speakerSpeed = 0.8;
+    double speakerRPM = 0.8;
     double ampSpeed = 0.5;
     double intakeSpeed = 0.5;
 };

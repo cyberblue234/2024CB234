@@ -11,19 +11,14 @@ Shooter::Shooter()
     shooter1Motor.RestoreFactoryDefaults();
     shooter2Motor.RestoreFactoryDefaults();
 
-    shooter1PID.SetP(ShooterConstants::kShooterP);
-    shooter1PID.SetI(ShooterConstants::kShooterI);
-    shooter1PID.SetD(ShooterConstants::kShooterD);
-    shooter1PID.SetFF(ShooterConstants::kShooterF);
-
-    shooter2PID.SetP(ShooterConstants::kShooterP);
-    shooter2PID.SetI(ShooterConstants::kShooterI);
-    shooter2PID.SetD(ShooterConstants::kShooterD);
-    shooter2PID.SetFF(ShooterConstants::kShooterF);
+    frc::SmartDashboard::PutNumber("Shooter P", ShooterConstants::kShooterP);
+    frc::SmartDashboard::PutNumber("Shooter I", ShooterConstants::kShooterI);
+    frc::SmartDashboard::PutNumber("Shooter D", ShooterConstants::kShooterD);
+    frc::SmartDashboard::PutNumber("Shooter F", ShooterConstants::kShooterF);
 
     shooter1Motor.SetInverted(true);
 
-    frc::SmartDashboard::PutNumber("Shooter Speaker Speed", speakerSpeed);
+    frc::SmartDashboard::PutNumber("Shooter Speaker RPM", speakerRPM);
     frc::SmartDashboard::PutNumber("Shooter Amp Speed", ampSpeed);
     frc::SmartDashboard::PutNumber("Shooter Intake Speed", intakeSpeed);
     
@@ -33,18 +28,31 @@ Shooter::Shooter()
     shooterAngleEncoder.SetDistancePerRotation(-360);
 }
 
+void Shooter::Periodic()
+{
+    shooter1PID.SetP(frc::SmartDashboard::GetNumber("Shooter P", ShooterConstants::kShooterP));
+    shooter1PID.SetI(frc::SmartDashboard::GetNumber("Shooter I", ShooterConstants::kShooterI));
+    shooter1PID.SetD(frc::SmartDashboard::GetNumber("Shooter D", ShooterConstants::kShooterD));
+    shooter1PID.SetFF(frc::SmartDashboard::GetNumber("Shooter F", ShooterConstants::kShooterF));
+
+    shooter2PID.SetP(frc::SmartDashboard::GetNumber("Shooter P", ShooterConstants::kShooterP));
+    shooter2PID.SetI(frc::SmartDashboard::GetNumber("Shooter I", ShooterConstants::kShooterI));
+    shooter2PID.SetD(frc::SmartDashboard::GetNumber("Shooter D", ShooterConstants::kShooterD));
+    shooter2PID.SetFF(frc::SmartDashboard::GetNumber("Shooter F", ShooterConstants::kShooterF));
+}
+
 void Shooter::ShootAtSpeaker()
 {
-    speakerSpeed = frc::SmartDashboard::GetNumber("Shooter Speaker Speed", speakerSpeed);
-    SetShooterMotors(speakerSpeed);
-    if (GetAverageRPM() >= (VORTEX_MAX_RPM / speakerSpeed) - 100) feeder.ShootAtSpeaker();
+    speakerRPM = frc::SmartDashboard::GetNumber("Shooter Speaker RPM", speakerRPM);
+    SetShooterMotorsRPM(speakerRPM);
+    if (GetAverageRPM() >= speakerRPM - 15) feeder.ShootAtSpeaker();
 }
 
 void Shooter::ShootAtAmp()
 {
     ampSpeed = frc::SmartDashboard::GetNumber("Shooter Amp Speed", ampSpeed);
     SetShooterMotors(ampSpeed);
-    if (GetAverageRPM() >= (VORTEX_MAX_RPM / ampSpeed) - 100) feeder.ShootAtAmp();
+    if (GetAverageRPM() >= (VORTEX_MAX_RPM / ampSpeed) - 25) feeder.ShootAtAmp();
 }
 
 void Shooter::IntakeFromSource()
