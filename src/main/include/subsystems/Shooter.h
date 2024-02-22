@@ -25,8 +25,6 @@ public:
     void SetShooterMotor1RPM(double rpm) { shooter1PID.SetReference(rpm, rev::CANSparkLowLevel::ControlType::kVelocity); };
     void SetShooterMotor2RPM(double rpm) { shooter2PID.SetReference(rpm, rev::CANSparkLowLevel::ControlType::kVelocity); };
     
-
-    double GetShooterAngle() { return shooterAngleEncoder.GetDistance(); };
     double GetAverageRPM() { return (GetShooter1RPM() + GetShooter2RPM()) / 2.0; };
     double GetShooter1RPM() { return shooter1Encoder.GetVelocity(); };
     double GetShooter2RPM() { return shooter2Encoder.GetVelocity(); };
@@ -46,8 +44,6 @@ private:
     rev::SparkRelativeEncoder shooter2Encoder = shooter2Motor.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor);
     rev::SparkPIDController shooter1PID = shooter1Motor.GetPIDController();
     rev::SparkPIDController shooter2PID = shooter2Motor.GetPIDController();
-
-    frc::DutyCycleEncoder shooterAngleEncoder{RobotMap::SHOOTER_ENCODER_ADDRESS};
 
     double speakerRPM = 0.8;
     double ampSpeed = 0.5;
