@@ -1,6 +1,8 @@
 #include "subsystems/Drivetrain.h"
 #include "RobotExt.h"
 
+
+
 Drivetrain::Drivetrain() : 
 frontLeft(RobotMap::FL_DRIVE_ADDRESS, RobotMap::FL_SWERVE_ADDRESS, RobotMap::FL_CANCODER_ADDRESS, DrivetrainConstants::FL_OFFSET_DEGREES), 
 frontRight(RobotMap::FR_DRIVE_ADDRESS, RobotMap::FR_SWERVE_ADDRESS, RobotMap::FR_CANCODER_ADDRESS, DrivetrainConstants::FR_OFFSET_DEGREES), 
@@ -117,6 +119,24 @@ void Drivetrain::Drive(const frc::ChassisSpeeds& speeds)
     frontRight.SetDesiredState(fr, DrivetrainConstants::FR_DRIVE_ADJUSTMENT);
     backLeft.SetDesiredState(bl, DrivetrainConstants::BL_DRIVE_ADJUSTMENT);
     backRight.SetDesiredState(br, DrivetrainConstants::BR_DRIVE_ADJUSTMENT);
+}
+
+double Drivetrain::RotationControl(double rotInput) 
+{
+    rotInput = rotInput * rotInput * rotInput;
+    // if(controls.GetRawButton(AUTO_ALIGN)) 
+    // {
+        
+    // }
+    if(abs(rotInput) < 0.05) {
+        double current = (double) gyro.GetRotation2d().Degrees();
+        return rotationController.Calculate(current, lastGyroYaw);
+    }
+    else 
+    {
+        lastGyroYaw = (double) gyro.GetRotation2d().Degrees();
+        return rotInput;
+    }
 }
 
 void Drivetrain::UpdateTelemetry()

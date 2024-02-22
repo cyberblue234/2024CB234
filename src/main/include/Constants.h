@@ -89,6 +89,10 @@ namespace DrivetrainConstants
     inline constexpr double BR_OFFSET_DEGREES = -0.256;  //-0.7263; //-0.2495;  //-0.171;   //-90.60;
 
     inline constexpr double DRIVE_SLOW_ADJUSTMENT = 0.20;
+
+    inline constexpr double kRotationP = 0.3;
+    inline constexpr double kRotationI = 0.0;
+    inline constexpr double kRotationD = 0.027;
 }
 
 namespace ShooterConstants

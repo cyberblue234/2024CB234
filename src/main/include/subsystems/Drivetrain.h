@@ -15,6 +15,8 @@
 
 #include <frc/estimator/SwerveDrivePoseEstimator.h>
 
+#include <frc/controller/PIDController.h>
+
 #include <frc/geometry/Pose2d.h>
 #include <frc/geometry/Rotation2d.h>
 #include <frc/geometry/Translation2d.h>
@@ -31,6 +33,8 @@
 #include "SwerveModule.h"
 #include "Constants.h"
 
+extern frc::PIDController rotationController;
+
 class Drivetrain : frc2::SubsystemBase
 {
 public:
@@ -46,14 +50,14 @@ public:
     frc::Pose2d UpdateOdometry();
     //Adds Vision data to odometry and returns the newest pose estimation. Also sets the pipeline ID to Apriltags
     frc::Pose2d UpdateOdometryWithVision(bool poseOverride);
-    //Returns a rot value to align with Target Apriltag
-    double AlignToAprilTag();
     // Returns the Pose2d of the robot
     frc::Pose2d GetPose() { return odometry.GetEstimatedPosition(); };
     // Resets the Pose2d of the robot
     void ResetPose(frc::Pose2d pose) { odometry.ResetPosition(gyro.GetRotation2d(), { frontLeft.GetModulePosition(), frontRight.GetModulePosition(), backLeft.GetModulePosition(), backRight.GetModulePosition() }, pose ); };
     // Returns the current ChassisSpeeds of the robot
     frc::ChassisSpeeds GetCurrentSpeeds() { return chassisSpeeds; };
+
+    double RotationControl(double rotInput);
 
     void UpdateTelemetry();
 
@@ -123,6 +127,8 @@ public:
 
     bool IsAlignmentOn() { return alignmentOn; };
 
+   
+
 private:
     SwerveModule frontLeft;
     SwerveModule frontRight;
@@ -132,6 +138,7 @@ private:
     AHRS gyro;
     double lastGyroPitch;
     double lastGyroRoll;
+    double lastGyroYaw;
     bool alignmentOn = false;
     bool gyro_reset_reversed = false;
     bool fieldRelative = false;
@@ -149,6 +156,9 @@ private:
     frc::SwerveDrivePoseEstimator<4> odometry;
 
     int time = 0;
+
+    frc::PIDController rotationController{DrivetrainConstants::kRotationP, DrivetrainConstants::kRotationP, DrivetrainConstants::kRotationI, 20_ms};
+
 };
 
 #endif
