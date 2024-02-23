@@ -42,24 +42,25 @@ void RobotContainer::RunTeleop()
     if (swerve.IsAlignmentOn()) 
 		swerve.AlignSwerveDrive();
     else 
+	{
 		swerve.DriveWithInput(gamePad.GetLeftY(), gamePad.GetLeftX(), gamePad.GetRightX(), gamePad.GetLeftStickButton());
+	}
+	
+	shooter.shootAtSpeaker = frc::SmartDashboard::GetBoolean("Shoot At Speaker?", shooter.shootAtSpeaker);
 
     // Intake
 	if (gamePad.GetLeftTriggerAxis() > 0.2) 
 		intake.IntakeFromGround();
-    else
+    else if (gamePad.GetRightTriggerAxis() > 0.2)
     {
-        intake.SetIntakeMotor(0.0);
-        feeder.SetFeedMotor(0.0);
-    }
+        if (shooter.shootAtSpeaker)
+		{
+			// todo swerve.AlignToAprilTag();
+			// is the swerve at position && is the elevator at position
+			//elevator.AlignShooterToSpeaker()
+			shooter.ShootAtSpeaker(true);
 
-	// Shooter
-	shooter.shootAtSpeaker = frc::SmartDashboard::GetBoolean("Shoot At Speaker?", shooter.shootAtSpeaker);
-
-    if (gamePad.GetRightTriggerAxis() > 0.2)
-    {
-        if (shooter.shootAtSpeaker) 
-			shooter.ShootAtSpeaker();
+		}
         else 
 			shooter.ShootAtAmp();
     }
@@ -67,6 +68,7 @@ void RobotContainer::RunTeleop()
 		shooter.IntakeFromSource();
     else
     {
+		intake.SetIntakeMotor(0.0);
         shooter.SetShooterMotors(0.0);
         feeder.SetFeedMotor(0.0);
     }

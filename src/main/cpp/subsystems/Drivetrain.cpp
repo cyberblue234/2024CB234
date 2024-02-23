@@ -1,8 +1,6 @@
 #include "subsystems/Drivetrain.h"
 #include "RobotExt.h"
 
-
-
 Drivetrain::Drivetrain() : 
 frontLeft(RobotMap::FL_DRIVE_ADDRESS, RobotMap::FL_SWERVE_ADDRESS, RobotMap::FL_CANCODER_ADDRESS, DrivetrainConstants::FL_OFFSET_DEGREES), 
 frontRight(RobotMap::FR_DRIVE_ADDRESS, RobotMap::FR_SWERVE_ADDRESS, RobotMap::FR_CANCODER_ADDRESS, DrivetrainConstants::FR_OFFSET_DEGREES), 
@@ -70,7 +68,7 @@ void Drivetrain::DriveWithInput(double fwd, double stf, double rot, bool limitSp
     {
         stf *= DrivetrainConstants::DRIVE_SLOW_ADJUSTMENT;
     }
-
+ 
     rot = rot * rot * rot;
     if (abs(rot) < 0.05)
     {
@@ -121,16 +119,19 @@ void Drivetrain::Drive(const frc::ChassisSpeeds& speeds)
     backRight.SetDesiredState(br, DrivetrainConstants::BR_DRIVE_ADJUSTMENT);
 }
 
-double Drivetrain::RotationControl(double rotInput) 
+double Drivetrain::RotationControl(double rotInput, bool alignToAprilTag) 
 {
     rotInput = rotInput * rotInput * rotInput;
-    // if(controls.GetRawButton(AUTO_ALIGN)) 
-    // {
-        
-    // }
-    if(abs(rotInput) < 0.05) {
-        double current = (double) gyro.GetRotation2d().Degrees();
-        return rotationController.Calculate(current, lastGyroYaw);
+
+    if (alignToAprilTag)
+    {   
+        rotInput = rotationController.Calculate(limelight3.GetAprilTagOffset(), 0);
+        return std::clamp(rotInput, -1.0, 1.0);
+    }
+    else if(abs(rotInput) < 0.05) 
+    {
+        rotInput = rotationController.Calculate((double) gyro.GetRotation2d().Degrees(), lastGyroYaw);
+        return std::clamp(rotInput, -1.0, 1.0);
     }
     else 
     {

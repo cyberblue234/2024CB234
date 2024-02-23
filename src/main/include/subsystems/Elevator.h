@@ -13,10 +13,10 @@ public:
     Elevator();
     void Periodic() override;
 
-    void AlignShooterToSpeaker();
+    bool AlignShooterToSpeaker();
     double CalculateSpeakerAngle();
     
-    void SetElevatorMotorsPosition(double pos) { elevatorPID.SetReference(pos, rev::CANSparkLowLevel::ControlType::kPosition); };
+    void SetElevatorMotorsPosition(double pos);
     void SetElevatorMotors(double power) { elevatorMotor1.Set(power); };
 
     double GetShooterAngle() { return shooterAngleEncoder.GetDistance(); };

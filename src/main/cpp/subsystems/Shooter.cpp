@@ -38,11 +38,11 @@ void Shooter::Periodic()
     shooter2PID.SetFF(frc::SmartDashboard::GetNumber("Shooter F", ShooterConstants::kShooterF));
 }
 
-void Shooter::ShootAtSpeaker()
+void Shooter::ShootAtSpeaker(bool atAlignment)
 {
     speakerRPM = frc::SmartDashboard::GetNumber("Shooter Speaker RPM", speakerRPM);
     SetShooterMotorsRPM(speakerRPM);
-    if (GetAverageRPM() >= speakerRPM - 15) feeder.ShootAtSpeaker();
+    if (GetAverageRPM() >= speakerRPM - 15 && atAlignment) feeder.ShootAtSpeaker();
 }
 
 void Shooter::ShootAtAmp()

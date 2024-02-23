@@ -32,6 +32,7 @@
 
 #include "SwerveModule.h"
 #include "Constants.h"
+#include "RobotExt.h"
 
 extern frc::PIDController rotationController;
 
@@ -57,7 +58,7 @@ public:
     // Returns the current ChassisSpeeds of the robot
     frc::ChassisSpeeds GetCurrentSpeeds() { return chassisSpeeds; };
 
-    double RotationControl(double rotInput);
+    double RotationControl(double rotInput, bool alignToAprilTag);
 
     void UpdateTelemetry();
 
@@ -127,7 +128,7 @@ public:
 
     bool IsAlignmentOn() { return alignmentOn; };
 
-   
+    bool GetAtAlignment() { return abs(limelight3.GetAprilTagOffset()) < 0.5; };
 
 private:
     SwerveModule frontLeft;
@@ -136,9 +137,9 @@ private:
     SwerveModule backRight;
 
     AHRS gyro;
-    double lastGyroPitch;
-    double lastGyroRoll;
-    double lastGyroYaw;
+    double lastGyroPitch = 0;
+    double lastGyroRoll = 0;
+    double lastGyroYaw = 0;
     bool alignmentOn = false;
     bool gyro_reset_reversed = false;
     bool fieldRelative = false;
