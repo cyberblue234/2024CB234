@@ -14,6 +14,9 @@ Elevator::Elevator()
     frc::SmartDashboard::PutNumber("Elevator D", ElevatorConstants::kElevatorD);
     frc::SmartDashboard::PutNumber("Elevator F", ElevatorConstants::kElevatorF);
 
+    frc::SmartDashboard::PutNumber("Elevator Speed", elevatorSpeed);
+    frc::SmartDashboard::PutNumber("Elevator Amp Angle", ampAngle);
+
     shooterAngleEncoder.SetPositionOffset(ShooterConstants::SHOOTER_ANGLE_OFFSET);
     shooterAngleEncoder.SetDistancePerRotation(-360);
 }
@@ -24,16 +27,17 @@ void Elevator::Periodic()
     elevatorPID.SetI(frc::SmartDashboard::GetNumber("Elevator I", ElevatorConstants::kElevatorI));
     elevatorPID.SetD(frc::SmartDashboard::GetNumber("Elevator D", ElevatorConstants::kElevatorD));
     elevatorPID.SetFF(frc::SmartDashboard::GetNumber("Elevator F", ElevatorConstants::kElevatorF));
+
+    elevatorSpeed = frc::SmartDashboard::GetNumber("Elevator Speed", elevatorSpeed);
+    ampAngle = frc::SmartDashboard::GetNumber("Elevator Amp Angle", ampAngle);
 }
 
-bool Elevator::AlignShooterToSpeaker()
+void Elevator::AlignShooterToSpeaker()
 {
     double current = GetShooterAngle() ;
     double target = CalculateSpeakerAngle();
-    double difference = current - target;
-    SetElevatorMotorsPosition(GetShooterRevolutions() + (difference / 360));
-
-    return abs(difference) > 0.5; 
+    alignmentDifference = current - target;
+    SetElevatorMotorsPosition(GetShooterRevolutions() + (alignmentDifference / 360));
 }
 
 //Returns the Angle from parallel to floor in degrees using limelight

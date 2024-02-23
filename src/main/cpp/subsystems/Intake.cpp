@@ -17,7 +17,7 @@ void Intake::IntakeFromGround()
 {
     groundSpeed = frc::SmartDashboard::GetNumber("Intake Ground Speed", groundSpeed);
     SetIntakeMotor(groundSpeed);
-    feeder.IntakeFromGround();
+    //feeder.IntakeFromGround();
 }
 
 void Intake::UpdateTelemetry()

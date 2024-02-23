@@ -2,6 +2,7 @@
 #include "RobotExt.h"
 #include "subsystems/Limelight.h"
 #include "subsystems/Drivetrain.h"
+#include <numbers>
 
 
 //Constructors, Name is fed in for the NetworkTables name
@@ -83,7 +84,7 @@ double Limelight::GetAprilTagOffset()
 {
     double offset = atan(targetpose_robotspace.at(0) / targetpose_robotspace.at(2));
     frc::SmartDashboard::PutNumber("Target Rotatation Offset", offset);
-    offset *= 180/PI;
+    offset *= 180 / std::numbers::pi;
     return offset;
 }
 

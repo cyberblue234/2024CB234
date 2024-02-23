@@ -13,7 +13,7 @@ public:
     Elevator();
     void Periodic() override;
 
-    bool AlignShooterToSpeaker();
+    void AlignShooterToSpeaker();
     double CalculateSpeakerAngle();
     
     void SetElevatorMotorsPosition(double pos);
@@ -21,6 +21,9 @@ public:
 
     double GetShooterAngle() { return shooterAngleEncoder.GetDistance(); };
     double GetShooterRevolutions() { return (double) shooterAngleEncoder.Get(); };
+    double GetElevatorSpeed() { return elevatorSpeed; };
+    double GetAlignmentDifference() { return alignmentDifference; };
+    double GetAmpAngle() { return ampAngle; };
     
     void UpdateTelemetry();
 
@@ -30,4 +33,9 @@ private:
     rev::SparkPIDController elevatorPID = elevatorMotor1.GetPIDController();
 
     frc::DutyCycleEncoder shooterAngleEncoder{RobotMap::SHOOTER_ENCODER_ADDRESS};
+
+    double elevatorSpeed = 0.5;
+    double alignmentDifference = 0;
+    // Should be a constant eventually
+    double ampAngle = 22;
 };

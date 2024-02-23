@@ -12,7 +12,7 @@ class Shooter : frc2::SubsystemBase
 public:
     Shooter();
     void Periodic() override;
-    void ShootAtSpeaker(bool atAlignment);
+    void ShootAtSpeaker();
     void ShootAtAmp();
     void IntakeFromSource();
 
