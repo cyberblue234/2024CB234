@@ -30,6 +30,8 @@ void Controls::DriveControls()
     if (gamepad.GetYButton() == true)
         swerve->ResetGyroAngle();
 
+    if (gamepad.GetRightBumper()) swerve->SetPIDFs();
+
     if (swerve->IsAlignmentOn())
         swerve->AlignSwerveDrive();
     else

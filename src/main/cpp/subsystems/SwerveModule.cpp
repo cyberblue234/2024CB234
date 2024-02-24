@@ -132,6 +132,7 @@ void SwerveModule::SetDrivePIDF(double P, double I, double D, double FF)
     drivePIDFConfigs.kI = I;
     drivePIDFConfigs.kD = D;
     drivePIDFConfigs.kV = FF;
+    driveMotor.GetConfigurator().Apply(drivePIDFConfigs);
 }
 
 void SwerveModule::SetSwervePIDF(double P, double I, double D, double FF)
@@ -141,4 +142,5 @@ void SwerveModule::SetSwervePIDF(double P, double I, double D, double FF)
     swervePIDFConfigs.kI = I;
     swervePIDFConfigs.kD = D;
     swervePIDFConfigs.kV = FF;
+    swerveMotor.GetConfigurator().Apply(swervePIDFConfigs);
 }
