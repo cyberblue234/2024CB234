@@ -51,6 +51,7 @@ void Drivetrain::Periodic()
     frc::SmartDashboard::PutBoolean("ALIGNMENT_ON", alignmentOn);
 
     UpdateTelemetry();
+    SetPIDFs();
 }
 
 void Drivetrain::DriveWithInput(double fwd, double stf, double rot, bool limitSpeed)
@@ -131,14 +132,14 @@ double Drivetrain::RotationControl(double rotInput, bool alignToAprilTag)
 
     if (alignToAprilTag)
     {
-        rotInput = rotationController.Calculate(limelight3->GetAprilTagOffset(), 0);
+        rotInput = -rotationController.Calculate(limelight3->GetAprilTagOffset(), 0);
         return std::clamp(rotInput, -1.0, 1.0);
     }
-    else if (abs(rotInput) < 0.05)
-    {
-        rotInput = rotationController.Calculate((double)gyro.GetRotation2d().Degrees(), lastGyroYaw);
-        return std::clamp(rotInput, -1.0, 1.0);
-    }
+    // else if (abs(rotInput) < 0.05)
+    // {
+    //     rotInput = rotationController.Calculate((double)gyro.GetRotation2d().Degrees(), lastGyroYaw);
+    //     return std::clamp(rotInput, -1.0, 1.0);
+    // }
     else
     {
         lastGyroYaw = (double)gyro.GetRotation2d().Degrees();
@@ -176,6 +177,21 @@ void Drivetrain::UpdateTelemetry()
     frc::SmartDashboard::PutNumber("FR Current Count", frontRight.GetCurrentCount());
     frc::SmartDashboard::PutNumber("BL Current Count", backLeft.GetCurrentCount());
     frc::SmartDashboard::PutNumber("BR Current Count", backRight.GetCurrentCount());
+
+    frc::SmartDashboard::PutNumber("DRIVE P", SwerveModuleConstants::kDriveP);
+    frc::SmartDashboard::PutNumber("DRIVE I", SwerveModuleConstants::kDriveI);
+    frc::SmartDashboard::PutNumber("DRIVE D", SwerveModuleConstants::kDriveD);
+    frc::SmartDashboard::PutNumber("DRIVE FF", SwerveModuleConstants::kDriveF);
+
+    frc::SmartDashboard::PutNumber("SWERVE P", SwerveModuleConstants::kAngleP);
+    frc::SmartDashboard::PutNumber("SWERVE I", SwerveModuleConstants::kAngleI);
+    frc::SmartDashboard::PutNumber("SWERVE D", SwerveModuleConstants::kAngleD);
+    frc::SmartDashboard::PutNumber("SWERVE FF", SwerveModuleConstants::kAngleF);
+
+    frc::SmartDashboard::PutNumber("ROTATION P", DrivetrainConstants::kRotationP);
+    frc::SmartDashboard::PutNumber("ROTATION I", DrivetrainConstants::kRotationI);
+    frc::SmartDashboard::PutNumber("ROTATION D", DrivetrainConstants::kRotationD);
+
 }
 
 void Drivetrain::SetDriveOpenLoopRamp(double ramp)
@@ -228,4 +244,33 @@ void Drivetrain::AlignSwerveDrive()
     frontRight.SetSwerveMotor(speed);
     backLeft.SetSwerveMotor(speed);
     backRight.SetSwerveMotor(speed);
+}
+
+void Drivetrain::SetPIDFs() {
+    double driveP = frc::SmartDashboard::GetNumber("DRIVE P", SwerveModuleConstants::kDriveP);
+    double driveI = frc::SmartDashboard::GetNumber("DRIVE I", SwerveModuleConstants::kDriveI);
+    double driveD = frc::SmartDashboard::GetNumber("DRIVE D", SwerveModuleConstants::kDriveD);
+    double driveFF = frc::SmartDashboard::GetNumber("DRIVE FF", SwerveModuleConstants::kDriveF);
+
+    frontLeft.SetDrivePIDF(driveP, driveI, driveD, driveFF);
+    backLeft.SetDrivePIDF(driveP, driveI, driveD, driveFF);
+    frontRight.SetDrivePIDF(driveP, driveI, driveD, driveFF);
+    backRight.SetDrivePIDF(driveP, driveI, driveD, driveFF);
+
+    double angleP = frc::SmartDashboard::GetNumber("SWERVE P", SwerveModuleConstants::kAngleP);
+    double angleI = frc::SmartDashboard::GetNumber("SWERVE I", SwerveModuleConstants::kAngleI);
+    double angleD = frc::SmartDashboard::GetNumber("SWERVE D", SwerveModuleConstants::kAngleD);
+    double angleFF = frc::SmartDashboard::GetNumber("SWERVE FF", SwerveModuleConstants::kAngleF);
+
+    frontLeft.SetSwervePIDF(angleP, angleI, angleD, angleFF);
+    backLeft.SetSwervePIDF(angleP, angleI, angleD, angleFF);
+    frontRight.SetSwervePIDF(angleP, angleI, angleD, angleFF);
+    backRight.SetSwervePIDF(angleP, angleI, angleD, angleFF);
+
+    rotationController.SetPID(
+        frc::SmartDashboard::GetNumber("ROTATION P", DrivetrainConstants::kRotationP),
+        frc::SmartDashboard::GetNumber("ROTATION I", DrivetrainConstants::kRotationI),
+        frc::SmartDashboard::GetNumber("ROTATION D", DrivetrainConstants::kRotationD)
+    );
+
 }

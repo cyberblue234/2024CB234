@@ -88,17 +88,17 @@ namespace DrivetrainConstants
 
     inline constexpr double DRIVE_SLOW_ADJUSTMENT = 0.20;
 
-    inline constexpr double kRotationP = 0.3;
-    inline constexpr double kRotationI = 0.0;
-    inline constexpr double kRotationD = 0.027;
+    inline constexpr double kRotationP = 0.0375;
+    inline constexpr double kRotationI = 0.003;
+    inline constexpr double kRotationD = 0.0025;
 }
 
 namespace ShooterConstants
 {
-    inline constexpr double kShooterP = 0.25;
+    inline constexpr double kShooterP = 0.000058;
     inline constexpr double kShooterI = 0.0;
-    inline constexpr double kShooterD = 0.0;
-    inline constexpr double kShooterF = 0.0;
+    inline constexpr double kShooterD = 0.000022;
+    inline constexpr double kShooterF = 0.000158;
 
     inline constexpr double SHOOTER_ANGLE_OFFSET = 0.0;
 }

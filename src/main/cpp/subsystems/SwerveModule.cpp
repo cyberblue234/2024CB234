@@ -124,3 +124,21 @@ void SwerveModule::SetDriveOpenLoopRamp(double ramp)
     driveMotorConfig.WithOpenLoopRamps(driveMotorOpenLoopRamps);
     driveMotor.GetConfigurator().Apply(driveMotorConfig);
 }
+
+void SwerveModule::SetDrivePIDF(double P, double I, double D, double FF)
+{
+    configs::SlotConfigs drivePIDFConfigs{};
+    drivePIDFConfigs.kP = P;
+    drivePIDFConfigs.kI = I;
+    drivePIDFConfigs.kD = D;
+    drivePIDFConfigs.kV = FF;
+}
+
+void SwerveModule::SetSwervePIDF(double P, double I, double D, double FF)
+{
+    configs::SlotConfigs swervePIDFConfigs{};
+    swervePIDFConfigs.kP = P;
+    swervePIDFConfigs.kI = I;
+    swervePIDFConfigs.kD = D;
+    swervePIDFConfigs.kV = FF;
+}

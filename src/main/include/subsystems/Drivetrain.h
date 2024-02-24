@@ -127,6 +127,8 @@ public:
     // Sets all motors to a speed of zero
     void AlignSwerveDrive();
 
+    void SetPIDFs();
+
     bool IsAlignmentOn() { return alignmentOn; };
 
     bool GetAtAlignment() { return abs(limelight3->GetAprilTagOffset()) < 0.5; };
