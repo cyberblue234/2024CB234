@@ -1,9 +1,11 @@
 #include "subsystems/Elevator.h"
-#include "RobotExt.h"
 #include <numbers>
+#include <frc/smartdashboard/SmartDashboard.h>
 
-Elevator::Elevator()
+Elevator::Elevator(Limelight* limelight3)
 {
+    this->limelight3 = limelight3;
+
     elevatorMotor1.RestoreFactoryDefaults();
     elevatorMotor2.RestoreFactoryDefaults();
 
@@ -44,7 +46,7 @@ void Elevator::AlignShooterToSpeaker()
 double Elevator::CalculateSpeakerAngle()
 {
     //Distance from speaker in meters
-    auto distance = limelight3.GetDistanceFromTarget();
+    auto distance = limelight3->GetDistanceFromTarget();
     //Height we are targetting in meters
     double targetHeight = ElevatorConstants::kSpeakerHeight + (( (double) distance / ElevatorConstants::kForce) * ElevatorConstants::kGravity);
     //Get the angle we want to go to in order to shoot in radians, then converting it to degrees

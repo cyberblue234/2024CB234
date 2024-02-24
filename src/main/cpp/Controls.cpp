@@ -1,114 +1,113 @@
 #include "Controls.h"
-#include "RobotExt.h"
 
-void Controls::ControlsPeriodic(Drivetrain &swerve, Shooter &shooter, Intake &intake, Feeder &feeder, Elevator &elevator)
+Controls::Controls(Drivetrain *swerve, Shooter *shooter, Intake *intake, Elevator *elevator, Feeder *feeder, Limelight *limelight3)
 {
-    // maybe an issue because I might be passing in a reference to a refernce
-    // try making an instance variable a reference to fix this
-    DriveControls(swerve);
-    ShooterControls(shooter);
-    IntakeControls(intake);
-    ElevatorControls(shooter, elevator);
-    FeederControls(shooter, elevator, feeder);
+    this->swerve = swerve;
+    this->shooter = shooter;
+    this->intake = intake;
+    this->feeder = feeder;
+    this->elevator = elevator;
+    this->limelight3 = limelight3;
 }
 
-void Controls::DriveControls(const Drivetrain &swerve)
+void Controls::Periodic()
+{
+    shooter->shootAtSpeaker = frc::SmartDashboard::GetBoolean("Shoot At Speaker?", shooter->shootAtSpeaker);
+    DriveControls();
+    ShooterControls();
+    IntakeControls();
+    ElevatorControls();
+    FeederControls();
+}
+
+void Controls::DriveControls()
 {
     if (gamepad.GetXButton() == true)
-        swerve.SetFieldRelative(true);
+        swerve->SetFieldRelative(true);
     if (gamepad.GetBButton() == true)
-        swerve.SetFieldRelative(false);
+        swerve->SetFieldRelative(false);
     
     if (gamepad.GetYButton() == true)
-	    swerve.ResetGyroAngle();
+	    swerve->ResetGyroAngle();
     
-    if (swerve.IsAlignmentOn()) 
-		swerve.AlignSwerveDrive();
+    if (swerve->IsAlignmentOn()) 
+		swerve->AlignSwerveDrive();
     else 
 	{
         double rot = gamepad.GetRightX();
         if (gamepad.GetRightTriggerAxis() > 0.2) 
         {
-            rot = limelight3.GetAprilTagOffset() / 360;
+            rot = limelight3->GetAprilTagOffset() / 360;
         }
-		swerve.DriveWithInput(gamepad.GetLeftY(), gamepad.GetLeftX(), rot, gamepad.GetLeftStickButton());
+		swerve->DriveWithInput(gamepad.GetLeftY(), gamepad.GetLeftX(), rot, gamepad.GetLeftStickButton());
 	}
 }
 
-void Controls::ShooterControl(const Shooter &shooter)
+void Controls::ShooterControls()
 {
-    shooter.shootAtSpeaker = frc::SmartDashboard::GetBoolean("Shoot At Speaker?", shooter.shootAtSpeaker);
-
     if (gamepad.GetRightTriggerAxis() > 0.2)
     {
-        if (shooter.shootAtSpeaker)
-			shooter.ShootAtSpeaker();
+        if (shooter->shootAtSpeaker)
+			shooter->ShootAtSpeaker();
         else 
-			shooter.ShootAtAmp();
+			shooter->ShootAtAmp();
     }
     else if (gamepad.GetLeftBumper()) 
-		shooter.IntakeFromSource();
+		shooter->IntakeFromSource();
     else
-        shooter.SetShooterMotors(0.0);
+        shooter->SetShooterMotors(0.0);
 }
 
-void Controls::IntakeControls(const Intake &intake)
+void Controls::IntakeControls()
 {
     if (gamepad.GetLeftTriggerAxis() > 0.2) 
-		intake.IntakeFromGround();
+		intake->IntakeFromGround();
     else 
-		intake.SetIntakeMotor(0.0);
+		intake->SetIntakeMotor(0.0);
 }
 
-void Controls::ElevatorControls(const Shooter &shooter, const Elevator &elevator)
+void Controls::ElevatorControls()
 {
-    shooter.shootAtSpeaker = frc::SmartDashboard::GetBoolean("Shoot At Speaker?", shooter.shootAtSpeaker);
-
     // Manual up - dpad up
     if (gamepad.GetPOV() > 315 && gamepad.GetPOV() < 45)
-        elevator.SetElevatorMotors(elevator.GetElevatorSpeed());    
+        elevator->SetElevatorMotors(elevator->GetElevatorSpeed());    
     // Manual down - dpad down
     else if (gamepad.GetPOV() < 215 && gamepad.GetPOV() > 135)
-        elevator.SetElevatorMotors(-elevator.GetElevatorSpeed());
+        elevator->SetElevatorMotors(-elevator->GetElevatorSpeed());
+    // Align to either speaker or amp
     else if (gamepad.GetRightTriggerAxis() > 0.2)
     {
-        if (shooter.shootAtSpeaker)
+        if (shooter->shootAtSpeaker)
 		{
-			// todo swerve.AlignToAprilTag();
-			// is the swerve at position && is the elevator at position
-			//elevator.AlignShooterToSpeaker()
-            elevator.AlignShooterToSpeaker();
+            elevator->AlignShooterToSpeaker();
 		}
         else 
 		{
-            elevator.SetElevatorMotorsPosition(elevator.GetShooterRevolutions() + );
+            elevator->SetElevatorMotorsPosition(elevator->GetShooterRevolutions() + (elevator->GetAmpAngle() / 360));
         }
     }
 }
 
-void Controls::FeederControls(const Shooter &shooter, const Elevator &elevator, const Feeder &feeder)
+void Controls::FeederControls()
 {
-    shooter.shootAtSpeaker = frc::SmartDashboard::GetBoolean("Shoot At Speaker?", shooter.shootAtSpeaker);
+    
 
     if (gamepad.GetRightTriggerAxis() > 0.2)
     {
-        if (shooter.shootAtSpeaker)
+        if (shooter->shootAtSpeaker)
 		{
-			// todo swerve.AlignToAprilTag();
-			// is the swerve at position && is the elevator at position
-			//elevator.AlignShooterToSpeaker()
-            bool atAlignment = Math.abs(limelight3.GetAprilTagOffset()) < 0.5 && Math.abs(elevator.getAlignmentDifference()) < 0.5;
-			if (shooter.GetAverageRPM() >= shooter.GetSpeakerRPM() - 15 && atAlignment) 
-                feeder.ShootAtSpeaker();
+            bool atAlignment = abs(limelight3->GetAprilTagOffset()) < 0.5 && abs(elevator->GetAlignmentDifference()) < 0.5;
+			if (shooter->GetAverageRPM() >= shooter->GetSpeakerRPM() - 15 && atAlignment) 
+                feeder->ShootAtSpeaker();
 		}
         else 
-			feeder.ShootAtAmp();
+			feeder->ShootAtAmp();
     }
     else if (gamepad.GetLeftBumper()) 
-		feeder.IntakeFromSource();
+		feeder->IntakeFromSource();
     else if (gamepad.GetLeftTriggerAxis() > 0.2) 
-		feeder.IntakeFromGround();
+		feeder->IntakeFromGround();
     else
-        feeder.SetFeedMotor(0.0);
+        feeder->SetFeedMotor(0.0);
 
 }

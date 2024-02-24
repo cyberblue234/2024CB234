@@ -8,7 +8,10 @@
 
 using namespace pathplanner;
 
-RobotContainer::RobotContainer() : swerve()
+RobotContainer::RobotContainer() : 
+	swerve(GetLimelight3()), elevator(GetLimelight3()), limelight3("limelight"), limelight2("limelight-intake"),
+	pdp(1, frc::PowerDistribution::ModuleType::kRev),
+	controls(GetSwerve(), GetShooter(), GetIntake(), GetElevator(), GetFeeder(), GetLimelight3())
 {
 	NamedCommands::registerCommand("Shoot", std::move(shooter.GetShooterCommand()));
 	NamedCommands::registerCommand("Intake", std::move(intake.GetIntakeCommand()));

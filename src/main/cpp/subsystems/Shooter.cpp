@@ -2,7 +2,6 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/InstantCommand.h>
-#include "RobotExt.h"
 
 #define VORTEX_MAX_RPM 6784
 

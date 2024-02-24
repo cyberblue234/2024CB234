@@ -1,10 +1,11 @@
+#pragma once
+
 #include "rev/CANSparkMax.h"
 #include "Constants.h"
 #include <frc2/command/SubsystemBase.h>
 #include <frc2/command/CommandPtr.h>
 #include <frc/DutyCycleEncoder.h>
 #include <frc/DigitalInput.h>
-#include "RobotExt.h"
 
 class Intake : frc2::SubsystemBase
 {

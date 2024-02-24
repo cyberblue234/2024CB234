@@ -1,3 +1,5 @@
+#pragma once
+
 #ifndef _DRIVETRAIN_H
 #define _DRIVETRAIN_H
 
@@ -30,16 +32,16 @@
 
 #include "AHRS.h"
 
-#include "SwerveModule.h"
+#include "subsystems/SwerveModule.h"
+#include "subsystems/Limelight.h"
 #include "Constants.h"
-#include "RobotExt.h"
 
 extern frc::PIDController rotationController;
 
 class Drivetrain : frc2::SubsystemBase
 {
 public:
-    Drivetrain();
+    Drivetrain(Limelight*);
 
     void Periodic() override;
 
@@ -128,13 +130,15 @@ public:
 
     bool IsAlignmentOn() { return alignmentOn; };
 
-    bool GetAtAlignment() { return abs(limelight3.GetAprilTagOffset()) < 0.5; };
+    bool GetAtAlignment() { return abs(limelight3->GetAprilTagOffset()) < 0.5; };
 
 private:
     SwerveModule frontLeft;
     SwerveModule frontRight;
     SwerveModule backLeft;
     SwerveModule backRight;
+
+    Limelight *limelight3;
 
     AHRS gyro;
     double lastGyroPitch = 0;

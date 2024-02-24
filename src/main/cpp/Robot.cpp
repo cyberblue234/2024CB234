@@ -2,14 +2,6 @@
 
 #include <frc2/command/CommandScheduler.h>
 
-#include <frc/PowerDistribution.h>
-#include "subsystems/Limelight.h"
-
-frc::PowerDistribution pdp{1, frc::PowerDistribution::ModuleType::kRev};
-
-Limelight limelight3{"limelight"};
-Limelight limelight2{"limelight-intake"};
-
 void Robot::RobotInit()
 {
 	container.OdometryInit();

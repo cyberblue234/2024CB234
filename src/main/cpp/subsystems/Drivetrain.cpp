@@ -1,17 +1,16 @@
 #include "subsystems/Drivetrain.h"
-#include "RobotExt.h"
 
-Drivetrain::Drivetrain() : 
-frontLeft(RobotMap::FL_DRIVE_ADDRESS, RobotMap::FL_SWERVE_ADDRESS, RobotMap::FL_CANCODER_ADDRESS, DrivetrainConstants::FL_OFFSET_DEGREES), 
-frontRight(RobotMap::FR_DRIVE_ADDRESS, RobotMap::FR_SWERVE_ADDRESS, RobotMap::FR_CANCODER_ADDRESS, DrivetrainConstants::FR_OFFSET_DEGREES), 
-backLeft(RobotMap::BL_DRIVE_ADDRESS, RobotMap::BL_SWERVE_ADDRESS, RobotMap::BL_CANCODER_ADDRESS, DrivetrainConstants::BL_OFFSET_DEGREES), 
-backRight(RobotMap::BR_DRIVE_ADDRESS, RobotMap::BR_SWERVE_ADDRESS, RobotMap::BR_CANCODER_ADDRESS, DrivetrainConstants::BR_OFFSET_DEGREES), 
-gyro(frc::SPI::Port::kMXP),
-odometry(
-    kinematics, gyro.GetRotation2d(),
-    { frontLeft.GetModulePosition(), frontRight.GetModulePosition(),
-    backLeft.GetModulePosition(), backRight.GetModulePosition() },
-    frc::Pose2d() )
+Drivetrain::Drivetrain(Limelight *limelight3) : 
+    frontLeft(RobotMap::FL_DRIVE_ADDRESS, RobotMap::FL_SWERVE_ADDRESS, RobotMap::FL_CANCODER_ADDRESS, DrivetrainConstants::FL_OFFSET_DEGREES), 
+    frontRight(RobotMap::FR_DRIVE_ADDRESS, RobotMap::FR_SWERVE_ADDRESS, RobotMap::FR_CANCODER_ADDRESS, DrivetrainConstants::FR_OFFSET_DEGREES), 
+    backLeft(RobotMap::BL_DRIVE_ADDRESS, RobotMap::BL_SWERVE_ADDRESS, RobotMap::BL_CANCODER_ADDRESS, DrivetrainConstants::BL_OFFSET_DEGREES), 
+    backRight(RobotMap::BR_DRIVE_ADDRESS, RobotMap::BR_SWERVE_ADDRESS, RobotMap::BR_CANCODER_ADDRESS, DrivetrainConstants::BR_OFFSET_DEGREES), 
+    gyro(frc::SPI::Port::kMXP),
+    odometry(
+        kinematics, gyro.GetRotation2d(),
+        { frontLeft.GetModulePosition(), frontRight.GetModulePosition(),
+        backLeft.GetModulePosition(), backRight.GetModulePosition() },
+        frc::Pose2d() )
 {
     gyro.Reset();
     // copies from https://pathplanner.dev/pplib-getting-started.html
@@ -30,15 +29,17 @@ odometry(
         },
         this
     );
+
+    this->limelight3 = limelight3;
 }
 
 void Drivetrain::Periodic() 
 {
-    limelight3.UpdateLimelightTracking();
+    limelight3->UpdateLimelightTracking();
     odometry.Update(gyro.GetRotation2d(), { frontLeft.GetModulePosition(), frontRight.GetModulePosition(), backLeft.GetModulePosition(), backRight.GetModulePosition() });
-    if (limelight3.GetTargetValid() == 1 && abs((double) limelight3.GetRobotPose().X() - (double) odometry.GetEstimatedPosition().X()) < 1)
-        odometry.AddVisionMeasurement(limelight3.GetRobotPose(), frc::Timer::GetFPGATimestamp());
-    if (time < 10) ResetPose(limelight3.GetRobotPose()); 
+    if (limelight3->GetTargetValid() == 1 && abs((double) limelight3->GetRobotPose().X() - (double) odometry.GetEstimatedPosition().X()) < 1)
+        odometry.AddVisionMeasurement(limelight3->GetRobotPose(), frc::Timer::GetFPGATimestamp());
+    if (time < 10) ResetPose(limelight3->GetRobotPose()); 
     time++;
 
     alignmentOn = frc::SmartDashboard::GetBoolean("ALIGNMENT_ON", false);
@@ -125,7 +126,7 @@ double Drivetrain::RotationControl(double rotInput, bool alignToAprilTag)
 
     if (alignToAprilTag)
     {   
-        rotInput = rotationController.Calculate(limelight3.GetAprilTagOffset(), 0);
+        rotInput = rotationController.Calculate(limelight3->GetAprilTagOffset(), 0);
         return std::clamp(rotInput, -1.0, 1.0);
     }
     else if(abs(rotInput) < 0.05) 

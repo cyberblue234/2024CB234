@@ -5,12 +5,13 @@
 #include "rev/CANSparkMax.h"
 #include <frc2/command/SubsystemBase.h>
 #include <frc/DutyCycleEncoder.h>
+#include "subsystems/Limelight.h"
 
 class Elevator : frc2::SubsystemBase 
 {
 
 public:
-    Elevator();
+    Elevator(Limelight*);
     void Periodic() override;
 
     void AlignShooterToSpeaker();
@@ -33,6 +34,8 @@ private:
     rev::SparkPIDController elevatorPID = elevatorMotor1.GetPIDController();
 
     frc::DutyCycleEncoder shooterAngleEncoder{RobotMap::SHOOTER_ENCODER_ADDRESS};
+
+    Limelight *limelight3;
 
     double elevatorSpeed = 0.5;
     double alignmentDifference = 0;

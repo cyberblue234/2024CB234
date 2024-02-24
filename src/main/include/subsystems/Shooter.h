@@ -1,3 +1,5 @@
+#pragma once
+
 #include "rev/CANSparkMax.h"
 #include "Constants.h"
 #include <frc/DutyCycleEncoder.h>
@@ -5,7 +7,6 @@
 #include <frc2/command/CommandPtr.h>
 #include <frc/Timer.h>
 #include <frc/DigitalInput.h>
-#include "RobotExt.h"
 
 class Shooter : frc2::SubsystemBase
 {

@@ -1,3 +1,5 @@
+#pragma once
+
 #ifndef _LIMELIGHT_H
 #define _LIMELIGHT_H
 
