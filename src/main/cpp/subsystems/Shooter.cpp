@@ -32,6 +32,8 @@ void Shooter::Periodic()
     shooter2PID.SetI(frc::SmartDashboard::GetNumber("Shooter I", ShooterConstants::kShooterI));
     shooter2PID.SetD(frc::SmartDashboard::GetNumber("Shooter D", ShooterConstants::kShooterD));
     shooter2PID.SetFF(frc::SmartDashboard::GetNumber("Shooter F", ShooterConstants::kShooterF));
+
+    UpdateTelemetry();
 }
 
 void Shooter::ShootAtSpeaker()

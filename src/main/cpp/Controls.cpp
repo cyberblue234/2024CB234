@@ -37,7 +37,11 @@ void Controls::DriveControls()
         double rot = gamepad.GetRightX();
         if (gamepad.GetRightTriggerAxis() > 0.2)
         {
-            rot = limelight3->GetAprilTagOffset() / 360;
+            limelight3->SetPipelineID(Limelight::kSpeakerDetection);
+            if(limelight3->GetTargetValid() != 0)
+            {
+            rot = swerve->RotationControl(0.0, true);
+            }
         }
         swerve->DriveWithInput(gamepad.GetLeftY(), gamepad.GetLeftX(), rot, gamepad.GetLeftStickButton());
     }
@@ -94,8 +98,8 @@ void Controls::FeederControls()
     {
         if (shooter->shootAtSpeaker)
         {
-            bool atAlignment = abs(limelight3->GetAprilTagOffset()) < 0.5 && abs(elevator->GetAlignmentDifference()) < 0.5;
-            if (shooter->GetAverageRPM() >= shooter->GetSpeakerRPM() - 15 && atAlignment)
+            bool atAlignment = abs(limelight3->GetAprilTagOffset()) < 1.0; //&& abs(elevator->GetAlignmentDifference()) < 0.5;
+            if (shooter->GetAverageRPM() >= shooter->GetSpeakerRPM() - 100 && atAlignment)
                 feeder->ShootAtSpeaker();
         }
         else

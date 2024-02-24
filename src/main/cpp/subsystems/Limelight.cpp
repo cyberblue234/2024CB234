@@ -111,4 +111,6 @@ void Limelight::UpdateTelemetry()
     // Tracking
     frc::SmartDashboard::PutNumber(limelight_name + "_TX", target_x);
     frc::SmartDashboard::PutNumber(limelight_name + "_TY", target_y);
+
+    frc::SmartDashboard::PutNumber(limelight_name + "_OFFSET", GetAprilTagOffset());
 }
