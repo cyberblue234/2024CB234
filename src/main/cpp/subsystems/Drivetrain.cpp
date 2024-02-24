@@ -55,7 +55,7 @@ void Drivetrain::Periodic()
     frc::SmartDashboard::PutBoolean("ALIGNMENT_ON", alignmentOn);
 
     UpdateTelemetry();
-    SetPIDFs();
+    //SetPIDFs();
 }
 
 void Drivetrain::DriveWithInput(double fwd, double stf, double rot, bool limitSpeed)
@@ -241,5 +241,4 @@ void Drivetrain::SetPIDFs() {
         frc::SmartDashboard::GetNumber("ROTATION I", DrivetrainConstants::kRotationI),
         frc::SmartDashboard::GetNumber("ROTATION D", DrivetrainConstants::kRotationD)
     );
-
 }

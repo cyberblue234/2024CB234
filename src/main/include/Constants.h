@@ -42,12 +42,12 @@ namespace SwerveModuleConstants
     inline constexpr double ENCODER_INCHES_PER_COUNT = 0.00090689;
     inline constexpr double ENCODER_METERS_PER_COUNT = ENCODER_INCHES_PER_COUNT / 39.37;
     // 6.54 : 1
-    inline constexpr double kDriveP = 1.0;
+    inline constexpr double kDriveP = 3.0;
     inline constexpr double kDriveI = 0.0;
-    inline constexpr double kDriveD = 0.0;
+    inline constexpr double kDriveD = 0.50;
     inline constexpr double kDriveF = 0.2;
 
-    inline constexpr double kAngleP = 7.5; // 0.30;
+    inline constexpr double kAngleP = 7.5; // 030;
     inline constexpr double kAngleI = 0.0;
     inline constexpr double kAngleD = 0.5; // 0.001;
     inline constexpr double kAngleF = 0.0;
