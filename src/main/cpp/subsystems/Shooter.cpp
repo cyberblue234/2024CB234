@@ -64,18 +64,3 @@ void Shooter::UpdateTelemetry()
     frc::SmartDashboard::PutNumber("Shooter1 Current", shooter1Motor.GetOutputCurrent());
     frc::SmartDashboard::PutNumber("Shooter2 Current", shooter2Motor.GetOutputCurrent());
 }
-
-Shooter::ShooterCommand::ShooterCommand(Shooter *shooter)
-{
-    this->shooter = shooter;
-}
-
-void Shooter::ShooterCommand::Execute()
-{
-    shooter->ShootAtSpeaker();
-}
-
-void Shooter::ShooterCommand::End(bool)
-{
-    shooter->SetShooterMotors(0.0);
-}

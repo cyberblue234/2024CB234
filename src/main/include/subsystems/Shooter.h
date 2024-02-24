@@ -4,6 +4,7 @@
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/CommandHelper.h>
 #include <frc2/command/Command.h>
+#include <frc2/command/StartEndCommand.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/DutyCycleEncoder.h>
 #include <frc/Timer.h>
@@ -43,16 +44,6 @@ public:
     double GetSpeakerRPM() { return speakerRPM; };
     double GetAmpSpeed() { return ampSpeed; };
     double GetIntakeSpeed() { return intakeSpeed; };
-
-    class ShooterCommand : public frc2::CommandHelper<frc2::Command, ShooterCommand>
-    {
-    public:
-        ShooterCommand(Shooter *);
-        void Execute() override;
-        void End(bool) override;
-    private:
-        Shooter *shooter;
-    };
 
     // FOR DEBUGGING
     bool shootAtSpeaker = true;

@@ -6,7 +6,7 @@ RobotContainer::RobotContainer() : swerve(GetLimelight3()), elevator(GetLimeligh
 								   pdp(1, frc::PowerDistribution::ModuleType::kRev),
 								   controls(GetSwerve(), GetShooter(), GetIntake(), GetElevator(), GetFeeder(), GetLimelight3())
 {
-	NamedCommands::registerCommand("Shoot", );
+	NamedCommands::registerCommand("Shoot", GetShootCommand());
 	NamedCommands::registerCommand("Intake", std::move(intake.GetIntakeCommand()));
 
 	ConfigureBindings();
@@ -22,6 +22,49 @@ void RobotContainer::ConfigureBindings()
 frc2::CommandPtr RobotContainer::GetAutonomousCommand()
 {
 	return PathPlannerAuto("Test Auto").ToPtr();
+}
+
+frc2::CommandPtr RobotContainer::GetShootCommand()
+{
+	return frc2::RunCommand
+	(
+		[this]
+		{
+			// this->GetSwerve()->AlignToAprilTag();
+			//this->GetElevator()->AlignShooterToSpeaker();
+			this->GetShooter()->ShootAtSpeaker();
+		}
+	).Until
+	(
+		[this]
+		{
+			bool atAlignment = true; //abs(this->GetLimelight3()->GetAprilTagOffset()) < 0.5;// && abs(this->GetElevator()->GetAlignmentDifference()) < 0.5;
+			return this->GetShooter()->GetAverageRPM() >= this->GetShooter()->GetSpeakerRPM() - 15 && atAlignment;
+		}
+	).AndThen
+	(
+		frc2::RunCommand
+		(
+			[this]
+			{
+				this->GetFeeder()->ShootAtSpeaker();
+			}
+		).ToPtr().RaceWith
+		(
+			frc2::WaitCommand(2_s).ToPtr()
+		)
+	).AndThen
+	(
+		frc2::InstantCommand
+		(
+			[this]
+			{
+				this->GetShooter()->SetShooterMotors(0.0);
+				this->GetElevator()->SetElevatorMotors(0.0);
+				this->GetFeeder()->SetFeedMotor(0.0);
+			}
+		).ToPtr()
+	);
 }
 
 void RobotContainer::RunTeleop()
