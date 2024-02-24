@@ -6,7 +6,7 @@ RobotContainer::RobotContainer() : swerve(GetLimelight3()), elevator(GetLimeligh
 								   pdp(1, frc::PowerDistribution::ModuleType::kRev),
 								   controls(GetSwerve(), GetShooter(), GetIntake(), GetElevator(), GetFeeder(), GetLimelight3())
 {
-	NamedCommands::registerCommand("Shoot", std::move(shooter.GetShooterCommand()));
+	NamedCommands::registerCommand("Shoot", );
 	NamedCommands::registerCommand("Intake", std::move(intake.GetIntakeCommand()));
 
 	ConfigureBindings();
