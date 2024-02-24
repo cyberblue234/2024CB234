@@ -1,10 +1,11 @@
 #pragma once
 
-#include "rev/CANSparkMax.h"
-#include "Constants.h"
 #include <frc2/command/SubsystemBase.h>
+#include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/Timer.h>
 #include <frc/DigitalInput.h>
+#include "rev/CANSparkMax.h"
+#include "Constants.h"
 
 class Feeder : frc2::SubsystemBase
 {
@@ -29,7 +30,7 @@ private:
 
     frc::DigitalInput feedSensor{RobotMap::FEED_SENSOR_ADDRESS};
     frc::Timer feedSensorTimer{};
-    
+
     // Speeds should be from 0.0 - 1.0
     double groundIntakeSpeed = 0.5;
     double sourceIntakeSpeed = 0.5;

@@ -1,7 +1,4 @@
 #include "subsystems/Shooter.h"
-#include <frc/smartdashboard/SmartDashboard.h>
-#include <frc2/command/CommandPtr.h>
-#include <frc2/command/InstantCommand.h>
 
 #define VORTEX_MAX_RPM 6784
 
@@ -20,7 +17,7 @@ Shooter::Shooter()
     frc::SmartDashboard::PutNumber("Shooter Speaker RPM", speakerRPM);
     frc::SmartDashboard::PutNumber("Shooter Amp Speed", ampSpeed);
     frc::SmartDashboard::PutNumber("Shooter Intake Speed", intakeSpeed);
-    
+
     frc::SmartDashboard::PutBoolean("Shoot At Speaker?", shootAtSpeaker);
 }
 
@@ -47,14 +44,12 @@ void Shooter::ShootAtAmp()
 {
     ampSpeed = frc::SmartDashboard::GetNumber("Shooter Amp Speed", ampSpeed);
     SetShooterMotors(ampSpeed);
-    //if (GetAverageRPM() >= (VORTEX_MAX_RPM / ampSpeed) - 25) feeder.ShootAtAmp();
 }
 
 void Shooter::IntakeFromSource()
 {
     intakeSpeed = frc::SmartDashboard::GetNumber("Shooter Intake Speed", intakeSpeed);
     SetShooterMotors(-intakeSpeed);
-    //feeder.IntakeFromSource();
 }
 
 void Shooter::UpdateTelemetry()
@@ -73,8 +68,8 @@ void Shooter::UpdateTelemetry()
 frc2::CommandPtr Shooter::GetShooterCommand()
 {
     return this->RunOnce(
-        [this] {
+        [this]
+        {
             SetShooterMotorsRPM(this->GetSpeakerRPM());
-        }
-    );
+        });
 }

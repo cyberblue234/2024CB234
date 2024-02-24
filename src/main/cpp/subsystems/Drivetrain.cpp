@@ -1,50 +1,55 @@
 #include "subsystems/Drivetrain.h"
 
-Drivetrain::Drivetrain(Limelight *limelight3) : 
-    frontLeft(RobotMap::FL_DRIVE_ADDRESS, RobotMap::FL_SWERVE_ADDRESS, RobotMap::FL_CANCODER_ADDRESS, DrivetrainConstants::FL_OFFSET_DEGREES), 
-    frontRight(RobotMap::FR_DRIVE_ADDRESS, RobotMap::FR_SWERVE_ADDRESS, RobotMap::FR_CANCODER_ADDRESS, DrivetrainConstants::FR_OFFSET_DEGREES), 
-    backLeft(RobotMap::BL_DRIVE_ADDRESS, RobotMap::BL_SWERVE_ADDRESS, RobotMap::BL_CANCODER_ADDRESS, DrivetrainConstants::BL_OFFSET_DEGREES), 
-    backRight(RobotMap::BR_DRIVE_ADDRESS, RobotMap::BR_SWERVE_ADDRESS, RobotMap::BR_CANCODER_ADDRESS, DrivetrainConstants::BR_OFFSET_DEGREES), 
-    gyro(frc::SPI::Port::kMXP),
-    odometry(
-        kinematics, gyro.GetRotation2d(),
-        { frontLeft.GetModulePosition(), frontRight.GetModulePosition(),
-        backLeft.GetModulePosition(), backRight.GetModulePosition() },
-        frc::Pose2d() )
+Drivetrain::Drivetrain(Limelight *limelight3) : frontLeft(RobotMap::FL_DRIVE_ADDRESS, RobotMap::FL_SWERVE_ADDRESS, RobotMap::FL_CANCODER_ADDRESS, DrivetrainConstants::FL_OFFSET_DEGREES),
+                                                frontRight(RobotMap::FR_DRIVE_ADDRESS, RobotMap::FR_SWERVE_ADDRESS, RobotMap::FR_CANCODER_ADDRESS, DrivetrainConstants::FR_OFFSET_DEGREES),
+                                                backLeft(RobotMap::BL_DRIVE_ADDRESS, RobotMap::BL_SWERVE_ADDRESS, RobotMap::BL_CANCODER_ADDRESS, DrivetrainConstants::BL_OFFSET_DEGREES),
+                                                backRight(RobotMap::BR_DRIVE_ADDRESS, RobotMap::BR_SWERVE_ADDRESS, RobotMap::BR_CANCODER_ADDRESS, DrivetrainConstants::BR_OFFSET_DEGREES),
+                                                gyro(frc::SPI::Port::kMXP),
+                                                odometry(
+                                                    kinematics, gyro.GetRotation2d(),
+                                                    {frontLeft.GetModulePosition(), frontRight.GetModulePosition(),
+                                                     backLeft.GetModulePosition(), backRight.GetModulePosition()},
+                                                    frc::Pose2d())
 {
     gyro.Reset();
     // copies from https://pathplanner.dev/pplib-getting-started.html
     pathplanner::AutoBuilder::configureHolonomic(
-        [this](){ return this->GetPose(); }, // Robot pose supplier
-        [this](frc::Pose2d pose){ this->ResetPose(pose); }, // Method to reset odometry (will be called if your auto has a starting pose)
-        [this](){ return this->GetCurrentSpeeds(); }, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-        [this](frc::ChassisSpeeds speeds){ this->Drive(speeds); }, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+        [this]()
+        { return this->GetPose(); }, // Robot pose supplier
+        [this](frc::Pose2d pose)
+        { this->ResetPose(pose); }, // Method to reset odometry (will be called if your auto has a starting pose)
+        [this]()
+        { return this->GetCurrentSpeeds(); }, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+        [this](frc::ChassisSpeeds speeds)
+        { this->Drive(speeds); }, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
         DrivetrainConstants::holonomicConfig,
-        []() {
+        []()
+        {
             auto alliance = frc::DriverStation::GetAlliance();
-            if (alliance) {
+            if (alliance)
+            {
                 return alliance.value() == frc::DriverStation::Alliance::kRed;
             }
             return false;
         },
-        this
-    );
+        this);
 
     this->limelight3 = limelight3;
 }
 
-void Drivetrain::Periodic() 
+void Drivetrain::Periodic()
 {
     limelight3->UpdateLimelightTracking();
-    odometry.Update(gyro.GetRotation2d(), { frontLeft.GetModulePosition(), frontRight.GetModulePosition(), backLeft.GetModulePosition(), backRight.GetModulePosition() });
-    if (limelight3->GetTargetValid() == 1 && abs((double) limelight3->GetRobotPose().X() - (double) odometry.GetEstimatedPosition().X()) < 1)
+    odometry.Update(gyro.GetRotation2d(), {frontLeft.GetModulePosition(), frontRight.GetModulePosition(), backLeft.GetModulePosition(), backRight.GetModulePosition()});
+    if (limelight3->GetTargetValid() == 1 && abs((double)limelight3->GetRobotPose().X() - (double)odometry.GetEstimatedPosition().X()) < 1)
         odometry.AddVisionMeasurement(limelight3->GetRobotPose(), frc::Timer::GetFPGATimestamp());
-    if (time < 10) ResetPose(limelight3->GetRobotPose()); 
+    if (time < 10)
+        ResetPose(limelight3->GetRobotPose());
     time++;
 
     alignmentOn = frc::SmartDashboard::GetBoolean("ALIGNMENT_ON", false);
     frc::SmartDashboard::PutBoolean("ALIGNMENT_ON", alignmentOn);
-    
+
     UpdateTelemetry();
 }
 
@@ -69,7 +74,7 @@ void Drivetrain::DriveWithInput(double fwd, double stf, double rot, bool limitSp
     {
         stf *= DrivetrainConstants::DRIVE_SLOW_ADJUSTMENT;
     }
- 
+
     rot = rot * rot * rot;
     if (abs(rot) < 0.05)
     {
@@ -82,7 +87,7 @@ void Drivetrain::DriveWithInput(double fwd, double stf, double rot, bool limitSp
 
     // Get the y speed or forward speed. Invert this because Xbox controllers return negative values when pushed forward
     auto ySpeed = units::meters_per_second_t(-fwd * DrivetrainConstants::MAX_SPEED);
-    frc::SmartDashboard::PutNumber("ySpeed", (double) ySpeed);
+    frc::SmartDashboard::PutNumber("ySpeed", (double)ySpeed);
     // Get the x speed or sideways/strafe speed. Needs to be inverted.
     auto xSpeed = units::meters_per_second_t(-stf * DrivetrainConstants::MAX_SPEED);
 
@@ -91,16 +96,16 @@ void Drivetrain::DriveWithInput(double fwd, double stf, double rot, bool limitSp
 
     frc::Rotation2d heading = gyro.GetRotation2d();
     auto speeds = fieldRelative ? frc::ChassisSpeeds::FromFieldRelativeSpeeds(ySpeed, xSpeed, rotation, heading)
-                                                                : frc::ChassisSpeeds{ySpeed, xSpeed, rotation};
+                                : frc::ChassisSpeeds{ySpeed, xSpeed, rotation};
 
     Drive(speeds);
 
-    frc::SmartDashboard::PutNumber("Y Speed", (double) ySpeed);
-    frc::SmartDashboard::PutNumber("X Speed", (double) xSpeed);
-    frc::SmartDashboard::PutNumber("Rot", (double) rot);
+    frc::SmartDashboard::PutNumber("Y Speed", (double)ySpeed);
+    frc::SmartDashboard::PutNumber("X Speed", (double)xSpeed);
+    frc::SmartDashboard::PutNumber("Rot", (double)rot);
 }
 
-void Drivetrain::Drive(const frc::ChassisSpeeds& speeds)
+void Drivetrain::Drive(const frc::ChassisSpeeds &speeds)
 {
     chassisSpeeds = speeds;
     auto states = kinematics.ToSwerveModuleStates(speeds);
@@ -112,7 +117,7 @@ void Drivetrain::Drive(const frc::ChassisSpeeds& speeds)
     frc::SwerveModuleState bl = states[2];
     frc::SwerveModuleState br = states[3];
 
-    frc::SmartDashboard::PutNumber("FL Desired Degrees", (double) fl.angle.Degrees());
+    frc::SmartDashboard::PutNumber("FL Desired Degrees", (double)fl.angle.Degrees());
 
     frontLeft.SetDesiredState(fl, DrivetrainConstants::FL_DRIVE_ADJUSTMENT);
     frontRight.SetDesiredState(fr, DrivetrainConstants::FR_DRIVE_ADJUSTMENT);
@@ -120,32 +125,32 @@ void Drivetrain::Drive(const frc::ChassisSpeeds& speeds)
     backRight.SetDesiredState(br, DrivetrainConstants::BR_DRIVE_ADJUSTMENT);
 }
 
-double Drivetrain::RotationControl(double rotInput, bool alignToAprilTag) 
+double Drivetrain::RotationControl(double rotInput, bool alignToAprilTag)
 {
     rotInput = rotInput * rotInput * rotInput;
 
     if (alignToAprilTag)
-    {   
+    {
         rotInput = rotationController.Calculate(limelight3->GetAprilTagOffset(), 0);
         return std::clamp(rotInput, -1.0, 1.0);
     }
-    else if(abs(rotInput) < 0.05) 
+    else if (abs(rotInput) < 0.05)
     {
-        rotInput = rotationController.Calculate((double) gyro.GetRotation2d().Degrees(), lastGyroYaw);
+        rotInput = rotationController.Calculate((double)gyro.GetRotation2d().Degrees(), lastGyroYaw);
         return std::clamp(rotInput, -1.0, 1.0);
     }
-    else 
+    else
     {
-        lastGyroYaw = (double) gyro.GetRotation2d().Degrees();
+        lastGyroYaw = (double)gyro.GetRotation2d().Degrees();
         return rotInput;
     }
 }
 
 void Drivetrain::UpdateTelemetry()
 {
-    frc::SmartDashboard::PutNumber("Odometry X", (double) GetPose().X());
-    frc::SmartDashboard::PutNumber("Odometry Y", (double) GetPose().Y());
-    frc::SmartDashboard::PutNumber("Odometry Rot", (double) GetPose().Rotation().Degrees());
+    frc::SmartDashboard::PutNumber("Odometry X", (double)GetPose().X());
+    frc::SmartDashboard::PutNumber("Odometry Y", (double)GetPose().Y());
+    frc::SmartDashboard::PutNumber("Odometry Rot", (double)GetPose().Rotation().Degrees());
 
     frc::SmartDashboard::PutNumber("FL Swerve Pos", frontLeft.GetSwervePosition());
     frc::SmartDashboard::PutNumber("FR Swerve Pos", frontRight.GetSwervePosition());

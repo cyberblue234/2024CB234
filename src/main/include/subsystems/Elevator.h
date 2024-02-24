@@ -1,31 +1,33 @@
 #pragma once
 
-#include "Constants.h"
-#include "frc/geometry/Pose2d.h"
-#include "rev/CANSparkMax.h"
 #include <frc2/command/SubsystemBase.h>
+#include <frc/smartdashboard/SmartDashboard.h>
+#include "frc/geometry/Pose2d.h"
 #include <frc/DutyCycleEncoder.h>
+#include "rev/CANSparkMax.h"
 #include "subsystems/Limelight.h"
+#include "Constants.h"
+#include <numbers>
 
-class Elevator : frc2::SubsystemBase 
+class Elevator : frc2::SubsystemBase
 {
 
 public:
-    Elevator(Limelight*);
+    Elevator(Limelight *);
     void Periodic() override;
 
     void AlignShooterToSpeaker();
     double CalculateSpeakerAngle();
-    
+
     void SetElevatorMotorsPosition(double pos);
     void SetElevatorMotors(double power) { elevatorMotor1.Set(power); };
 
     double GetShooterAngle() { return shooterAngleEncoder.GetDistance(); };
-    double GetShooterRevolutions() { return (double) shooterAngleEncoder.Get(); };
+    double GetShooterRevolutions() { return (double)shooterAngleEncoder.Get(); };
     double GetElevatorSpeed() { return elevatorSpeed; };
     double GetAlignmentDifference() { return alignmentDifference; };
     double GetAmpAngle() { return ampAngle; };
-    
+
     void UpdateTelemetry();
 
 private:

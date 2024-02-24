@@ -13,6 +13,7 @@
 #include <numbers>
 #include <ctre/phoenix6/CANcoder.hpp>
 #include <ctre/phoenix6/TalonFX.hpp>
+#include <ctre/phoenix6/configs/Configurator.hpp>
 #include "Constants.h"
 
 using namespace ctre::phoenix6;
@@ -26,7 +27,7 @@ public:
     // Return the relative rotational position of the angle motor in degrees
     // GetAbsolutePosition returns 0 - 360 degrees (default)
     frc::Rotation2d GetAngle() { return (frc::Rotation2d(units::angle::degree_t(GetSwervePosition()))); }
-    
+
     void SetDesiredState(frc::SwerveModuleState desiredState, double speedAdjustment);
     // Returns the desired count for the swerve encoder
     double GetDesiredCount() { return desiredCount; }
@@ -35,9 +36,9 @@ public:
     // Returns the amount of encoder ticks needed to turn to the desired angle
     double GetDeltaCount() { return deltaCount; }
     // Returns the current angle of the robot
-    double GetCurrentAngle() { return (double) currentAngle.Degrees(); }
+    double GetCurrentAngle() { return (double)currentAngle.Degrees(); }
     // Returns the amount of degrees needed to turn to the desired angle
-    double GetDeltaAngle() { return (double) deltaAngle.Degrees(); }
+    double GetDeltaAngle() { return (double)deltaAngle.Degrees(); }
     // Returns the speed of the motor
     double GetPercentSpeed() { return percentSpeed; }
     // Returns the abosolute position of the swerve motor
@@ -76,6 +77,6 @@ private:
     hardware::TalonFX swerveMotor;
     hardware::CANcoder canCoder;
 
-    controls::PositionVoltage swervePositionOut{0_tr,0_tps,true,0_V,0,false};
-    //controls::DutyCycleOut driveMotorOut(0);
+    controls::PositionVoltage swervePositionOut{0_tr, 0_tps, true, 0_V, 0, false};
+    // controls::DutyCycleOut driveMotorOut(0);
 };

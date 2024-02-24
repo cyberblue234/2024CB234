@@ -1,17 +1,10 @@
 #include "RobotContainer.h"
-#include <pathplanner/lib/auto/AutoBuilder.h>
-#include <pathplanner/lib/path/PathPlannerPath.h>
-#include <pathplanner/lib/commands/PathPlannerAuto.h>
-#include <pathplanner/lib/auto/NamedCommands.h>
-#include <frc/smartdashboard/SmartDashboard.h>
-#include <frc2/command/Commands.h>
 
 using namespace pathplanner;
 
-RobotContainer::RobotContainer() : 
-	swerve(GetLimelight3()), elevator(GetLimelight3()), limelight3("limelight"), limelight2("limelight-intake"),
-	pdp(1, frc::PowerDistribution::ModuleType::kRev),
-	controls(GetSwerve(), GetShooter(), GetIntake(), GetElevator(), GetFeeder(), GetLimelight3())
+RobotContainer::RobotContainer() : swerve(GetLimelight3()), elevator(GetLimelight3()), limelight3("limelight"), limelight2("limelight-intake"),
+								   pdp(1, frc::PowerDistribution::ModuleType::kRev),
+								   controls(GetSwerve(), GetShooter(), GetIntake(), GetElevator(), GetFeeder(), GetLimelight3())
 {
 	NamedCommands::registerCommand("Shoot", std::move(shooter.GetShooterCommand()));
 	NamedCommands::registerCommand("Intake", std::move(intake.GetIntakeCommand()));
@@ -32,7 +25,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
 }
 
 void RobotContainer::RunTeleop()
-{	
+{
 	LogTeleopData();
 }
 

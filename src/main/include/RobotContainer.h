@@ -1,7 +1,16 @@
 #pragma once
 
 #include <frc2/command/CommandPtr.h>
+#include <frc2/command/Commands.h>
+
+#include <pathplanner/lib/auto/AutoBuilder.h>
+#include <pathplanner/lib/path/PathPlannerPath.h>
+#include <pathplanner/lib/commands/PathPlannerAuto.h>
+#include <pathplanner/lib/auto/NamedCommands.h>
+
+#include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/PowerDistribution.h>
+
 #include "subsystems/Drivetrain.h"
 #include "subsystems/Shooter.h"
 #include "subsystems/Intake.h"
@@ -16,7 +25,7 @@ public:
 	RobotContainer();
 
 	frc2::CommandPtr GetAutonomousCommand();
-	
+
 	void OdometryInit()
 	{
 		limelight3.UpdateLimelightTracking();
@@ -37,9 +46,9 @@ public:
 	void LogTeleopData();
 
 private:
-  	Drivetrain swerve;
-  	Shooter shooter;
-  	Intake intake;
+	Drivetrain swerve;
+	Shooter shooter;
+	Intake intake;
 	Elevator elevator;
 	Feeder feeder;
 	Limelight limelight3;
@@ -52,7 +61,7 @@ private:
 	std::unique_ptr<frc2::Command> testAuto;
 
 	FILE *t_output;
-    frc::Timer logTimer;
+	frc::Timer logTimer;
 
 	void ConfigureBindings();
 };

@@ -13,7 +13,7 @@
 class Controls : frc2::SubsystemBase
 {
 public:
-    Controls(Drivetrain*, Shooter*, Intake*, Elevator*, Feeder*, Limelight*);
+    Controls(Drivetrain *, Shooter *, Intake *, Elevator *, Feeder *, Limelight *);
     void Periodic() override;
     void DriveControls();
     void ShooterControls();
@@ -23,6 +23,7 @@ public:
 
     frc::XboxController gamepad{0};
     frc::Joystick controlsBoard{1};
+
 private:
     Drivetrain *swerve;
     Shooter *shooter;

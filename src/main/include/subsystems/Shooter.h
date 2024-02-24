@@ -1,12 +1,14 @@
 #pragma once
 
-#include "rev/CANSparkMax.h"
-#include "Constants.h"
-#include <frc/DutyCycleEncoder.h>
 #include <frc2/command/SubsystemBase.h>
 #include <frc2/command/CommandPtr.h>
+#include <frc2/command/InstantCommand.h>
+#include <frc/smartdashboard/SmartDashboard.h>
+#include <frc/DutyCycleEncoder.h>
 #include <frc/Timer.h>
 #include <frc/DigitalInput.h>
+#include "rev/CANSparkMax.h"
+#include "Constants.h"
 
 class Shooter : frc2::SubsystemBase
 {
@@ -19,13 +21,21 @@ public:
 
     void UpdateTelemetry();
 
-    void SetShooterMotors(double power) { SetShooterMotor1(power); SetShooterMotor2(power); };
+    void SetShooterMotors(double power)
+    {
+        SetShooterMotor1(power);
+        SetShooterMotor2(power);
+    };
     void SetShooterMotor1(double power) { shooter1Motor.Set(power); };
     void SetShooterMotor2(double power) { shooter2Motor.Set(power); };
-    void SetShooterMotorsRPM(double rpm) { SetShooterMotor1RPM(rpm); SetShooterMotor2RPM(rpm); };
+    void SetShooterMotorsRPM(double rpm)
+    {
+        SetShooterMotor1RPM(rpm);
+        SetShooterMotor2RPM(rpm);
+    };
     void SetShooterMotor1RPM(double rpm) { shooter1PID.SetReference(rpm, rev::CANSparkLowLevel::ControlType::kVelocity); };
     void SetShooterMotor2RPM(double rpm) { shooter2PID.SetReference(rpm, rev::CANSparkLowLevel::ControlType::kVelocity); };
-    
+
     double GetAverageRPM() { return (GetShooter1RPM() + GetShooter2RPM()) / 2.0; };
     double GetShooter1RPM() { return shooter1Encoder.GetVelocity(); };
     double GetShooter2RPM() { return shooter2Encoder.GetVelocity(); };

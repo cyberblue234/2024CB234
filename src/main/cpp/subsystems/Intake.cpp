@@ -1,6 +1,4 @@
 #include "subsystems/Intake.h"
-#include <frc/smartdashboard/SmartDashboard.h>
-#include <frc/DigitalInput.h>
 
 Intake::Intake()
 {
@@ -17,7 +15,6 @@ void Intake::IntakeFromGround()
 {
     groundSpeed = frc::SmartDashboard::GetNumber("Intake Ground Speed", groundSpeed);
     SetIntakeMotor(groundSpeed);
-    //feeder.IntakeFromGround();
 }
 
 void Intake::UpdateTelemetry()
@@ -29,8 +26,8 @@ void Intake::UpdateTelemetry()
 frc2::CommandPtr Intake::GetIntakeCommand()
 {
     return this->RunOnce(
-        [this] {
+        [this]
+        {
             SetIntakeMotor(this->GetGroundSpeed());
-        }
-    );
+        });
 }
