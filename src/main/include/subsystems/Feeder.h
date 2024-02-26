@@ -18,6 +18,7 @@ public:
     void SensorControl();
     void SetFeedMotor(double power) { feedMotor.Set(power); };
 
+    double GetFeedMotorRPM() { return feedMotorEncoder.GetVelocity(); }
     double GetGroundIntakeSpeed() { return groundIntakeSpeed; };
     double GetSourceIntakeSpeed() { return sourceIntakeSpeed; };
     double GetSpeakerShooterSpeed() { return speakerShooterSpeed; };
@@ -27,6 +28,7 @@ public:
 
 private:
     rev::CANSparkMax feedMotor{RobotMap::FEED_MOTOR_ADDRESS, rev::CANSparkMax::MotorType::kBrushless};
+    rev::SparkRelativeEncoder feedMotorEncoder = feedMotor.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor);
 
     frc::DigitalInput feedSensor{RobotMap::FEED_SENSOR_ADDRESS};
     frc::Timer feedSensorTimer{};

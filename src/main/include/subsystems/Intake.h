@@ -17,7 +17,6 @@ public:
     void SetIntakeMotor(double power) { intake.Set(power); };
     void UpdateTelemetry();
     double GetGroundSpeed() { return groundSpeed; };
-    frc2::CommandPtr GetIntakeCommand();
 
 private:
     rev::CANSparkMax intake{RobotMap::INTAKE_MOTOR_ADDRESS, rev::CANSparkMax::MotorType::kBrushless};

@@ -7,7 +7,7 @@ RobotContainer::RobotContainer() : swerve(GetLimelight3()), elevator(GetLimeligh
 								   controls(GetSwerve(), GetShooter(), GetIntake(), GetElevator(), GetFeeder(), GetLimelight3())
 {
 	NamedCommands::registerCommand("Shoot", GetShootCommand());
-	NamedCommands::registerCommand("Intake", std::move(intake.GetIntakeCommand()));
+	NamedCommands::registerCommand("Intake", GetIntakeCommand());
 
 	ConfigureBindings();
 }
@@ -30,7 +30,7 @@ frc2::CommandPtr RobotContainer::GetShootCommand()
 	(
 		[this]
 		{
-			// this->GetSwerve()->AlignToAprilTag();
+			this->GetSwerve()->AlignToSpeaker();
 			//this->GetElevator()->AlignShooterToSpeaker();
 			this->GetShooter()->ShootAtSpeaker();
 		}
@@ -65,6 +65,22 @@ frc2::CommandPtr RobotContainer::GetShootCommand()
 				this->GetFeeder()->SetFeedMotor(0.0);
 			}
 		).ToPtr()
+	);
+}
+
+frc2::CommandPtr RobotContainer::GetIntakeCommand()
+{
+	return frc2::RunCommand
+	(
+		[this]
+		{
+			this->GetIntake()->IntakeFromGround();
+			this->GetFeeder()->IntakeFromGround();
+			//this->GetElevator()->SetElevatorMotorsPosition(GetElevator()->GetIntakeAngle());
+		}
+	).ToPtr().RaceWith
+	(
+		frc2::WaitCommand(2_s).ToPtr()
 	);
 }
 

@@ -80,7 +80,6 @@ void Drivetrain::DriveWithInput(double fwd, double stf, double rot, bool limitSp
         stf *= DrivetrainConstants::DRIVE_SLOW_ADJUSTMENT;
     }
 
-    rot = rot * rot * rot;
     if (abs(rot) < 0.05)
     {
         rot = 0.0;
@@ -92,7 +91,7 @@ void Drivetrain::DriveWithInput(double fwd, double stf, double rot, bool limitSp
 
     // Get the y speed or forward speed. Invert this because Xbox controllers return negative values when pushed forward
     auto ySpeed = units::meters_per_second_t(-fwd * DrivetrainConstants::MAX_SPEED);
-    frc::SmartDashboard::PutNumber("ySpeed", (double)ySpeed);
+
     // Get the x speed or sideways/strafe speed. Needs to be inverted.
     auto xSpeed = units::meters_per_second_t(-stf * DrivetrainConstants::MAX_SPEED);
 
@@ -132,12 +131,11 @@ void Drivetrain::Drive(const frc::ChassisSpeeds &speeds)
 
 double Drivetrain::RotationControl(double rotInput, bool alignToAprilTag)
 {
-    rotInput = rotInput * rotInput * rotInput;
-
     if (alignToAprilTag)
     {
+        limelight3->SetPipelineID(Limelight::kSpeakerDetection);
         rotInput = -rotationController.Calculate(limelight3->GetAprilTagOffset(), 0);
-        return std::clamp(rotInput, -1.0, 1.0);
+        return rotInput;
     }
     // else if (abs(rotInput) < 0.05)
     // {
@@ -146,9 +144,16 @@ double Drivetrain::RotationControl(double rotInput, bool alignToAprilTag)
     // }
     else
     {
+        limelight3->SetPipelineID(Limelight::kAprilTag);
+        rotInput = rotInput * rotInput * rotInput;
         lastGyroYaw = (double)gyro.GetRotation2d().Degrees();
         return rotInput;
     }
+}
+
+void Drivetrain::AlignToSpeaker()
+{
+    DriveWithInput(0.0, 0.0, RotationControl(0, true), false);    
 }
 
 void Drivetrain::UpdateTelemetry()

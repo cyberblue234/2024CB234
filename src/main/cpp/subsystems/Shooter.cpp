@@ -38,8 +38,7 @@ void Shooter::Periodic()
 
 void Shooter::ShootAtSpeaker()
 {
-    speakerRPM = frc::SmartDashboard::GetNumber("Shooter Speaker RPM", speakerRPM);
-    SetShooterMotorsRPM(5000);
+    SetShooterMotorsRPM(speakerRPM);
 }
 
 void Shooter::ShootAtAmp()

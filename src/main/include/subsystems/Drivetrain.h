@@ -61,6 +61,7 @@ public:
     frc::ChassisSpeeds GetCurrentSpeeds() { return chassisSpeeds; };
 
     double RotationControl(double rotInput, bool alignToAprilTag);
+    void AlignToSpeaker();
 
     void UpdateTelemetry();
 

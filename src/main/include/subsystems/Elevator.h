@@ -27,6 +27,7 @@ public:
     double GetElevatorSpeed() { return elevatorSpeed; };
     double GetAlignmentDifference() { return alignmentDifference; };
     double GetAmpAngle() { return ampAngle; };
+    double GetIntakeAngle() { return intakeAngle; };
 
     void UpdateTelemetry();
 
@@ -43,4 +44,5 @@ private:
     double alignmentDifference = 0;
     // Should be a constant eventually
     double ampAngle = 22;
+    double intakeAngle = 45;
 };

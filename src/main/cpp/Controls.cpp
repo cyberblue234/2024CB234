@@ -36,15 +36,7 @@ void Controls::DriveControls()
         swerve->AlignSwerveDrive();
     else
     {
-        double rot = gamepad.GetRightX();
-        if (gamepad.GetRightTriggerAxis() > 0.2)
-        {
-            limelight3->SetPipelineID(Limelight::kSpeakerDetection);
-            if(limelight3->GetTargetValid() != 0)
-            {
-            rot = swerve->RotationControl(0.0, true);
-            }
-        }
+        double rot = swerve->RotationControl(gamepad.GetRightX(), gamepad.GetRightTriggerAxis() > 0.2);
         swerve->DriveWithInput(gamepad.GetLeftY(), gamepad.GetLeftX(), rot, gamepad.GetLeftStickButton());
     }
 }
