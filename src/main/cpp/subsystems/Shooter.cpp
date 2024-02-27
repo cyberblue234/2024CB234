@@ -19,19 +19,29 @@ Shooter::Shooter()
     frc::SmartDashboard::PutNumber("Shooter Intake Speed", intakeSpeed);
 
     frc::SmartDashboard::PutBoolean("Shoot At Speaker?", shootAtSpeaker);
+
+    shooter1PID.SetP(ShooterConstants::kShooterP);
+    shooter1PID.SetI(ShooterConstants::kShooterI);
+    shooter1PID.SetD(ShooterConstants::kShooterD);
+    shooter1PID.SetFF(ShooterConstants::kShooterF);
+
+    shooter2PID.SetP(ShooterConstants::kShooterP);
+    shooter2PID.SetI(ShooterConstants::kShooterI);
+    shooter2PID.SetD(ShooterConstants::kShooterD);
+    shooter2PID.SetFF(ShooterConstants::kShooterF);
 }
 
 void Shooter::Periodic()
 {
-    shooter1PID.SetP(frc::SmartDashboard::GetNumber("Shooter P", ShooterConstants::kShooterP));
-    shooter1PID.SetI(frc::SmartDashboard::GetNumber("Shooter I", ShooterConstants::kShooterI));
-    shooter1PID.SetD(frc::SmartDashboard::GetNumber("Shooter D", ShooterConstants::kShooterD));
-    shooter1PID.SetFF(frc::SmartDashboard::GetNumber("Shooter F", ShooterConstants::kShooterF));
+    // shooter1PID.SetP(frc::SmartDashboard::GetNumber("Shooter P", ShooterConstants::kShooterP));
+    // shooter1PID.SetI(frc::SmartDashboard::GetNumber("Shooter I", ShooterConstants::kShooterI));
+    // shooter1PID.SetD(frc::SmartDashboard::GetNumber("Shooter D", ShooterConstants::kShooterD));
+    // shooter1PID.SetFF(frc::SmartDashboard::GetNumber("Shooter F", ShooterConstants::kShooterF));
 
-    shooter2PID.SetP(frc::SmartDashboard::GetNumber("Shooter P", ShooterConstants::kShooterP));
-    shooter2PID.SetI(frc::SmartDashboard::GetNumber("Shooter I", ShooterConstants::kShooterI));
-    shooter2PID.SetD(frc::SmartDashboard::GetNumber("Shooter D", ShooterConstants::kShooterD));
-    shooter2PID.SetFF(frc::SmartDashboard::GetNumber("Shooter F", ShooterConstants::kShooterF));
+    // shooter2PID.SetP(frc::SmartDashboard::GetNumber("Shooter P", ShooterConstants::kShooterP));
+    // shooter2PID.SetI(frc::SmartDashboard::GetNumber("Shooter I", ShooterConstants::kShooterI));
+    // shooter2PID.SetD(frc::SmartDashboard::GetNumber("Shooter D", ShooterConstants::kShooterD));
+    // shooter2PID.SetFF(frc::SmartDashboard::GetNumber("Shooter F", ShooterConstants::kShooterF));
 
     UpdateTelemetry();
 }

@@ -69,6 +69,4 @@ private:
 
 	FILE *t_output;
 	frc::Timer logTimer;
-
-	void ConfigureBindings();
 };

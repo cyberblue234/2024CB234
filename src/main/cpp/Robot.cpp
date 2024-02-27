@@ -7,7 +7,7 @@ void Robot::RobotInit()
 
 void Robot::RobotPeriodic()
 {
-	
+	frc2::CommandScheduler::GetInstance().Run();
 }
 
 void Robot::DisabledInit() {}
@@ -28,7 +28,6 @@ void Robot::AutonomousInit()
 
 void Robot::AutonomousPeriodic() 
 {
-	frc2::CommandScheduler::GetInstance().Run();
 }
 
 void Robot::TeleopInit()

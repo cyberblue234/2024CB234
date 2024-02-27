@@ -8,20 +8,11 @@ RobotContainer::RobotContainer() : swerve(GetLimelight3()), elevator(GetLimeligh
 {
 	NamedCommands::registerCommand("Shoot", GetShootCommand());
 	NamedCommands::registerCommand("Intake", GetIntakeCommand());
-
-	ConfigureBindings();
-}
-
-void RobotContainer::ConfigureBindings()
-{
-	// Add a button to run the example auto to SmartDashboard, this will also be in the GetAutonomousCommand method below
-	testAuto = PathPlannerAuto("Test Auto").ToPtr().Unwrap();
-	frc::SmartDashboard::PutData("Test Auto", testAuto.get());
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand()
 {
-	return PathPlannerAuto("Test Auto").ToPtr();
+	return PathPlannerAuto("Amp Auto").ToPtr();
 }
 
 frc2::CommandPtr RobotContainer::GetShootCommand()
@@ -80,7 +71,7 @@ frc2::CommandPtr RobotContainer::GetIntakeCommand()
 		}
 	).ToPtr().RaceWith
 	(
-		frc2::WaitCommand(2_s).ToPtr()
+		frc2::WaitCommand(4_s).ToPtr()
 	);
 }
 
