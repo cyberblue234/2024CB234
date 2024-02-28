@@ -1,3 +1,5 @@
+#pragma once
+
 #ifndef _DRIVETRAIN_H
 #define _DRIVETRAIN_H
 
@@ -15,6 +17,8 @@
 
 #include <frc/estimator/SwerveDrivePoseEstimator.h>
 
+#include <frc/controller/PIDController.h>
+
 #include <frc/geometry/Pose2d.h>
 #include <frc/geometry/Rotation2d.h>
 #include <frc/geometry/Translation2d.h>
@@ -28,42 +32,48 @@
 
 #include "AHRS.h"
 
-#include "SwerveModule.h"
+#include "subsystems/SwerveModule.h"
+#include "subsystems/Limelight.h"
 #include "Constants.h"
+
+extern frc::PIDController rotationController;
 
 class Drivetrain : frc2::SubsystemBase
 {
 public:
-    Drivetrain();
+    Drivetrain(Limelight *);
 
     void Periodic() override;
 
-    // Main function of the drivetrain, runs all things related to driving
-    void DriveControl();
     // Gets all of the joystick values and does calculations, then runs Drive(). Provided bool slows down the speed if true
-    void DriveWithJoystick(bool limitSpeed);
+    void DriveWithInput(double fwd, double stf, double rot, bool limitSpeed);
     // Sets all of the motors using kinematics calulcations. Uses the provided ChassisSpeeds for calculations
-    void Drive(const frc::ChassisSpeeds& speeds);
+    void Drive(const frc::ChassisSpeeds &speeds);
     // Updates the odometry. Must be ran every cycle.
     frc::Pose2d UpdateOdometry();
-    //Adds Vision data to odometry and returns the newest pose estimation. Also sets the pipeline ID to Apriltags
+    // Adds Vision data to odometry and returns the newest pose estimation. Also sets the pipeline ID to Apriltags
     frc::Pose2d UpdateOdometryWithVision(bool poseOverride);
-    //Returns a rot value to align with Target Apriltag
-    double AlignToAprilTag();
     // Returns the Pose2d of the robot
     frc::Pose2d GetPose() { return odometry.GetEstimatedPosition(); };
     // Resets the Pose2d of the robot
-    void ResetPose(frc::Pose2d pose) { odometry.ResetPosition(gyro.GetRotation2d(), { frontLeft.GetModulePosition(), frontRight.GetModulePosition(), backLeft.GetModulePosition(), backRight.GetModulePosition() }, pose ); };
+    void ResetPose(frc::Pose2d pose) { odometry.ResetPosition(gyro.GetRotation2d(), {frontLeft.GetModulePosition(), frontRight.GetModulePosition(), backLeft.GetModulePosition(), backRight.GetModulePosition()}, pose); };
     // Returns the current ChassisSpeeds of the robot
     frc::ChassisSpeeds GetCurrentSpeeds() { return chassisSpeeds; };
 
+    double RotationControl(double rotInput, bool alignToAprilTag);
+    void AlignToSpeaker();
+
+    void UpdateTelemetry();
+
     // Sets all of the motors ramp (the minimun time to accelerate to full throttle)
     void SetDriveOpenLoopRamp(double ramp);
+    // Sets the bool that determines if the robot drives field or robot relative
+    void SetFieldRelative(bool isFieldRelative) { fieldRelative = isFieldRelative; };
     // Resets all of the motors swerve cancoders
     void ResetCancoders();
     // Resets the gyro, if first time since auton reverses the angle
     void ResetGyroAngle();
-    //Gets the gyro as a rotation2d
+    // Gets the gyro as a rotation2d
     frc::Rotation2d GetGyro2d() { return gyro.GetRotation2d(); };
     // Returns the gyro's yaw
     double GetGyroAngle() { return gyro.GetYaw(); };
@@ -96,7 +106,6 @@ public:
     // Returns the average of the front left and back right distance
     double GetDriveDistance();
 
-
     // Returns the current being pulled by the front left drive motor
     double GetFLDriveCurrent() { return frontLeft.GetDriveCurrent(); };
     // Returns the current being pulled by the front right drive motor
@@ -119,30 +128,41 @@ public:
     // Sets all motors to a speed of zero
     void AlignSwerveDrive();
 
+    void SetPIDFs();
+
+    bool IsAlignmentOn() { return alignmentOn; };
+
+    bool GetAtAlignment() { return abs(limelight3->GetAprilTagOffset()) < 0.5; };
+
 private:
     SwerveModule frontLeft;
     SwerveModule frontRight;
     SwerveModule backLeft;
     SwerveModule backRight;
 
+    Limelight *limelight3;
+
     AHRS gyro;
-    double lastGyroPitch;
-    double lastGyroRoll;
+    double lastGyroPitch = 0;
+    double lastGyroRoll = 0;
+    double lastGyroYaw = 0;
     bool alignmentOn = false;
     bool gyro_reset_reversed = false;
+    bool fieldRelative = true;
+
     frc::ChassisSpeeds chassisSpeeds;
 
-    frc::SwerveDriveKinematics<4> kinematics
-    {
-        DrivetrainConstants::frontLeftLocation, 
-        DrivetrainConstants::frontRightLocation, 
-        DrivetrainConstants::backLeftLocation, 
-        DrivetrainConstants::backRightLocation
-    };
+    frc::SwerveDriveKinematics<4> kinematics{
+        DrivetrainConstants::frontLeftLocation,
+        DrivetrainConstants::frontRightLocation,
+        DrivetrainConstants::backLeftLocation,
+        DrivetrainConstants::backRightLocation};
 
     frc::SwerveDrivePoseEstimator<4> odometry;
 
     int time = 0;
+
+    frc::PIDController rotationController{DrivetrainConstants::kRotationP, DrivetrainConstants::kRotationP, DrivetrainConstants::kRotationI, 20_ms};
 };
 
 #endif
