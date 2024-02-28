@@ -44,10 +44,10 @@ namespace SwerveModuleConstants
     // 6.54 : 1
     inline constexpr double kDriveP = 3.0;
     inline constexpr double kDriveI = 0.0;
-    inline constexpr double kDriveD = 0.5;
+    inline constexpr double kDriveD = 0.5250;
     inline constexpr double kDriveF = 0.2;
 
-    inline constexpr double kAngleP = 7.5; // 0.30;
+    inline constexpr double kAngleP = 7.5; // 030;
     inline constexpr double kAngleI = 0.0;
     inline constexpr double kAngleD = 0.5; // 0.001;
     inline constexpr double kAngleF = 0.0;
@@ -88,9 +88,9 @@ namespace DrivetrainConstants
 
     inline constexpr double DRIVE_SLOW_ADJUSTMENT = 0.20;
 
-    inline constexpr double kRotationP = 0.0375;
-    inline constexpr double kRotationI = 0.003;
-    inline constexpr double kRotationD = 0.0025;
+    inline constexpr double kRotationP = 0.025;
+    inline constexpr double kRotationI = 0.00;
+    inline constexpr double kRotationD = 0.002;
 }
 
 namespace ShooterConstants

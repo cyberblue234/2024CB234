@@ -6,22 +6,73 @@ RobotContainer::RobotContainer() : swerve(GetLimelight3()), elevator(GetLimeligh
 								   pdp(1, frc::PowerDistribution::ModuleType::kRev),
 								   controls(GetSwerve(), GetShooter(), GetIntake(), GetElevator(), GetFeeder(), GetLimelight3())
 {
-	NamedCommands::registerCommand("Shoot", std::move(shooter.GetShooterCommand()));
-	NamedCommands::registerCommand("Intake", std::move(intake.GetIntakeCommand()));
-
-	ConfigureBindings();
-}
-
-void RobotContainer::ConfigureBindings()
-{
-	// Add a button to run the example auto to SmartDashboard, this will also be in the GetAutonomousCommand method below
-	testAuto = PathPlannerAuto("Test Auto").ToPtr().Unwrap();
-	frc::SmartDashboard::PutData("Test Auto", testAuto.get());
+	NamedCommands::registerCommand("Shoot", GetShootCommand());
+	NamedCommands::registerCommand("Intake", GetIntakeCommand());
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand()
 {
-	return PathPlannerAuto("Test Auto").ToPtr();
+	return PathPlannerAuto("Center Auto").ToPtr();
+}
+
+frc2::CommandPtr RobotContainer::GetShootCommand()
+{
+	return frc2::RunCommand
+	(
+		[this]
+		{
+			this->GetSwerve()->AlignToSpeaker();
+			//this->GetElevator()->AlignShooterToSpeaker();
+			this->GetShooter()->ShootAtSpeaker();
+		}
+	).Until
+	(
+		[this]
+		{
+			bool atAlignment = true; //abs(this->GetLimelight3()->GetAprilTagOffset()) < 0.5;// && abs(this->GetElevator()->GetAlignmentDifference()) < 0.5;
+			return this->GetShooter()->GetAverageRPM() >= this->GetShooter()->GetSpeakerRPM() - 100 && atAlignment;
+		}
+	).AndThen
+	(
+		frc2::RunCommand
+		(
+			[this]
+			{
+				this->GetShooter()->ShootAtSpeaker();
+				this->GetFeeder()->ShootAtSpeaker();
+			}
+		).ToPtr().RaceWith
+		(
+			frc2::WaitCommand(2_s).ToPtr()
+		)
+	).AndThen
+	(
+		frc2::InstantCommand
+		(
+			[this]
+			{
+				this->GetShooter()->SetShooterMotors(0.0);
+				this->GetElevator()->SetElevatorMotors(0.0);
+				this->GetFeeder()->SetFeedMotor(0.0);
+			}
+		).ToPtr()
+	);
+}
+
+frc2::CommandPtr RobotContainer::GetIntakeCommand()
+{
+	return frc2::RunCommand
+	(
+		[this]
+		{
+			this->GetIntake()->IntakeFromGround();
+			this->GetFeeder()->IntakeFromGround();
+			//this->GetElevator()->SetElevatorMotorsPosition(GetElevator()->GetIntakeAngle());
+		}
+	).ToPtr().RaceWith
+	(
+		frc2::WaitCommand(10_s).ToPtr()
+	);
 }
 
 void RobotContainer::RunTeleop()

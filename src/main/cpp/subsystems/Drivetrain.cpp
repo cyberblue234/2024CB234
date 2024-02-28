@@ -35,11 +35,16 @@ Drivetrain::Drivetrain(Limelight *limelight3) : frontLeft(RobotMap::FL_DRIVE_ADD
         this);
 
     this->limelight3 = limelight3;
+
+    frc::SmartDashboard::PutNumber("ROTATION P", DrivetrainConstants::kRotationP);
+    frc::SmartDashboard::PutNumber("ROTATION I", DrivetrainConstants::kRotationI);
+    frc::SmartDashboard::PutNumber("ROTATION D", DrivetrainConstants::kRotationD);
 }
 
 void Drivetrain::Periodic()
 {
     limelight3->UpdateLimelightTracking();
+    limelight3->UpdateTelemetry();
     odometry.Update(gyro.GetRotation2d(), {frontLeft.GetModulePosition(), frontRight.GetModulePosition(), backLeft.GetModulePosition(), backRight.GetModulePosition()});
     if (limelight3->GetTargetValid() == 1 && abs((double)limelight3->GetRobotPose().X() - (double)odometry.GetEstimatedPosition().X()) < 1)
         odometry.AddVisionMeasurement(limelight3->GetRobotPose(), frc::Timer::GetFPGATimestamp());
@@ -51,7 +56,6 @@ void Drivetrain::Periodic()
     frc::SmartDashboard::PutBoolean("ALIGNMENT_ON", alignmentOn);
 
     UpdateTelemetry();
-    SetPIDFs();
 }
 
 void Drivetrain::DriveWithInput(double fwd, double stf, double rot, bool limitSpeed)
@@ -76,7 +80,6 @@ void Drivetrain::DriveWithInput(double fwd, double stf, double rot, bool limitSp
         stf *= DrivetrainConstants::DRIVE_SLOW_ADJUSTMENT;
     }
 
-    rot = rot * rot * rot;
     if (abs(rot) < 0.05)
     {
         rot = 0.0;
@@ -88,14 +91,14 @@ void Drivetrain::DriveWithInput(double fwd, double stf, double rot, bool limitSp
 
     // Get the y speed or forward speed. Invert this because Xbox controllers return negative values when pushed forward
     auto ySpeed = units::meters_per_second_t(-fwd * DrivetrainConstants::MAX_SPEED);
-    frc::SmartDashboard::PutNumber("ySpeed", (double)ySpeed);
+
     // Get the x speed or sideways/strafe speed. Needs to be inverted.
     auto xSpeed = units::meters_per_second_t(-stf * DrivetrainConstants::MAX_SPEED);
 
     // Get the rate of angular rotation. Needs to be inverted. Remember CCW is positive in mathematics.
     auto rotation = units::radians_per_second_t(-rot * DrivetrainConstants::MAX_ANGULAR_SPEED);
 
-    frc::Rotation2d heading = gyro.GetRotation2d();
+    frc::Rotation2d heading = odometry.GetEstimatedPosition().Rotation().RotateBy(frc::Rotation2d(units::angle::degree_t(180)));
     auto speeds = fieldRelative ? frc::ChassisSpeeds::FromFieldRelativeSpeeds(ySpeed, xSpeed, rotation, heading)
                                 : frc::ChassisSpeeds{ySpeed, xSpeed, rotation};
 
@@ -128,12 +131,11 @@ void Drivetrain::Drive(const frc::ChassisSpeeds &speeds)
 
 double Drivetrain::RotationControl(double rotInput, bool alignToAprilTag)
 {
-    rotInput = rotInput * rotInput * rotInput;
-
     if (alignToAprilTag)
     {
+        limelight3->SetPipelineID(Limelight::kSpeakerDetection);
         rotInput = -rotationController.Calculate(limelight3->GetAprilTagOffset(), 0);
-        return std::clamp(rotInput, -1.0, 1.0);
+        return rotInput;
     }
     // else if (abs(rotInput) < 0.05)
     // {
@@ -142,9 +144,16 @@ double Drivetrain::RotationControl(double rotInput, bool alignToAprilTag)
     // }
     else
     {
+        limelight3->SetPipelineID(Limelight::kAprilTag);
+        rotInput = rotInput * rotInput * rotInput;
         lastGyroYaw = (double)gyro.GetRotation2d().Degrees();
         return rotInput;
     }
+}
+
+void Drivetrain::AlignToSpeaker()
+{
+    DriveWithInput(0.0, 0.0, RotationControl(0, true), false);    
 }
 
 void Drivetrain::UpdateTelemetry()
@@ -177,21 +186,6 @@ void Drivetrain::UpdateTelemetry()
     frc::SmartDashboard::PutNumber("FR Current Count", frontRight.GetCurrentCount());
     frc::SmartDashboard::PutNumber("BL Current Count", backLeft.GetCurrentCount());
     frc::SmartDashboard::PutNumber("BR Current Count", backRight.GetCurrentCount());
-
-    frc::SmartDashboard::PutNumber("DRIVE P", SwerveModuleConstants::kDriveP);
-    frc::SmartDashboard::PutNumber("DRIVE I", SwerveModuleConstants::kDriveI);
-    frc::SmartDashboard::PutNumber("DRIVE D", SwerveModuleConstants::kDriveD);
-    frc::SmartDashboard::PutNumber("DRIVE FF", SwerveModuleConstants::kDriveF);
-
-    frc::SmartDashboard::PutNumber("SWERVE P", SwerveModuleConstants::kAngleP);
-    frc::SmartDashboard::PutNumber("SWERVE I", SwerveModuleConstants::kAngleI);
-    frc::SmartDashboard::PutNumber("SWERVE D", SwerveModuleConstants::kAngleD);
-    frc::SmartDashboard::PutNumber("SWERVE FF", SwerveModuleConstants::kAngleF);
-
-    frc::SmartDashboard::PutNumber("ROTATION P", DrivetrainConstants::kRotationP);
-    frc::SmartDashboard::PutNumber("ROTATION I", DrivetrainConstants::kRotationI);
-    frc::SmartDashboard::PutNumber("ROTATION D", DrivetrainConstants::kRotationD);
-
 }
 
 void Drivetrain::SetDriveOpenLoopRamp(double ramp)
@@ -247,30 +241,9 @@ void Drivetrain::AlignSwerveDrive()
 }
 
 void Drivetrain::SetPIDFs() {
-    double driveP = frc::SmartDashboard::GetNumber("DRIVE P", SwerveModuleConstants::kDriveP);
-    double driveI = frc::SmartDashboard::GetNumber("DRIVE I", SwerveModuleConstants::kDriveI);
-    double driveD = frc::SmartDashboard::GetNumber("DRIVE D", SwerveModuleConstants::kDriveD);
-    double driveFF = frc::SmartDashboard::GetNumber("DRIVE FF", SwerveModuleConstants::kDriveF);
-
-    frontLeft.SetDrivePIDF(driveP, driveI, driveD, driveFF);
-    backLeft.SetDrivePIDF(driveP, driveI, driveD, driveFF);
-    frontRight.SetDrivePIDF(driveP, driveI, driveD, driveFF);
-    backRight.SetDrivePIDF(driveP, driveI, driveD, driveFF);
-
-    double angleP = frc::SmartDashboard::GetNumber("SWERVE P", SwerveModuleConstants::kAngleP);
-    double angleI = frc::SmartDashboard::GetNumber("SWERVE I", SwerveModuleConstants::kAngleI);
-    double angleD = frc::SmartDashboard::GetNumber("SWERVE D", SwerveModuleConstants::kAngleD);
-    double angleFF = frc::SmartDashboard::GetNumber("SWERVE FF", SwerveModuleConstants::kAngleF);
-
-    frontLeft.SetSwervePIDF(angleP, angleI, angleD, angleFF);
-    backLeft.SetSwervePIDF(angleP, angleI, angleD, angleFF);
-    frontRight.SetSwervePIDF(angleP, angleI, angleD, angleFF);
-    backRight.SetSwervePIDF(angleP, angleI, angleD, angleFF);
-
     rotationController.SetPID(
         frc::SmartDashboard::GetNumber("ROTATION P", DrivetrainConstants::kRotationP),
         frc::SmartDashboard::GetNumber("ROTATION I", DrivetrainConstants::kRotationI),
         frc::SmartDashboard::GetNumber("ROTATION D", DrivetrainConstants::kRotationD)
     );
-
 }

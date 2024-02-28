@@ -22,12 +22,3 @@ void Intake::UpdateTelemetry()
     frc::SmartDashboard::PutNumber("Intake RPM", intakeEncoder.GetVelocity());
     frc::SmartDashboard::PutNumber("Intake Current", intake.GetOutputCurrent());
 }
-
-frc2::CommandPtr Intake::GetIntakeCommand()
-{
-    return this->RunOnce(
-        [this]
-        {
-            SetIntakeMotor(this->GetGroundSpeed());
-        });
-}

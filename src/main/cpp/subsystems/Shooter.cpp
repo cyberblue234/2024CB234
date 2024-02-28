@@ -19,26 +19,35 @@ Shooter::Shooter()
     frc::SmartDashboard::PutNumber("Shooter Intake Speed", intakeSpeed);
 
     frc::SmartDashboard::PutBoolean("Shoot At Speaker?", shootAtSpeaker);
+
+    shooter1PID.SetP(ShooterConstants::kShooterP);
+    shooter1PID.SetI(ShooterConstants::kShooterI);
+    shooter1PID.SetD(ShooterConstants::kShooterD);
+    shooter1PID.SetFF(ShooterConstants::kShooterF);
+
+    shooter2PID.SetP(ShooterConstants::kShooterP);
+    shooter2PID.SetI(ShooterConstants::kShooterI);
+    shooter2PID.SetD(ShooterConstants::kShooterD);
+    shooter2PID.SetFF(ShooterConstants::kShooterF);
 }
 
 void Shooter::Periodic()
 {
-    shooter1PID.SetP(frc::SmartDashboard::GetNumber("Shooter P", ShooterConstants::kShooterP));
-    shooter1PID.SetI(frc::SmartDashboard::GetNumber("Shooter I", ShooterConstants::kShooterI));
-    shooter1PID.SetD(frc::SmartDashboard::GetNumber("Shooter D", ShooterConstants::kShooterD));
-    shooter1PID.SetFF(frc::SmartDashboard::GetNumber("Shooter F", ShooterConstants::kShooterF));
+    // shooter1PID.SetP(frc::SmartDashboard::GetNumber("Shooter P", ShooterConstants::kShooterP));
+    // shooter1PID.SetI(frc::SmartDashboard::GetNumber("Shooter I", ShooterConstants::kShooterI));
+    // shooter1PID.SetD(frc::SmartDashboard::GetNumber("Shooter D", ShooterConstants::kShooterD));
+    // shooter1PID.SetFF(frc::SmartDashboard::GetNumber("Shooter F", ShooterConstants::kShooterF));
 
-    shooter2PID.SetP(frc::SmartDashboard::GetNumber("Shooter P", ShooterConstants::kShooterP));
-    shooter2PID.SetI(frc::SmartDashboard::GetNumber("Shooter I", ShooterConstants::kShooterI));
-    shooter2PID.SetD(frc::SmartDashboard::GetNumber("Shooter D", ShooterConstants::kShooterD));
-    shooter2PID.SetFF(frc::SmartDashboard::GetNumber("Shooter F", ShooterConstants::kShooterF));
+    // shooter2PID.SetP(frc::SmartDashboard::GetNumber("Shooter P", ShooterConstants::kShooterP));
+    // shooter2PID.SetI(frc::SmartDashboard::GetNumber("Shooter I", ShooterConstants::kShooterI));
+    // shooter2PID.SetD(frc::SmartDashboard::GetNumber("Shooter D", ShooterConstants::kShooterD));
+    // shooter2PID.SetFF(frc::SmartDashboard::GetNumber("Shooter F", ShooterConstants::kShooterF));
 
     UpdateTelemetry();
 }
 
 void Shooter::ShootAtSpeaker()
 {
-    speakerRPM = frc::SmartDashboard::GetNumber("Shooter Speaker RPM", speakerRPM);
     SetShooterMotorsRPM(speakerRPM);
 }
 
@@ -65,13 +74,4 @@ void Shooter::UpdateTelemetry()
 
     frc::SmartDashboard::PutNumber("Shooter1 Current", shooter1Motor.GetOutputCurrent());
     frc::SmartDashboard::PutNumber("Shooter2 Current", shooter2Motor.GetOutputCurrent());
-}
-
-frc2::CommandPtr Shooter::GetShooterCommand()
-{
-    return this->RunOnce(
-        [this]
-        {
-            SetShooterMotorsRPM(this->GetSpeakerRPM());
-        });
 }

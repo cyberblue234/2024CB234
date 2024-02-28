@@ -96,21 +96,21 @@ void Limelight::UpdateTelemetry()
 {
     // April Tags
     frc::SmartDashboard::PutNumber(limelight_name + "_TAG_ID", april_tag_id);
-    frc::SmartDashboard::PutNumber(limelight_name + "_TVALID", target_valid);
+    // frc::SmartDashboard::PutNumber(limelight_name + "_TVALID", target_valid);
     frc::SmartDashboard::PutNumber(limelight_name + "_DISTANCE", GetDistanceFromTarget());
 
     // Pose
-    frc::SmartDashboard::PutNumber(limelight_name + "_POSE_X", (double)GetRobotPose().X());
-    frc::SmartDashboard::PutNumber(limelight_name + "_POSE_Y", (double)GetRobotPose().Y());
-    frc::SmartDashboard::PutNumber(limelight_name + "_POSE_ROT", (double)GetRobotPose().Rotation().Degrees());
+    // frc::SmartDashboard::PutNumber(limelight_name + "_POSE_X", (double)GetRobotPose().X());
+    // frc::SmartDashboard::PutNumber(limelight_name + "_POSE_Y", (double)GetRobotPose().Y());
+    // frc::SmartDashboard::PutNumber(limelight_name + "_POSE_ROT", (double)GetRobotPose().Rotation().Degrees());
 
     // Pipelines
-    frc::SmartDashboard::PutNumber(limelight_name + "_LATENCY", GetTotalLatency());
-    frc::SmartDashboard::PutNumber(limelight_name + "_PIPE", GetActivePipeline());
+    // frc::SmartDashboard::PutNumber(limelight_name + "_LATENCY", GetTotalLatency());
+    // frc::SmartDashboard::PutNumber(limelight_name + "_PIPE", GetActivePipeline());
 
-    // Tracking
-    frc::SmartDashboard::PutNumber(limelight_name + "_TX", target_x);
-    frc::SmartDashboard::PutNumber(limelight_name + "_TY", target_y);
+    // // Tracking
+    // frc::SmartDashboard::PutNumber(limelight_name + "_TX", target_x);
+    // frc::SmartDashboard::PutNumber(limelight_name + "_TY", target_y);
 
     frc::SmartDashboard::PutNumber(limelight_name + "_OFFSET", GetAprilTagOffset());
 }

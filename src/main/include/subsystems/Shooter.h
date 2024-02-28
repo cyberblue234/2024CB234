@@ -2,7 +2,9 @@
 
 #include <frc2/command/SubsystemBase.h>
 #include <frc2/command/CommandPtr.h>
-#include <frc2/command/InstantCommand.h>
+#include <frc2/command/CommandHelper.h>
+#include <frc2/command/Command.h>
+#include <frc2/command/StartEndCommand.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/DutyCycleEncoder.h>
 #include <frc/Timer.h>
@@ -43,8 +45,6 @@ public:
     double GetAmpSpeed() { return ampSpeed; };
     double GetIntakeSpeed() { return intakeSpeed; };
 
-    frc2::CommandPtr GetShooterCommand();
-
     // FOR DEBUGGING
     bool shootAtSpeaker = true;
 
@@ -56,7 +56,7 @@ private:
     rev::SparkPIDController shooter1PID = shooter1Motor.GetPIDController();
     rev::SparkPIDController shooter2PID = shooter2Motor.GetPIDController();
 
-    double speakerRPM = 0.8;
+    double speakerRPM = 4500;
     double ampSpeed = 0.5;
     double intakeSpeed = 0.5;
 };

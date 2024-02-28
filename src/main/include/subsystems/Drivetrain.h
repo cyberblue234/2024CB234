@@ -61,6 +61,7 @@ public:
     frc::ChassisSpeeds GetCurrentSpeeds() { return chassisSpeeds; };
 
     double RotationControl(double rotInput, bool alignToAprilTag);
+    void AlignToSpeaker();
 
     void UpdateTelemetry();
 
@@ -147,7 +148,7 @@ private:
     double lastGyroYaw = 0;
     bool alignmentOn = false;
     bool gyro_reset_reversed = false;
-    bool fieldRelative = false;
+    bool fieldRelative = true;
 
     frc::ChassisSpeeds chassisSpeeds;
 

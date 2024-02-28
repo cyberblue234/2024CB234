@@ -39,7 +39,7 @@ void Feeder::IntakeFromSource()
 void Feeder::ShootAtSpeaker()
 {
     speakerShooterSpeed = frc::SmartDashboard::GetNumber("Feed Speaker Speed", speakerShooterSpeed);
-    SetFeedMotor(speakerShooterSpeed);
+    SetFeedMotor(0.85);
 }
 
 void Feeder::ShootAtAmp()
