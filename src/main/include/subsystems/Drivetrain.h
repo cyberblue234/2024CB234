@@ -62,6 +62,7 @@ public:
 
     double RotationControl(double rotInput, bool alignToAprilTag);
     void AlignToSpeaker();
+    void SetAnchorState();
 
     void UpdateTelemetry();
 

@@ -119,13 +119,40 @@ namespace ElevatorConstants
 
 namespace ControlBoardConstants
 {
-    inline constexpr int SHOOT = 0;
-    inline constexpr int SHOOTER_MOTORS = 0;
-    inline constexpr int SOURCE_INTAKE = 0;
-    inline constexpr int GROUND_INTAKE = 0;
-    inline constexpr int ELEVATOR_UP = 0;
-    inline constexpr int ELEVATOR_DOWN = 0;
-    inline constexpr int ANCHOR = 0;
-    inline constexpr int PURGE = 0;
-    
+    // Shoot button
+    inline constexpr int SHOOT = 10;
+    // Turn on shooter motors switch
+    inline constexpr int SHOOTER_MOTORS = 9;
+    // Intake from source switch
+    inline constexpr int SOURCE_INTAKE = 8;
+    // Intake from ground switch
+    inline constexpr int GROUND_INTAKE = 11;
+    // Move the elevator up switch
+    inline constexpr int ELEVATOR_UP = 2;
+    // Move the elevator down switch
+    inline constexpr int ELEVATOR_DOWN = 3;
+    // Turn the anchor on switch
+    inline constexpr int ANCHOR = 5;
+    // Purge any notes button
+    inline constexpr int PURGE = 4;
+    // Rotary switches: 0 - 9, easier to deal with than the raw analog inputs 
+    // Scoring position at the subwoofer
+    inline constexpr int POS_CLOSE = 0;
+    // Scoring position directly back from the subwoofer
+    inline constexpr int POS_MID = 1;
+    // Scoring position with the bot touching the stage
+    inline constexpr int POS_STAGE = 2;
+    // Scoring position for the amp
+    inline constexpr int POS_AMP = 3;
+    // Auto alignment scoring position
+    inline constexpr int AUTO_SCORE = 4;
+    // Scoring position for the trap
+    inline constexpr int POS_TRAP = 7;
+    // Manual control for angle and elevator
+    inline constexpr int MANUAL_SCORE = 9;
+
+    int AnalogToRotaryIndex(double analogInput)
+    {
+        return (int) (input + 0.05) * 4.5 + 4.5;
+    }
 }
