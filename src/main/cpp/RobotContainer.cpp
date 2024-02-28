@@ -12,7 +12,7 @@ RobotContainer::RobotContainer() : swerve(GetLimelight3()), elevator(GetLimeligh
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand()
 {
-	return PathPlannerAuto("Amp Auto").ToPtr();
+	return PathPlannerAuto("Center Auto").ToPtr();
 }
 
 frc2::CommandPtr RobotContainer::GetShootCommand()
@@ -71,7 +71,7 @@ frc2::CommandPtr RobotContainer::GetIntakeCommand()
 		}
 	).ToPtr().RaceWith
 	(
-		frc2::WaitCommand(4_s).ToPtr()
+		frc2::WaitCommand(10_s).ToPtr()
 	);
 }
 

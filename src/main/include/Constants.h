@@ -44,7 +44,7 @@ namespace SwerveModuleConstants
     // 6.54 : 1
     inline constexpr double kDriveP = 3.0;
     inline constexpr double kDriveI = 0.0;
-    inline constexpr double kDriveD = 0.50;
+    inline constexpr double kDriveD = 0.5250;
     inline constexpr double kDriveF = 0.2;
 
     inline constexpr double kAngleP = 7.5; // 030;

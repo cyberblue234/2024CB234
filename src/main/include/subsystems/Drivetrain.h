@@ -148,7 +148,7 @@ private:
     double lastGyroYaw = 0;
     bool alignmentOn = false;
     bool gyro_reset_reversed = false;
-    bool fieldRelative = false;
+    bool fieldRelative = true;
 
     frc::ChassisSpeeds chassisSpeeds;
 
