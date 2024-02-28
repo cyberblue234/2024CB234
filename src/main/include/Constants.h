@@ -116,3 +116,16 @@ namespace ElevatorConstants
 
     inline constexpr double kSpeakerHeight = 1.0914; // Speaker height to target in meters
 }
+
+namespace ControlBoardConstants
+{
+    inline constexpr int SHOOT = 0;
+    inline constexpr int SHOOTER_MOTORS = 0;
+    inline constexpr int SOURCE_INTAKE = 0;
+    inline constexpr int GROUND_INTAKE = 0;
+    inline constexpr int ELEVATOR_UP = 0;
+    inline constexpr int ELEVATOR_DOWN = 0;
+    inline constexpr int ANCHOR = 0;
+    inline constexpr int PURGE = 0;
+    
+}
