@@ -151,8 +151,8 @@ namespace ControlBoardConstants
     // Manual control for angle and elevator
     inline constexpr int MANUAL_SCORE = 9;
 
-    int AnalogToRotaryIndex(double analogInput)
+    inline constexpr int AnalogToRotaryIndex(double analogInput)
     {
-        return (int) (input + 0.05) * 4.5 + 4.5;
+        return (int) (analogInput + 0.05) * 4.5 + 4.5;
     }
 }

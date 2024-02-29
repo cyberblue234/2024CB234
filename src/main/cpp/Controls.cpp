@@ -29,7 +29,8 @@ void Controls::DriveControls()
         swerve->SetFieldRelative(false);
     if (gamepad.GetYButton() == true)
         swerve->ResetGyroAngle();
-    if (gamepad.GetRightBumper()) swerve->SetPIDFs();
+    if (gamepad.GetRightBumper()) 
+        swerve->SetPIDFs();
 
     if (swerve->IsAlignmentOn())
         swerve->AlignSwerveDrive();
@@ -103,7 +104,7 @@ void Controls::ElevatorControls()
                     break;
                 // Default is the close angle
                 default:
-                    angle = elevator-GetCloseAngle();
+                    angle = elevator->GetCloseAngle();
             }
             elevator->SetElevatorMotorsPosition(elevator->GetShooterAngleRevolutions() + (angle / 360));
         }
