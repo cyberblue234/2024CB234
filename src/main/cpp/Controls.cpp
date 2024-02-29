@@ -73,17 +73,19 @@ void Controls::ElevatorControls()
     else if (gamepad.GetPOV() == 180)
         elevator->SetElevatorMotors(-elevator->GetElevatorSpeed());
     // Align to either speaker or amp
-    else if (gamepad.GetRightTriggerAxis() > 0.2)
-    {
-        if (shooter->shootAtSpeaker)
-        {
-            elevator->AlignShooterToSpeaker();
-        }
-        else
-        {
-            elevator->SetElevatorMotorsPosition(elevator->GetShooterRevolutions() + (elevator->GetAmpAngle() / 360));
-        }
-    }
+    // else if (gamepad.GetRightTriggerAxis() > 0.2)
+    // {
+    //     if (shooter->shootAtSpeaker)
+    //     {
+    //         elevator->AlignShooterToSpeaker();
+    //     }
+    //     else
+    //     {
+    //         elevator->SetElevatorMotorsPosition(elevator->GetShooterRevolutions() + (elevator->GetAmpAngle() / 360));
+    //     }
+    // }
+    else
+        elevator->SetElevatorMotors(0.0);
 }
 
 void Controls::FeederControls()
