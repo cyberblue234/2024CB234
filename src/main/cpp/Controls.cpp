@@ -72,6 +72,10 @@ void Controls::ElevatorControls()
     // Manual down - dpad down
     else if (gamepad.GetPOV() == 180)
         elevator->SetElevatorMotors(-elevator->GetElevatorSpeed());
+    else if (gamepad.GetPOV() == 90)
+        elevator->SetElevatorMotor2(0.5);
+    else if (gamepad.GetPOV() == 270)
+        elevator->SetElevatorMotor1(-0.5);
     // Align to either speaker or amp
     // else if (gamepad.GetRightTriggerAxis() > 0.2)
     // {

@@ -4,8 +4,6 @@ Feeder::Feeder()
 {
     feedMotor.RestoreFactoryDefaults();
 
-    feedMotor.SetInverted(true);
-
     groundIntakeSpeed = frc::SmartDashboard::PutNumber("Feed Ground Speed", groundIntakeSpeed);
     sourceIntakeSpeed = frc::SmartDashboard::PutNumber("Feed Source Speed", sourceIntakeSpeed);
     speakerShooterSpeed = frc::SmartDashboard::PutNumber("Feed Speaker Speed", speakerShooterSpeed);

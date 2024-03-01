@@ -20,7 +20,9 @@ public:
     double CalculateSpeakerAngle();
 
     void SetElevatorMotorsPosition(double pos);
-    void SetElevatorMotors(double power) { elevatorMotor1.Set(power); };
+    void SetElevatorMotors(double power) { SetElevatorMotor1(power); SetElevatorMotor2(-power); };
+    void SetElevatorMotor1(double power) { elevatorMotor1.Set(power); };
+    void SetElevatorMotor2(double power) { elevatorMotor2.Set(power); };
 
     double GetShooterAngle() { return shooterAngleEncoder.GetDistance(); };
     double GetShooterRevolutions() { return (double)shooterAngleEncoder.Get(); };
