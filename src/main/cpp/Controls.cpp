@@ -30,7 +30,7 @@ void Controls::DriveControls()
     if (gamepad.GetYButton() == true)
         swerve->ResetGyroAngle();
 
-    if (gamepad.GetRightBumper()) swerve->SetPIDFs();
+    //if (gamepad.GetRightBumper()) swerve->SetPIDFs();
 
     if (swerve->IsAlignmentOn())
         swerve->AlignSwerveDrive();
@@ -66,16 +66,25 @@ void Controls::IntakeControls()
 
 void Controls::ElevatorControls()
 {
+    if (gamepad.GetPOV() == 270) {
+        elevator->SetElevatorMotor1(gamepad.GetRightBumper() ? -0.5 : 0.5);
+        return;
+    }
+    else if (gamepad.GetPOV() == 90) {
+        elevator->SetElevatorMotor2(gamepad.GetRightBumper() ? -0.5 : 0.5);
+        return;
+    }
+
+    if (elevator->IsElevator1OutOfBounds())
+        elevator->SetElevator1Motor(0.0);
+    else if (elevator->IsElevator2OutOfBounds())
+        elevator->SetElevator2Motor(0.0);
     // Manual up - dpad up
-    if (gamepad.GetPOV() == 0)
+    else if (gamepad.GetPOV() == 0)
         elevator->SetElevatorMotors(elevator->GetElevatorSpeed());
     // Manual down - dpad down
     else if (gamepad.GetPOV() == 180)
         elevator->SetElevatorMotors(-elevator->GetElevatorSpeed());
-    else if (gamepad.GetPOV() == 90)
-        elevator->SetElevatorMotor2(0.5);
-    else if (gamepad.GetPOV() == 270)
-        elevator->SetElevatorMotor1(-0.5);
     // Align to either speaker or amp
     // else if (gamepad.GetRightTriggerAxis() > 0.2)
     // {

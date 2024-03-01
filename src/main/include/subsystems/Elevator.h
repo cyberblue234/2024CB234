@@ -21,20 +21,25 @@ public:
 
     void SetElevatorMotorsPosition(double pos) 
     { 
-        Setelevator1MotorPosition(pos);
-        Setelevator2MotorPosition(pos);
+        SetElevator1MotorPosition(pos);
+        SetElevator2MotorPosition(pos);
     };
-    void Setelevator1MotorPosition(double pos) { elevator1PID.SetReference(pos, rev::CANSparkLowLevel::ControlType::kPosition); };
-    void Setelevator2MotorPosition(double pos) { elevator2PID.SetReference(pos, rev::CANSparkLowLevel::ControlType::kPosition); };
+    void SetElevator1MotorPosition(double pos) { elevator1PID.SetReference(pos, rev::CANSparkLowLevel::ControlType::kPosition); };
+    void SetElevator2MotorPosition(double pos) { elevator2PID.SetReference(pos, rev::CANSparkLowLevel::ControlType::kPosition); };
     
     void SetElevatorMotors(double power) 
     { 
-        Setelevator1Motor(power); 
-        Setelevator2Motor(power); 
+        SetElevator1Motor(power); 
+        SetElevator2Motor(power); 
     };
-    void Setelevator1Motor(double power) { elevator1Motor.Set(power); };
-    void Setelevator2Motor(double power) { elevator2Motor.Set(power); };
+    void SetElevator1Motor(double power) { elevator1Motor.Set(power); };
+    void SetElevator2Motor(double power) { elevator2Motor.Set(power); };
 
+    bool IsElevator1OutOfBounds() { return (double) elevator1Encoder.GetPosition() >= elevator1TopLimit 
+                                        || (double) elevator1Encoder.GetPosition() <= elevator1BottomLimit; };
+    bool IsElevator2OutOfBounds() { return (double) elevator2Encoder.GetPosition() >= elevator2TopLimit 
+                                        || (double) elevator2Encoder.GetPosition() <= elevator2BottomLimit; };
+    
     double GetShooterAngle() { return shooterAngleEncoder.GetDistance(); };
     double GetShooterRevolutions() { return (double) shooterAngleEncoder.Get(); };
     double GetElevatorSpeed() { return elevatorSpeed; };
@@ -62,5 +67,8 @@ private:
     double ampAngle = 22;
     double intakeAngle = 45;
     // Also should be a constant
-    double
+    double elevator1BottomLimit = 0;
+    double elevator1TopLimit = 0;
+    double elevator2BottomLimit = 0;
+    double elevator2TopLimit = 0;
 };

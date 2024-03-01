@@ -23,7 +23,7 @@ Elevator::Elevator(Limelight *limelight3)
 
 void Elevator::Periodic()
 {
-    
+    UpdateTelemetry();
 }
 
 void Elevator::AlignShooterToSpeaker()
@@ -51,4 +51,6 @@ void Elevator::UpdateTelemetry()
 {
     frc::SmartDashboard::PutNumber("Shooter Encoder Count", shooterAngleEncoder.GetAbsolutePosition());
     frc::SmartDashboard::PutNumber("Shooter Angle Degrees", GetShooterAngle());
+    frc::SmartDashboard:::PutNumber("Elevator1 Encoder", elevator1Encoder.GetPosition());
+    frc::SmartDashboard::PutNumber("Elevator2 Encoder", elevator2Encoder.GetPosition());
 }
