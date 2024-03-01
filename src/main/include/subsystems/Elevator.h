@@ -19,13 +19,24 @@ public:
     void AlignShooterToSpeaker();
     double CalculateSpeakerAngle();
 
-    void SetElevatorMotorsPosition(double pos);
-    void SetElevatorMotors(double power) { SetElevatorMotor1(power); SetElevatorMotor2(-power); };
-    void SetElevatorMotor1(double power) { elevatorMotor1.Set(power); };
-    void SetElevatorMotor2(double power) { elevatorMotor2.Set(power); };
+    void SetElevatorMotorsPosition(double pos) 
+    { 
+        Setelevator1MotorPosition(pos);
+        Setelevator2MotorPosition(pos);
+    };
+    void Setelevator1MotorPosition(double pos) { elevator1PID.SetReference(pos, rev::CANSparkLowLevel::ControlType::kPosition); };
+    void Setelevator2MotorPosition(double pos) { elevator2PID.SetReference(pos, rev::CANSparkLowLevel::ControlType::kPosition); };
+    
+    void SetElevatorMotors(double power) 
+    { 
+        Setelevator1Motor(power); 
+        Setelevator2Motor(power); 
+    };
+    void Setelevator1Motor(double power) { elevator1Motor.Set(power); };
+    void Setelevator2Motor(double power) { elevator2Motor.Set(power); };
 
     double GetShooterAngle() { return shooterAngleEncoder.GetDistance(); };
-    double GetShooterRevolutions() { return (double)shooterAngleEncoder.Get(); };
+    double GetShooterRevolutions() { return (double) shooterAngleEncoder.Get(); };
     double GetElevatorSpeed() { return elevatorSpeed; };
     double GetAlignmentDifference() { return alignmentDifference; };
     double GetAmpAngle() { return ampAngle; };
@@ -34,17 +45,22 @@ public:
     void UpdateTelemetry();
 
 private:
-    rev::CANSparkMax elevatorMotor1{RobotMap::ELEVATOR_MOTOR1_ADDRESS, rev::CANSparkMax::MotorType::kBrushless};
-    rev::CANSparkMax elevatorMotor2{RobotMap::ELEVATOR_MOTOR2_ADDRESS, rev::CANSparkMax::MotorType::kBrushless};
-    rev::SparkPIDController elevatorPID = elevatorMotor1.GetPIDController();
+    rev::CANSparkMax elevator1Motor{RobotMap::ELEVATOR_MOTOR1_ADDRESS, rev::CANSparkMax::MotorType::kBrushless};
+    rev::CANSparkMax elevator2Motor{RobotMap::ELEVATOR_MOTOR2_ADDRESS, rev::CANSparkMax::MotorType::kBrushless};
+    rev::SparkPIDController elevator1PID = elevator1Motor.GetPIDController();
+    rev::SparkPIDController elevator2PID = elevator2Motor.GetPIDController();
+    rev::SparkRelativeEncoder elevator1Encoder = elevator1Motor.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor);
+    rev::SparkRelativeEncoder elevator2Encoder = elevator2Motor.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor);
 
     frc::DutyCycleEncoder shooterAngleEncoder{RobotMap::SHOOTER_ENCODER_ADDRESS};
 
     Limelight *limelight3;
 
-    double elevatorSpeed = 0.5;
+    double elevatorSpeed = 0.8;
     double alignmentDifference = 0;
     // Should be a constant eventually
     double ampAngle = 22;
     double intakeAngle = 45;
+    // Also should be a constant
+    double
 };
