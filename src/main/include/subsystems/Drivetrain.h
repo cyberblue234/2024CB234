@@ -71,7 +71,7 @@ public:
     void SetFieldRelative(bool isFieldRelative) { fieldRelative = isFieldRelative; };
     // Resets all of the motors swerve cancoders
     void ResetCancoders();
-    // Resets the gyro, if first time since auton reverses the angle
+    // Resets the gyro
     void ResetGyroAngle();
     // Gets the gyro as a rotation2d
     frc::Rotation2d GetGyro2d() { return gyro.GetRotation2d(); };

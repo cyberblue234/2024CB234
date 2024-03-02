@@ -33,8 +33,8 @@ namespace RobotMap
 
     constexpr int INTAKE_MOTOR_ADDRESS = 4;
 
-    constexpr int ELEVATOR_MOTOR1_ADDRESS = 6;
-    constexpr int ELEVATOR_MOTOR2_ADDRESS = 7;
+    constexpr int ELEVATOR_MOTOR1_ADDRESS = 12;
+    constexpr int ELEVATOR_MOTOR2_ADDRESS = 13;
     constexpr int ELEVATOR1_TOP_LIMIT_SWITCH = 3;
     constexpr int ELEVATOR1_BOTTOM_LIMIT_SWITCH = 4;
     constexpr int ELEVATOR2_TOP_LIMIT_SWITCH = 5;
@@ -102,7 +102,7 @@ namespace ShooterConstants
     inline constexpr double kShooterP = 0.000058;
     inline constexpr double kShooterI = 0.0;
     inline constexpr double kShooterD = 0.000022;
-    inline constexpr double kShooterF = 0.000158;
+    inline constexpr double kShooterF = 0.000185;
 
     inline constexpr double SHOOTER_ANGLE_OFFSET = 0.0;
 }

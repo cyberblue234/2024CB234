@@ -6,9 +6,13 @@
 #include <frc/DigitalInput.h>
 #include <frc/DutyCycleEncoder.h>
 #include "rev/CANSparkMax.h"
+#include <ctre/phoenix6/TalonFX.hpp>
+#include <ctre/phoenix6/configs/Configurator.hpp>
 #include "subsystems/Limelight.h"
 #include "Constants.h"
 #include <numbers>
+
+using namespace ctre::phoenix6;
 
 class Elevator : frc2::SubsystemBase
 {
@@ -25,8 +29,8 @@ public:
         SetElevator1MotorPosition(pos);
         SetElevator2MotorPosition(pos);
     };
-    void SetElevator1MotorPosition(double pos) { elevator1PID.SetReference(pos, rev::CANSparkLowLevel::ControlType::kPosition); };
-    void SetElevator2MotorPosition(double pos) { elevator2PID.SetReference(pos, rev::CANSparkLowLevel::ControlType::kPosition); };
+    void SetElevator1MotorPosition(double pos) { /*elevator1PID.SetReference(pos, rev::CANSparkLowLevel::ControlType::kPosition);*/ };
+    void SetElevator2MotorPosition(double pos) { /*elevator2PID.SetReference(pos, rev::CANSparkLowLevel::ControlType::kPosition);*/ };
     
     void SetElevatorMotors(double power) 
     { 
@@ -51,12 +55,12 @@ public:
     void UpdateTelemetry();
 
 private:
-    rev::CANSparkMax elevator1Motor{RobotMap::ELEVATOR_MOTOR1_ADDRESS, rev::CANSparkMax::MotorType::kBrushless};
-    rev::CANSparkMax elevator2Motor{RobotMap::ELEVATOR_MOTOR2_ADDRESS, rev::CANSparkMax::MotorType::kBrushless};
-    rev::SparkPIDController elevator1PID = elevator1Motor.GetPIDController();
-    rev::SparkPIDController elevator2PID = elevator2Motor.GetPIDController();
-    rev::SparkRelativeEncoder elevator1Encoder = elevator1Motor.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor);
-    rev::SparkRelativeEncoder elevator2Encoder = elevator2Motor.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor);
+    hardware::TalonFX elevator1Motor{RobotMap::ELEVATOR_MOTOR1_ADDRESS, "rio"};
+    hardware::TalonFX elevator2Motor{RobotMap::ELEVATOR_MOTOR2_ADDRESS, "rio"};
+    //rev::SparkPIDController elevator1PID = elevator1Motor.GetPIDController();
+    //rev::SparkPIDController elevator2PID = elevator2Motor.GetPIDController();
+    //rev::SparkRelativeEncoder elevator1Encoder = elevator1Motor.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor);
+    //rev::SparkRelativeEncoder elevator2Encoder = elevator2Motor.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor);
 
     frc::DutyCycleEncoder shooterAngleEncoder{RobotMap::SHOOTER_ENCODER_ADDRESS};
 
@@ -67,7 +71,7 @@ private:
 
     Limelight *limelight3;
 
-    double elevatorSpeed = 0.8;
+    double elevatorSpeed = 1.0;
     double alignmentDifference = 0;
     // Should be a constant eventually
     double ampAngle = 22;

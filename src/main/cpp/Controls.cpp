@@ -28,7 +28,10 @@ void Controls::DriveControls()
         swerve->SetFieldRelative(false);
 
     if (gamepad.GetYButton() == true)
+    {
         swerve->ResetGyroAngle();
+        swerve->ResetPose(limelight3->GetRobotPose());
+    }
 
     //if (gamepad.GetRightBumper()) swerve->SetPIDFs();
 
@@ -36,7 +39,7 @@ void Controls::DriveControls()
         swerve->AlignSwerveDrive();
     else
     {
-        double rot = swerve->RotationControl(gamepad.GetRightX(), gamepad.GetRightTriggerAxis() > 0.2);
+        double rot = swerve->RotationControl(-gamepad.GetRightX(), gamepad.GetRightTriggerAxis() > 0.2);
         swerve->DriveWithInput(gamepad.GetLeftY(), gamepad.GetLeftX(), rot, gamepad.GetLeftStickButton());
     }
 }
@@ -97,12 +100,12 @@ void Controls::ElevatorControls()
     // }
     else
         elevator->SetElevatorMotors(0.0);
-        
-    if (elevator->GetElevator1TopLimit() || elevator->GetElevator1BottomLimit())
+
+    if (!elevator->GetElevator1TopLimit() && !elevator->GetElevator1BottomLimit())
     {
         elevator->SetElevator1Motor(0.0);
     }
-    if (elevator->GetElevator2TopLimit() || elevator->GetElevator2BottomLimit())
+    if (!elevator->GetElevator2TopLimit() && !elevator->GetElevator2BottomLimit())
     {
         elevator->SetElevator2Motor(0.0);
     }
@@ -115,10 +118,10 @@ void Controls::FeederControls()
         if (shooter->shootAtSpeaker)
         {
             bool atAlignment = abs(limelight3->GetAprilTagOffset()) < 1.0; //&& abs(elevator->GetAlignmentDifference()) < 0.5;
-            if (shooter->GetAverageRPM() >= shooter->GetSpeakerRPM() - 100 && atAlignment)
+            if (shooter->GetAverageRPM() >= shooter->GetSpeakerRPM() - 100)// && atAlignment)
                 feeder->ShootAtSpeaker();
         }
-        else
+        else if (shooter->GetAverageRPM() >= 2000)
             feeder->ShootAtAmp();
     }
     else if (gamepad.GetLeftBumper())

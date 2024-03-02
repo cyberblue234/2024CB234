@@ -4,10 +4,24 @@ Elevator::Elevator(Limelight *limelight3)
 {
     this->limelight3 = limelight3;
 
-    elevator1Motor.RestoreFactoryDefaults();
-    elevator2Motor.RestoreFactoryDefaults();
+    elevator1Motor.GetConfigurator().Apply(configs::TalonFXConfiguration{});
+    configs::TalonFXConfiguration elevator1Config{};
 
-    elevator1Motor.SetInverted(true);
+    configs::MotorOutputConfigs elevator1MotorOutput{};
+    elevator1MotorOutput.WithInverted(signals::InvertedValue::Clockwise_Positive);
+    elevator1MotorOutput.WithNeutralMode(signals::NeutralModeValue::Brake);
+    elevator1Config.WithMotorOutput(elevator1MotorOutput);
+
+    elevator1Motor.GetConfigurator().Apply(elevator1Config);
+
+    elevator2Motor.GetConfigurator().Apply(configs::TalonFXConfiguration{});
+    configs::TalonFXConfiguration elevator2Config{};
+
+    configs::MotorOutputConfigs elevator2MotorOutput{};
+    elevator2MotorOutput.WithNeutralMode(signals::NeutralModeValue::Brake);
+    elevator2Config.WithMotorOutput(elevator2MotorOutput);
+
+    elevator2Motor.GetConfigurator().Apply(elevator2Config);
 
     frc::SmartDashboard::PutNumber("Elevator P", ElevatorConstants::kElevatorP);
     frc::SmartDashboard::PutNumber("Elevator I", ElevatorConstants::kElevatorI);
@@ -51,6 +65,4 @@ void Elevator::UpdateTelemetry()
 {
     frc::SmartDashboard::PutNumber("Shooter Encoder Count", shooterAngleEncoder.GetAbsolutePosition());
     frc::SmartDashboard::PutNumber("Shooter Angle Degrees", GetShooterAngle());
-    frc::SmartDashboard::PutNumber("Elevator1 Encoder", elevator1Encoder.GetPosition());
-    frc::SmartDashboard::PutNumber("Elevator2 Encoder", elevator2Encoder.GetPosition());
 }
