@@ -84,11 +84,11 @@ void Controls::ElevatorControls()
     // Manual up - dpad up
     if (gamepad.GetPOV() == 0)
     {
-        if (!elevator->GetElevator1TopLimit())
+        if (elevator->GetElevator1TopLimit() == false)
             elevator->SetElevator1Motor(elevator->GetElevatorSpeed());
         else    
             elevator->SetElevator1Motor(0.0);
-        if (!elevator->GetElevator2TopLimit())
+        if (elevator->GetElevator2TopLimit() == false)
             elevator->SetElevator2Motor(elevator->GetElevatorSpeed());
         else    
             elevator->SetElevator2Motor(0.0);
@@ -96,11 +96,11 @@ void Controls::ElevatorControls()
     // Manual down - dpad down
     else if (gamepad.GetPOV() == 180)
     {
-        if (!elevator->GetElevator1BottomLimit())
+        if (elevator->GetElevator1BottomLimit() == false)
             elevator->SetElevator1Motor(-elevator->GetElevatorSpeed());
         else    
             elevator->SetElevator1Motor(0.0);
-        if (!elevator->GetElevator2BottomLimit())
+        if (elevator->GetElevator2BottomLimit() == false)
             elevator->SetElevator2Motor(-elevator->GetElevatorSpeed());
         else    
             elevator->SetElevator2Motor(0.0);

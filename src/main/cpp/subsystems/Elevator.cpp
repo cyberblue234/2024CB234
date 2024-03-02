@@ -65,4 +65,6 @@ void Elevator::UpdateTelemetry()
 {
     frc::SmartDashboard::PutNumber("Shooter Encoder Count", shooterAngleEncoder.GetAbsolutePosition());
     frc::SmartDashboard::PutNumber("Shooter Angle Degrees", GetShooterAngle());
+    frc::SmartDashboard::PutBoolean("Elevator 1 Top Limit", GetElevator1TopLimit());
+    
 }
