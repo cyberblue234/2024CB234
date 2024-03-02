@@ -30,7 +30,8 @@ void Controls::DriveControls()
     if (gamepad.GetYButton() == true)
     {
         swerve->ResetGyroAngle();
-        swerve->ResetPose(limelight3->GetRobotPose());
+        if (limelight3->GetTargetValid() == 1)
+            swerve->ResetPose(limelight3->GetRobotPose());
     }
 
     //if (gamepad.GetRightBumper()) swerve->SetPIDFs();
@@ -82,10 +83,28 @@ void Controls::ElevatorControls()
 
     // Manual up - dpad up
     if (gamepad.GetPOV() == 0)
-        elevator->SetElevatorMotors(elevator->GetElevatorSpeed());
+    {
+        if (!elevator->GetElevator1TopLimit())
+            elevator->SetElevator1Motor(elevator->GetElevatorSpeed());
+        else    
+            elevator->SetElevator1Motor(0.0);
+        if (!elevator->GetElevator2TopLimit())
+            elevator->SetElevator2Motor(elevator->GetElevatorSpeed());
+        else    
+            elevator->SetElevator2Motor(0.0);
+    }
     // Manual down - dpad down
     else if (gamepad.GetPOV() == 180)
-        elevator->SetElevatorMotors(-elevator->GetElevatorSpeed());
+    {
+        if (!elevator->GetElevator1BottomLimit())
+            elevator->SetElevator1Motor(-elevator->GetElevatorSpeed());
+        else    
+            elevator->SetElevator1Motor(0.0);
+        if (!elevator->GetElevator2BottomLimit())
+            elevator->SetElevator2Motor(-elevator->GetElevatorSpeed());
+        else    
+            elevator->SetElevator2Motor(0.0);
+    }
     // Align to either speaker or amp
     // else if (gamepad.GetRightTriggerAxis() > 0.2)
     // {
@@ -100,15 +119,6 @@ void Controls::ElevatorControls()
     // }
     else
         elevator->SetElevatorMotors(0.0);
-
-    if (!elevator->GetElevator1TopLimit() && !elevator->GetElevator1BottomLimit())
-    {
-        elevator->SetElevator1Motor(0.0);
-    }
-    if (!elevator->GetElevator2TopLimit() && !elevator->GetElevator2BottomLimit())
-    {
-        elevator->SetElevator2Motor(0.0);
-    }
 }
 
 void Controls::FeederControls()
