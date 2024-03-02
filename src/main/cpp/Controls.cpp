@@ -66,21 +66,19 @@ void Controls::IntakeControls()
 
 void Controls::ElevatorControls()
 {
-    if (gamepad.GetPOV() == 270) {
-        elevator->SetElevatorMotor1(gamepad.GetRightBumper() ? -0.5 : 0.5);
+    if (gamepad.GetPOV() == 270) 
+    {
+        elevator->SetElevator1Motor(gamepad.GetRightBumper() ? -0.5 : 0.5);
         return;
     }
-    else if (gamepad.GetPOV() == 90) {
-        elevator->SetElevatorMotor2(gamepad.GetRightBumper() ? -0.5 : 0.5);
+    else if (gamepad.GetPOV() == 90) 
+    {
+        elevator->SetElevator2Motor(gamepad.GetRightBumper() ? -0.5 : 0.5);
         return;
     }
 
-    if (elevator->IsElevator1OutOfBounds())
-        elevator->SetElevator1Motor(0.0);
-    else if (elevator->IsElevator2OutOfBounds())
-        elevator->SetElevator2Motor(0.0);
     // Manual up - dpad up
-    else if (gamepad.GetPOV() == 0)
+    if (gamepad.GetPOV() == 0)
         elevator->SetElevatorMotors(elevator->GetElevatorSpeed());
     // Manual down - dpad down
     else if (gamepad.GetPOV() == 180)
@@ -99,6 +97,15 @@ void Controls::ElevatorControls()
     // }
     else
         elevator->SetElevatorMotors(0.0);
+        
+    if (elevator->GetElevator1TopLimit() || elevator->GetElevator1BottomLimit())
+    {
+        elevator->SetElevator1Motor(0.0);
+    }
+    if (elevator->GetElevator2TopLimit() || elevator->GetElevator2BottomLimit())
+    {
+        elevator->SetElevator2Motor(0.0);
+    }
 }
 
 void Controls::FeederControls()

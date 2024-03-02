@@ -3,6 +3,7 @@
 #include <frc2/command/SubsystemBase.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include "frc/geometry/Pose2d.h"
+#include <frc/DigitalInput.h>
 #include <frc/DutyCycleEncoder.h>
 #include "rev/CANSparkMax.h"
 #include "subsystems/Limelight.h"
@@ -35,17 +36,17 @@ public:
     void SetElevator1Motor(double power) { elevator1Motor.Set(power); };
     void SetElevator2Motor(double power) { elevator2Motor.Set(power); };
 
-    bool IsElevator1OutOfBounds() { return (double) elevator1Encoder.GetPosition() >= elevator1TopLimit 
-                                        || (double) elevator1Encoder.GetPosition() <= elevator1BottomLimit; };
-    bool IsElevator2OutOfBounds() { return (double) elevator2Encoder.GetPosition() >= elevator2TopLimit 
-                                        || (double) elevator2Encoder.GetPosition() <= elevator2BottomLimit; };
-    
     double GetShooterAngle() { return shooterAngleEncoder.GetDistance(); };
     double GetShooterRevolutions() { return (double) shooterAngleEncoder.Get(); };
     double GetElevatorSpeed() { return elevatorSpeed; };
     double GetAlignmentDifference() { return alignmentDifference; };
     double GetAmpAngle() { return ampAngle; };
     double GetIntakeAngle() { return intakeAngle; };
+
+    bool GetElevator1TopLimit() { return elevator1TopLimit.Get(); };
+    bool GetElevator1BottomLimit() { return elevator1BottomLimit.Get(); };
+    bool GetElevator2TopLimit() { return elevator2TopLimit.Get(); };
+    bool GetElevator2BottomLimit() { return elevator2BottomLimit.Get(); };
 
     void UpdateTelemetry();
 
@@ -59,6 +60,11 @@ private:
 
     frc::DutyCycleEncoder shooterAngleEncoder{RobotMap::SHOOTER_ENCODER_ADDRESS};
 
+    frc::DigitalInput elevator1TopLimit{RobotMap::ELEVATOR1_TOP_LIMIT_SWITCH};
+    frc::DigitalInput elevator1BottomLimit{RobotMap::ELEVATOR1_BOTTOM_LIMIT_SWITCH};
+    frc::DigitalInput elevator2TopLimit{RobotMap::ELEVATOR2_TOP_LIMIT_SWITCH};
+    frc::DigitalInput elevator2BottomLimit{RobotMap::ELEVATOR2_BOTTOM_LIMIT_SWITCH};
+
     Limelight *limelight3;
 
     double elevatorSpeed = 0.8;
@@ -66,9 +72,4 @@ private:
     // Should be a constant eventually
     double ampAngle = 22;
     double intakeAngle = 45;
-    // Also should be a constant
-    double elevator1BottomLimit = 0;
-    double elevator1TopLimit = 0;
-    double elevator2BottomLimit = 0;
-    double elevator2TopLimit = 0;
 };

@@ -35,6 +35,11 @@ namespace RobotMap
 
     constexpr int ELEVATOR_MOTOR1_ADDRESS = 6;
     constexpr int ELEVATOR_MOTOR2_ADDRESS = 7;
+    constexpr int ELEVATOR1_TOP_LIMIT_SWITCH = 3;
+    constexpr int ELEVATOR1_BOTTOM_LIMIT_SWITCH = 4;
+    constexpr int ELEVATOR2_TOP_LIMIT_SWITCH = 5;
+    constexpr int ELEVATOR2_BOTTOM_LIMIT_SWITCH = 6;
+
 }
 
 namespace SwerveModuleConstants
@@ -114,4 +119,6 @@ namespace ElevatorConstants
     inline constexpr double kGravity = 9.8;
 
     inline constexpr double kSpeakerHeight = 1.0914; // Speaker height to target in meters
+
+    inline constexpr double kRotationsPerDegree = 0.0;
 }

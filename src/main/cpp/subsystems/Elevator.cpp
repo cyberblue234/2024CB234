@@ -31,7 +31,7 @@ void Elevator::AlignShooterToSpeaker()
     double current = GetShooterAngle();
     double target = CalculateSpeakerAngle();
     alignmentDifference = current - target;
-    SetElevatorMotorsPosition(GetShooterRevolutions() + (alignmentDifference / 360));
+    SetElevatorMotorsPosition(GetShooterRevolutions() + (alignmentDifference / 360) * ElevatorConstants::kRotationsPerDegree);
 }
 
 // Returns the Angle from parallel to floor in degrees using limelight
@@ -51,6 +51,6 @@ void Elevator::UpdateTelemetry()
 {
     frc::SmartDashboard::PutNumber("Shooter Encoder Count", shooterAngleEncoder.GetAbsolutePosition());
     frc::SmartDashboard::PutNumber("Shooter Angle Degrees", GetShooterAngle());
-    frc::SmartDashboard:::PutNumber("Elevator1 Encoder", elevator1Encoder.GetPosition());
+    frc::SmartDashboard::PutNumber("Elevator1 Encoder", elevator1Encoder.GetPosition());
     frc::SmartDashboard::PutNumber("Elevator2 Encoder", elevator2Encoder.GetPosition());
 }
