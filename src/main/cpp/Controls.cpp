@@ -12,7 +12,8 @@ Controls::Controls(Drivetrain *swerve, Shooter *shooter, Intake *intake, Elevato
 
 void Controls::Periodic()
 {
-    shooter->shootAtSpeaker = frc::SmartDashboard::GetBoolean("Shoot At Speaker?", shooter->shootAtSpeaker);
+    SetSelectedRotaryIndex(ControlBoardConstants::AnalogToRotaryIndex(controlBoard.GetX()));
+
     DriveControls();
     ShooterControls();
     IntakeControls();
@@ -26,7 +27,6 @@ void Controls::DriveControls()
         swerve->SetFieldRelative(true);
     if (gamepad.GetBButton() == true)
         swerve->SetFieldRelative(false);
-
     if (gamepad.GetYButton() == true)
     {
         swerve->ResetGyroAngle();
@@ -34,36 +34,45 @@ void Controls::DriveControls()
             swerve->ResetPose(limelight3->GetRobotPose());
     }
 
-    //if (gamepad.GetRightBumper()) swerve->SetPIDFs();
+    if (gamepad.GetRightBumper()) 
+        swerve->SetPIDFs();
 
     if (swerve->IsAlignmentOn())
         swerve->AlignSwerveDrive();
+    else if (controlBoard.GetRawButton(ControlBoardConstants::ANCHOR))
+        swerve->SetAnchorState();
     else
     {
-        double rot = swerve->RotationControl(-gamepad.GetRightX(), gamepad.GetRightTriggerAxis() > 0.2);
-        swerve->DriveWithInput(gamepad.GetLeftY(), gamepad.GetLeftX(), rot, gamepad.GetLeftStickButton());
+        double rot = swerve->RotationControl(gamepad.GetRightX(), 
+                                controlBoard.GetRawButton(ControlBoardConstants::SHOOT) 
+                                && GetSelectedRotaryIndex() != ControlBoardConstants::MANUAL_SCORE);
+        swerve->DriveWithInput(gamepad.GetLeftY(), gamepad.GetLeftX(), rot, gamepad.GetRightTriggerAxis() > 0.2);
     }
 }
 
 void Controls::ShooterControls()
 {
-    if (gamepad.GetRightTriggerAxis() > 0.2)
+    if (controlBoard.GetRawButton(ControlBoardConstants::SHOOTER_MOTORS))
     {
-        if (shooter->shootAtSpeaker)
-            shooter->ShootAtSpeaker();
-        else
+        if (GetSelectedRotaryIndex() == ControlBoardConstants::POS_AMP)
             shooter->ShootAtAmp();
+        else
+            shooter->ShootAtSpeaker();
     }
-    else if (gamepad.GetLeftBumper())
+    else if (controlBoard.GetRawButton(ControlBoardConstants::SOURCE_INTAKE))
         shooter->IntakeFromSource();
+    else if (controlBoard.GetRawButton(ControlBoardConstants::PURGE))
+        shooter->Purge();
     else
         shooter->SetShooterMotors(0.0);
 }
 
 void Controls::IntakeControls()
 {
-    if (gamepad.GetLeftTriggerAxis() > 0.2)
+    if (controlBoard.GetRawButton(ControlBoardConstants::GROUND_INTAKE))
         intake->IntakeFromGround();
+    else if (controlBoard.GetRawButton(ControlBoardConstants::PURGE))
+        intake->Purge();
     else
         intake->SetIntakeMotor(0.0);
 }
@@ -82,7 +91,7 @@ void Controls::ElevatorControls()
     }
 
     // Manual up - dpad up
-    if (gamepad.GetPOV() == 0)
+    if (controlBoard.GetRawButton(ControlBoardConstants::ELEVATOR_UP))
     {
         if (elevator->GetElevator1TopLimit() == false)
             elevator->SetElevator1Motor(elevator->GetElevatorSpeed());
@@ -94,7 +103,7 @@ void Controls::ElevatorControls()
             elevator->SetElevator2Motor(0.0);
     }
     // Manual down - dpad down
-    else if (gamepad.GetPOV() == 180)
+    else if (controlBoard.GetRawButton(ControlBoardConstants::ELEVATOR_DOWN))
     {
         if (elevator->GetElevator1BottomLimit() == false)
             elevator->SetElevator1Motor(-elevator->GetElevatorSpeed());
@@ -105,39 +114,60 @@ void Controls::ElevatorControls()
         else    
             elevator->SetElevator2Motor(0.0);
     }
-    // Align to either speaker or amp
-    // else if (gamepad.GetRightTriggerAxis() > 0.2)
-    // {
-    //     if (shooter->shootAtSpeaker)
-    //     {
-    //         elevator->AlignShooterToSpeaker();
-    //     }
-    //     else
-    //     {
-    //         elevator->SetElevatorMotorsPosition(elevator->GetShooterRevolutions() + (elevator->GetAmpAngle() / 360));
-    //     }
-    // }
+    // Align to speaker
+    else if (controlBoard.GetRawButton(ControlBoardConstants::SHOOT) && GetSelectedRotaryIndex() != ControlBoardConstants::MANUAL_SCORE)
+    {
+        if (GetSelectedRotaryIndex() == ControlBoardConstants::AUTO_SCORE)
+            elevator->AlignShooterToSpeaker();
+        else
+        {
+            double angle;
+            switch (GetSelectedRotaryIndex())
+            {
+                case ControlBoardConstants::POS_MID:
+                    angle = elevator->GetMidAngle();
+                    break;
+                case ControlBoardConstants::POS_STAGE:
+                    angle = elevator->GetStageAngle();
+                    break;
+                case ControlBoardConstants::POS_AMP:
+                    angle = elevator->GetAmpAngle();
+                    break;
+                case ControlBoardConstants::POS_TRAP:
+                    angle = elevator->GetTrapAngle();
+                    break;
+                // Default is the close angle
+                default:
+                    angle = elevator->GetCloseAngle();
+            }
+            elevator->SetElevatorMotorsPosition(elevator->GetShooterAngleRevolutions() + (angle / 360));
+        }
+    }
     else
         elevator->SetElevatorMotors(0.0);
 }
 
 void Controls::FeederControls()
 {
-    if (gamepad.GetRightTriggerAxis() > 0.2)
+    if (controlBoard.GetRawButton(ControlBoardConstants::SHOOT))
     {
-        if (shooter->shootAtSpeaker)
+        if (GetSelectedRotaryIndex() == ControlBoardConstants::POS_AMP)
+            feeder->ShootAtAmp();
+        else if (GetSelectedRotaryIndex() != ControlBoardConstants::MANUAL_SCORE)
         {
-            bool atAlignment = abs(limelight3->GetAprilTagOffset()) < 1.0; //&& abs(elevator->GetAlignmentDifference()) < 0.5;
-            if (shooter->GetAverageRPM() >= shooter->GetSpeakerRPM() - 100)// && atAlignment)
+            bool atAlignment = abs(limelight3->GetAprilTagOffset()) < 1.0 && abs(elevator->GetAlignmentDifference()) < 0.5;
+            if (shooter->GetAverageRPM() >= shooter->GetSpeakerRPM() - 100 && atAlignment)
                 feeder->ShootAtSpeaker();
         }
-        else if (shooter->GetAverageRPM() >= 2000)
-            feeder->ShootAtAmp();
+        else
+            feeder->ShootAtSpeaker();
     }
-    else if (gamepad.GetLeftBumper())
+    else if (controlBoard.GetRawButton(ControlBoardConstants::SOURCE_INTAKE))
         feeder->IntakeFromSource();
-    else if (gamepad.GetLeftTriggerAxis() > 0.2)
+    else if (controlBoard.GetRawButton(ControlBoardConstants::GROUND_INTAKE))
         feeder->IntakeFromGround();
+    else if (controlBoard.GetRawButton(ControlBoardConstants::PURGE))
+        feeder->Purge();
     else
         feeder->SetFeedMotor(0.0);
 }

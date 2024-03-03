@@ -45,7 +45,7 @@ void Elevator::AlignShooterToSpeaker()
     double current = GetShooterAngle();
     double target = CalculateSpeakerAngle();
     alignmentDifference = current - target;
-    SetElevatorMotorsPosition(GetShooterRevolutions() + (alignmentDifference / 360) * ElevatorConstants::kRotationsPerDegree);
+    SetElevatorMotorsPosition(GetShooterAngleRevolutions() + (alignmentDifference / 360));
 }
 
 // Returns the Angle from parallel to floor in degrees using limelight

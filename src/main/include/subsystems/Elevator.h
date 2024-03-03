@@ -41,10 +41,14 @@ public:
     void SetElevator2Motor(double power) { elevator2Motor.Set(power); };
 
     double GetShooterAngle() { return shooterAngleEncoder.GetDistance(); };
-    double GetShooterRevolutions() { return (double) shooterAngleEncoder.Get(); };
+    double GetShooterAngleRevolutions() { return (double)shooterAngleEncoder.Get(); };
     double GetElevatorSpeed() { return elevatorSpeed; };
     double GetAlignmentDifference() { return alignmentDifference; };
     double GetAmpAngle() { return ampAngle; };
+    double GetCloseAngle() { return closeAngle; };
+    double GetMidAngle() { return midAngle; };
+    double GetStageAngle() { return stageAngle; };
+    double GetTrapAngle() { return trapAngle; };
     double GetIntakeAngle() { return intakeAngle; };
 
     bool GetElevator1TopLimit() { return elevator1TopLimit.Get(); };
@@ -75,5 +79,9 @@ private:
     double alignmentDifference = 0;
     // Should be a constant eventually
     double ampAngle = 22;
+    double closeAngle = 50;
+    double midAngle = 30;
+    double stageAngle = 30;
+    double trapAngle = 30;
     double intakeAngle = 45;
 };

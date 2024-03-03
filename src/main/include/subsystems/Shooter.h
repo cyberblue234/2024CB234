@@ -23,6 +23,7 @@ public:
 
     void UpdateTelemetry();
 
+    void Purge() { SetShooterMotors(-1.0); };
     void SetShooterMotors(double power)
     {
         SetShooterMotor1(power);
@@ -44,9 +45,6 @@ public:
     double GetSpeakerRPM() { return speakerRPM; };
     double GetAmpSpeed() { return ampSpeed; };
     double GetIntakeSpeed() { return intakeSpeed; };
-
-    // FOR DEBUGGING
-    bool shootAtSpeaker = true;
 
 private:
     rev::CANSparkMax shooter1Motor{RobotMap::SHOOTER_MOTOR1_ADDRESS, rev::CANSparkMax::MotorType::kBrushless};

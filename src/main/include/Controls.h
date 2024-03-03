@@ -21,8 +21,11 @@ public:
     void ElevatorControls();
     void FeederControls();
 
+    void SetSelectedRotaryIndex(int newIndex) { selectedRotaryIndex = newIndex; };
+    int GetSelectedRotaryIndex() { return selectedRotaryIndex; };
+
     frc::XboxController gamepad{0};
-    frc::Joystick controlsBoard{1};
+    frc::Joystick controlBoard{1};
 
 private:
     Drivetrain *swerve;
@@ -31,4 +34,6 @@ private:
     Feeder *feeder;
     Elevator *elevator;
     Limelight *limelight3;
+
+    int selectedRotaryIndex = 0;
 };
