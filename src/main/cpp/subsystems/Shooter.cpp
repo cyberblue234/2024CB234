@@ -51,7 +51,7 @@ void Shooter::ShootAtSpeaker()
 
 void Shooter::ShootAtAmp()
 {
-    ampSpeed = frc::SmartDashboard::GetNumber("Shooter Amp Speed", ampSpeed);
+    //ampSpeed = frc::SmartDashboard::GetNumber("Shooter Amp Speed", ampSpeed);
     SetShooterMotors(ampSpeed);
 }
 

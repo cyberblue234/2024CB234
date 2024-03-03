@@ -85,10 +85,10 @@ namespace DrivetrainConstants
     inline constexpr double BL_DRIVE_ADJUSTMENT = 1.0;
     inline constexpr double BR_DRIVE_ADJUSTMENT = 1.0;
 
-    inline constexpr double FL_OFFSET_DEGREES = -0.166016;
-    inline constexpr double FR_OFFSET_DEGREES = -0.28125;
-    inline constexpr double BL_OFFSET_DEGREES = 0.3852546;
-    inline constexpr double BR_OFFSET_DEGREES = -0.751953;
+    inline constexpr double FL_OFFSET_DEGREES = -0.666016;
+    inline constexpr double FR_OFFSET_DEGREES = -0.78125;
+    inline constexpr double BL_OFFSET_DEGREES = 0.8852546;
+    inline constexpr double BR_OFFSET_DEGREES = -0.251953;
 
     inline constexpr double DRIVE_SLOW_ADJUSTMENT = 0.20;
 
@@ -126,21 +126,21 @@ namespace ElevatorConstants
 namespace ControlBoardConstants
 {
     // Shoot button
-    inline constexpr int SHOOT = 10;
+    inline constexpr int SHOOT = 11;
     // Turn on shooter motors switch
-    inline constexpr int SHOOTER_MOTORS = 9;
+    inline constexpr int SHOOTER_MOTORS = 10;
     // Intake from source switch
-    inline constexpr int SOURCE_INTAKE = 8;
+    inline constexpr int SOURCE_INTAKE = 9;
     // Intake from ground switch
-    inline constexpr int GROUND_INTAKE = 11;
+    inline constexpr int GROUND_INTAKE = 12;
     // Move the elevator up switch
-    inline constexpr int ELEVATOR_UP = 2;
+    inline constexpr int ELEVATOR_UP = 3;
     // Move the elevator down switch
-    inline constexpr int ELEVATOR_DOWN = 3;
+    inline constexpr int ELEVATOR_DOWN = 4;
     // Turn the anchor on switch
-    inline constexpr int ANCHOR = 5;
+    inline constexpr int ANCHOR = 6;
     // Purge any notes button
-    inline constexpr int PURGE = 4;
+    inline constexpr int PURGE = 5;
     // Rotary switches: 0 - 9, easier to deal with than the raw analog inputs 
     // Scoring position at the subwoofer
     inline constexpr int POS_CLOSE = 0;
@@ -156,9 +156,4 @@ namespace ControlBoardConstants
     inline constexpr int POS_TRAP = 7;
     // Manual control for angle and elevator
     inline constexpr int MANUAL_SCORE = 9;
-
-    inline constexpr int AnalogToRotaryIndex(double analogInput)
-    {
-        return (int) (analogInput + 0.05) * 4.5 + 4.5;
-    }
 }

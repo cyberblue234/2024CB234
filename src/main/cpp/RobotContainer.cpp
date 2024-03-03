@@ -12,7 +12,7 @@ RobotContainer::RobotContainer() : swerve(GetLimelight3()), elevator(GetLimeligh
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand()
 {
-	return PathPlannerAuto("Center Auto").ToPtr();
+	return PathPlannerAuto("Copy Center Auto").ToPtr();
 }
 
 frc2::CommandPtr RobotContainer::GetShootCommand()
@@ -21,7 +21,7 @@ frc2::CommandPtr RobotContainer::GetShootCommand()
 	(
 		[this]
 		{
-			this->GetSwerve()->AlignToSpeaker();
+			//this->GetSwerve()->AlignToSpeaker();
 			//this->GetElevator()->AlignShooterToSpeaker();
 			this->GetShooter()->ShootAtSpeaker();
 		}
@@ -65,13 +65,24 @@ frc2::CommandPtr RobotContainer::GetIntakeCommand()
 	(
 		[this]
 		{
-			this->GetIntake()->IntakeFromGround();
-			this->GetFeeder()->IntakeFromGround();
-			//this->GetElevator()->SetElevatorMotorsPosition(GetElevator()->GetIntakeAngle());
+			this->GetElevator()->SetElevatorMotors(0.5);
 		}
 	).ToPtr().RaceWith
 	(
-		frc2::WaitCommand(10_s).ToPtr()
+		frc2::WaitCommand(1.0_s).ToPtr()
+	).AndThen
+	(
+		frc2::RunCommand
+		(
+			[this]
+			{
+				this->GetIntake()->IntakeFromGround();
+				this->GetFeeder()->IntakeFromGround();
+			}
+		).ToPtr().RaceWith
+		(
+			frc2::WaitCommand(10_s).ToPtr()
+		)
 	);
 }
 

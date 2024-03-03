@@ -56,5 +56,5 @@ private:
 
     double speakerRPM = 4500;
     double ampSpeed = 0.5;
-    double intakeSpeed = 0.5;
+    double intakeSpeed = 0.25;
 };

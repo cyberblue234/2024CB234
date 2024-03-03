@@ -12,8 +12,10 @@ Controls::Controls(Drivetrain *swerve, Shooter *shooter, Intake *intake, Elevato
 
 void Controls::Periodic()
 {
-    SetSelectedRotaryIndex(ControlBoardConstants::AnalogToRotaryIndex(controlBoard.GetX()));
+    SetSelectedRotaryIndex(AnalogToRotaryIndex(controlBoard.GetX()));
+    frc::SmartDashboard::PutNumber("Control Board X", controlBoard.GetX());
 
+    frc::SmartDashboard::PutNumber("Rotary Index", GetSelectedRotaryIndex());
     DriveControls();
     ShooterControls();
     IntakeControls();

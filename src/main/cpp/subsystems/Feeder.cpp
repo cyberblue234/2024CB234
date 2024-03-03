@@ -14,10 +14,10 @@ Feeder::Feeder()
 
 void Feeder::IntakeFromGround()
 {
-    groundIntakeSpeed = frc::SmartDashboard::GetNumber("Feed Ground Speed", groundIntakeSpeed);
+    //groundIntakeSpeed = frc::SmartDashboard::GetNumber("Feed Ground Speed", groundIntakeSpeed);
 
     SensorControl();
-    if ((double)feedSensorTimer.Get() > 0.40)
+    if (feedMotorEncoder.GetPosition() < 4)
         SetFeedMotor(groundIntakeSpeed);
     else
         SetFeedMotor(0.0);
@@ -25,10 +25,10 @@ void Feeder::IntakeFromGround()
 
 void Feeder::IntakeFromSource()
 {
-    sourceIntakeSpeed = frc::SmartDashboard::GetNumber("Feed Source Speed", sourceIntakeSpeed);
+    //sourceIntakeSpeed = frc::SmartDashboard::GetNumber("Feed Source Speed", sourceIntakeSpeed);
 
     SensorControl();
-    if ((double)feedSensorTimer.Get() > 0.40)
+    if (feedMotorEncoder.GetPosition() > -4)
         SetFeedMotor(-sourceIntakeSpeed);
     else
         SetFeedMotor(0.0);
@@ -49,6 +49,6 @@ void Feeder::ShootAtAmp()
 void Feeder::SensorControl()
 {
     // Sensor does not detect a gamepiece
-    if (feedSensor.Get() == true)
-        feedSensorTimer.Reset();
+    if (feedSensor.Get() == false)
+        feedMotorEncoder.SetPosition(0.0);
 }

@@ -137,11 +137,6 @@ double Drivetrain::RotationControl(double rotInput, bool alignToAprilTag)
         rotInput = -rotationController.Calculate(limelight3->GetAprilTagOffset(), 0);
         return rotInput;
     }
-    // else if (abs(rotInput) < 0.05)
-    // {
-    //     rotInput = rotationController.Calculate((double)gyro.GetRotation2d().Degrees(), lastGyroYaw);
-    //     return std::clamp(rotInput, -1.0, 1.0);
-    // }
     else
     {
         limelight3->SetPipelineID(Limelight::kAprilTag);
