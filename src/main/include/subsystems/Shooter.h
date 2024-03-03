@@ -23,6 +23,7 @@ public:
 
     void UpdateTelemetry();
 
+    void Purge() { SetShooterMotors(-1.0); };
     void SetShooterMotors(double power)
     {
         SetShooterMotor1(power);
@@ -45,9 +46,6 @@ public:
     double GetAmpSpeed() { return ampSpeed; };
     double GetIntakeSpeed() { return intakeSpeed; };
 
-    // FOR DEBUGGING
-    bool shootAtSpeaker = true;
-
 private:
     rev::CANSparkMax shooter1Motor{RobotMap::SHOOTER_MOTOR1_ADDRESS, rev::CANSparkMax::MotorType::kBrushless};
     rev::CANSparkMax shooter2Motor{RobotMap::SHOOTER_MOTOR2_ADDRESS, rev::CANSparkMax::MotorType::kBrushless};
@@ -58,5 +56,5 @@ private:
 
     double speakerRPM = 4500;
     double ampSpeed = 0.5;
-    double intakeSpeed = 0.5;
+    double intakeSpeed = 0.25;
 };

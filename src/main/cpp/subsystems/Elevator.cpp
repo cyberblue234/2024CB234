@@ -4,10 +4,24 @@ Elevator::Elevator(Limelight *limelight3)
 {
     this->limelight3 = limelight3;
 
-    elevatorMotor1.RestoreFactoryDefaults();
-    elevatorMotor2.RestoreFactoryDefaults();
+    elevator1Motor.GetConfigurator().Apply(configs::TalonFXConfiguration{});
+    configs::TalonFXConfiguration elevator1Config{};
 
-    elevatorMotor2.Follow(elevatorMotor1, true);
+    configs::MotorOutputConfigs elevator1MotorOutput{};
+    elevator1MotorOutput.WithInverted(signals::InvertedValue::Clockwise_Positive);
+    elevator1MotorOutput.WithNeutralMode(signals::NeutralModeValue::Brake);
+    elevator1Config.WithMotorOutput(elevator1MotorOutput);
+
+    elevator1Motor.GetConfigurator().Apply(elevator1Config);
+
+    elevator2Motor.GetConfigurator().Apply(configs::TalonFXConfiguration{});
+    configs::TalonFXConfiguration elevator2Config{};
+
+    configs::MotorOutputConfigs elevator2MotorOutput{};
+    elevator2MotorOutput.WithNeutralMode(signals::NeutralModeValue::Brake);
+    elevator2Config.WithMotorOutput(elevator2MotorOutput);
+
+    elevator2Motor.GetConfigurator().Apply(elevator2Config);
 
     frc::SmartDashboard::PutNumber("Elevator P", ElevatorConstants::kElevatorP);
     frc::SmartDashboard::PutNumber("Elevator I", ElevatorConstants::kElevatorI);
@@ -23,13 +37,7 @@ Elevator::Elevator(Limelight *limelight3)
 
 void Elevator::Periodic()
 {
-    // elevatorPID.SetP(frc::SmartDashboard::GetNumber("Elevator P", ElevatorConstants::kElevatorP));
-    // elevatorPID.SetI(frc::SmartDashboard::GetNumber("Elevator I", ElevatorConstants::kElevatorI));
-    // elevatorPID.SetD(frc::SmartDashboard::GetNumber("Elevator D", ElevatorConstants::kElevatorD));
-    // elevatorPID.SetFF(frc::SmartDashboard::GetNumber("Elevator F", ElevatorConstants::kElevatorF));
-
-    elevatorSpeed = frc::SmartDashboard::GetNumber("Elevator Speed", elevatorSpeed);
-    ampAngle = frc::SmartDashboard::GetNumber("Elevator Amp Angle", ampAngle);
+    UpdateTelemetry();
 }
 
 void Elevator::AlignShooterToSpeaker()
@@ -37,7 +45,7 @@ void Elevator::AlignShooterToSpeaker()
     double current = GetShooterAngle();
     double target = CalculateSpeakerAngle();
     alignmentDifference = current - target;
-    SetElevatorMotorsPosition(GetShooterRevolutions() + (alignmentDifference / 360));
+    SetElevatorMotorsPosition(GetShooterAngleRevolutions() + (alignmentDifference / 360));
 }
 
 // Returns the Angle from parallel to floor in degrees using limelight
@@ -53,13 +61,10 @@ double Elevator::CalculateSpeakerAngle()
     return (targetAngle - ElevatorConstants::kKickup);
 }
 
-void Elevator::SetElevatorMotorsPosition(double pos)
-{
-    elevatorPID.SetReference(pos, rev::CANSparkLowLevel::ControlType::kPosition);
-}
-
 void Elevator::UpdateTelemetry()
 {
     frc::SmartDashboard::PutNumber("Shooter Encoder Count", shooterAngleEncoder.GetAbsolutePosition());
     frc::SmartDashboard::PutNumber("Shooter Angle Degrees", GetShooterAngle());
+    frc::SmartDashboard::PutBoolean("Elevator 1 Top Limit", GetElevator1TopLimit());
+    
 }

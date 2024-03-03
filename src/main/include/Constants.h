@@ -33,8 +33,13 @@ namespace RobotMap
 
     constexpr int INTAKE_MOTOR_ADDRESS = 4;
 
-    constexpr int ELEVATOR_MOTOR1_ADDRESS = 6;
-    constexpr int ELEVATOR_MOTOR2_ADDRESS = 7;
+    constexpr int ELEVATOR_MOTOR1_ADDRESS = 12;
+    constexpr int ELEVATOR_MOTOR2_ADDRESS = 13;
+    constexpr int ELEVATOR1_TOP_LIMIT_SWITCH = 3;
+    constexpr int ELEVATOR1_BOTTOM_LIMIT_SWITCH = 4;
+    constexpr int ELEVATOR2_TOP_LIMIT_SWITCH = 5;
+    constexpr int ELEVATOR2_BOTTOM_LIMIT_SWITCH = 6;
+
 }
 
 namespace SwerveModuleConstants
@@ -80,10 +85,10 @@ namespace DrivetrainConstants
     inline constexpr double BL_DRIVE_ADJUSTMENT = 1.0;
     inline constexpr double BR_DRIVE_ADJUSTMENT = 1.0;
 
-    inline constexpr double FL_OFFSET_DEGREES = -0.166016;
-    inline constexpr double FR_OFFSET_DEGREES = -0.28125;
-    inline constexpr double BL_OFFSET_DEGREES = 0.385254;
-    inline constexpr double BR_OFFSET_DEGREES = -0.751953;
+    inline constexpr double FL_OFFSET_DEGREES = -0.666016;
+    inline constexpr double FR_OFFSET_DEGREES = -0.78125;
+    inline constexpr double BL_OFFSET_DEGREES = 0.8852546;
+    inline constexpr double BR_OFFSET_DEGREES = -0.251953;
 
     inline constexpr double DRIVE_SLOW_ADJUSTMENT = 0.20;
 
@@ -97,7 +102,7 @@ namespace ShooterConstants
     inline constexpr double kShooterP = 0.000058;
     inline constexpr double kShooterI = 0.0;
     inline constexpr double kShooterD = 0.000022;
-    inline constexpr double kShooterF = 0.000158;
+    inline constexpr double kShooterF = 0.000185;
 
     inline constexpr double SHOOTER_ANGLE_OFFSET = 0.0;
 }
@@ -114,4 +119,41 @@ namespace ElevatorConstants
     inline constexpr double kGravity = 9.8;
 
     inline constexpr double kSpeakerHeight = 1.0914; // Speaker height to target in meters
+
+    inline constexpr double kRotationsPerDegree = 0.0;
+}
+
+namespace ControlBoardConstants
+{
+    // Shoot button
+    inline constexpr int SHOOT = 11;
+    // Turn on shooter motors switch
+    inline constexpr int SHOOTER_MOTORS = 10;
+    // Intake from source switch
+    inline constexpr int SOURCE_INTAKE = 9;
+    // Intake from ground switch
+    inline constexpr int GROUND_INTAKE = 12;
+    // Move the elevator up switch
+    inline constexpr int ELEVATOR_UP = 3;
+    // Move the elevator down switch
+    inline constexpr int ELEVATOR_DOWN = 4;
+    // Turn the anchor on switch
+    inline constexpr int ANCHOR = 6;
+    // Purge any notes button
+    inline constexpr int PURGE = 5;
+    // Rotary switches: 0 - 9, easier to deal with than the raw analog inputs 
+    // Scoring position at the subwoofer
+    inline constexpr int POS_CLOSE = 0;
+    // Scoring position directly back from the subwoofer
+    inline constexpr int POS_MID = 1;
+    // Scoring position with the bot touching the stage
+    inline constexpr int POS_STAGE = 2;
+    // Scoring position for the amp
+    inline constexpr int POS_AMP = 3;
+    // Auto alignment scoring position
+    inline constexpr int AUTO_SCORE = 4;
+    // Scoring position for the trap
+    inline constexpr int POS_TRAP = 7;
+    // Manual control for angle and elevator
+    inline constexpr int MANUAL_SCORE = 9;
 }

@@ -18,8 +18,6 @@ Shooter::Shooter()
     frc::SmartDashboard::PutNumber("Shooter Amp Speed", ampSpeed);
     frc::SmartDashboard::PutNumber("Shooter Intake Speed", intakeSpeed);
 
-    frc::SmartDashboard::PutBoolean("Shoot At Speaker?", shootAtSpeaker);
-
     shooter1PID.SetP(ShooterConstants::kShooterP);
     shooter1PID.SetI(ShooterConstants::kShooterI);
     shooter1PID.SetD(ShooterConstants::kShooterD);
@@ -53,7 +51,7 @@ void Shooter::ShootAtSpeaker()
 
 void Shooter::ShootAtAmp()
 {
-    ampSpeed = frc::SmartDashboard::GetNumber("Shooter Amp Speed", ampSpeed);
+    //ampSpeed = frc::SmartDashboard::GetNumber("Shooter Amp Speed", ampSpeed);
     SetShooterMotors(ampSpeed);
 }
 
@@ -65,12 +63,8 @@ void Shooter::IntakeFromSource()
 
 void Shooter::UpdateTelemetry()
 {
-    shootAtSpeaker = frc::SmartDashboard::GetBoolean("Shoot At Speaker?", shootAtSpeaker);
-
     frc::SmartDashboard::PutNumber("Shooter1 RPM", shooter1Encoder.GetVelocity());
-    frc::SmartDashboard::PutNumber("Shooter1 RPM * Gear Ratio", shooter1Encoder.GetVelocity() * 50 / 30);
     frc::SmartDashboard::PutNumber("Shooter2 RPM", shooter2Encoder.GetVelocity());
-    frc::SmartDashboard::PutNumber("Shooter2 RPM * Gear Ratio", shooter2Encoder.GetVelocity() * 28 / 30);
 
     frc::SmartDashboard::PutNumber("Shooter1 Current", shooter1Motor.GetOutputCurrent());
     frc::SmartDashboard::PutNumber("Shooter2 Current", shooter2Motor.GetOutputCurrent());

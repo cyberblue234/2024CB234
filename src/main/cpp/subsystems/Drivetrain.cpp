@@ -137,11 +137,6 @@ double Drivetrain::RotationControl(double rotInput, bool alignToAprilTag)
         rotInput = -rotationController.Calculate(limelight3->GetAprilTagOffset(), 0);
         return rotInput;
     }
-    // else if (abs(rotInput) < 0.05)
-    // {
-    //     rotInput = rotationController.Calculate((double)gyro.GetRotation2d().Degrees(), lastGyroYaw);
-    //     return std::clamp(rotInput, -1.0, 1.0);
-    // }
     else
     {
         limelight3->SetPipelineID(Limelight::kAprilTag);
@@ -154,6 +149,19 @@ double Drivetrain::RotationControl(double rotInput, bool alignToAprilTag)
 void Drivetrain::AlignToSpeaker()
 {
     DriveWithInput(0.0, 0.0, RotationControl(0, true), false);    
+}
+
+void Drivetrain::SetAnchorState()
+{
+    frc::SwerveModuleState fl = {0_mps, frc::Rotation2d(units::angle::degree_t(45))};
+    frc::SwerveModuleState fr = {0_mps, frc::Rotation2d(units::angle::degree_t(-45))};
+    frc::SwerveModuleState bl = {0_mps, frc::Rotation2d(units::angle::degree_t(-45))};
+    frc::SwerveModuleState br = {0_mps, frc::Rotation2d(units::angle::degree_t(45))};
+
+    frontLeft.SetDesiredState(fl, 0.0);
+    frontRight.SetDesiredState(fr, 0.0);
+    backLeft.SetDesiredState(bl, 0.0);
+    backRight.SetDesiredState(br, 0.0);
 }
 
 void Drivetrain::UpdateTelemetry()
