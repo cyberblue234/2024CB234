@@ -11,8 +11,8 @@ class Feeder : frc2::SubsystemBase
 {
 public:
     Feeder();
-    void IntakeFromGround();
-    void IntakeFromSource();
+    bool IntakeFromGround();
+    bool IntakeFromSource();
     void ShootAtSpeaker();
     void ShootAtAmp();
     void SensorControl();

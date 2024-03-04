@@ -12,26 +12,34 @@ Feeder::Feeder()
     feedSensorTimer.Start();
 }
 
-void Feeder::IntakeFromGround()
+bool Feeder::IntakeFromGround()
 {
-    //groundIntakeSpeed = frc::SmartDashboard::GetNumber("Feed Ground Speed", groundIntakeSpeed);
-
     SensorControl();
     if (feedMotorEncoder.GetPosition() < 4)
+    {
         SetFeedMotor(groundIntakeSpeed);
+        return false;
+    }
     else
+    {
         SetFeedMotor(0.0);
+        return true;
+    }
 }
 
-void Feeder::IntakeFromSource()
+bool Feeder::IntakeFromSource()
 {
-    //sourceIntakeSpeed = frc::SmartDashboard::GetNumber("Feed Source Speed", sourceIntakeSpeed);
-
     SensorControl();
     if (feedMotorEncoder.GetPosition() > -4)
+    {
         SetFeedMotor(-sourceIntakeSpeed);
+        return false;
+    }
     else
+    {
         SetFeedMotor(0.0);
+        return true;
+    }
 }
 
 void Feeder::ShootAtSpeaker()

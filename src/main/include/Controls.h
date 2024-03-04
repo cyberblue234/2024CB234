@@ -37,6 +37,9 @@ public:
         if (analogInput <  1.10) return 9;
         return -1;
     }; 
+
+    void RumbleGamepad() { gamepad.SetRumble(gamepad.kBothRumble, 1.0); };
+
     frc::XboxController gamepad{0};
     frc::Joystick controlBoard{1};
 

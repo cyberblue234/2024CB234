@@ -175,9 +175,13 @@ void Controls::FeederControls()
             feeder->ShootAtSpeaker();
     }
     else if (controlBoard.GetRawButton(ControlBoardConstants::SOURCE_INTAKE))
-        feeder->IntakeFromSource();
+    {
+        if (feeder->IntakeFromSource()) RumbleGamepad();
+    }
     else if (controlBoard.GetRawButton(ControlBoardConstants::GROUND_INTAKE))
-        feeder->IntakeFromGround();
+    {
+        if (feeder->IntakeFromGround()) RumbleGamepad();
+    }
     else if (controlBoard.GetRawButton(ControlBoardConstants::PURGE))
         feeder->Purge();
     else

@@ -37,6 +37,7 @@ Elevator::Elevator(Limelight *limelight3)
 
 void Elevator::Periodic()
 {
+    if (GetElevator1BottomLimit() == true && GetElevator2BottomLimit() == true) ResetShooterEncoder();
     UpdateTelemetry();
 }
 

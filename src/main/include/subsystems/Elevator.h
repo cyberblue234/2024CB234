@@ -58,6 +58,8 @@ public:
     bool GetElevator2TopLimit() { return elevator2TopLimit.Get(); };
     bool GetElevator2BottomLimit() { return elevator2BottomLimit.Get(); };
 
+    void ResetShooterEncoder() { shooterAngleEncoder.Reset(); };
+
     void UpdateTelemetry();
 
 private:
