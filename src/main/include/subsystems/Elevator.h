@@ -5,6 +5,7 @@
 #include "frc/geometry/Pose2d.h"
 #include <frc/DigitalInput.h>
 #include <frc/DutyCycleEncoder.h>
+#include <frc/controller/PIDController.h>
 #include "rev/CANSparkMax.h"
 #include <ctre/phoenix6/TalonFX.hpp>
 #include <ctre/phoenix6/configs/Configurator.hpp>
@@ -21,7 +22,6 @@ public:
     Elevator(Limelight *);
     void Periodic() override;
 
-    void AlignShooterToSpeaker();
     double CalculateSpeakerAngle();
 
     void SetElevatorMotorsPosition(double pos) 
@@ -29,8 +29,10 @@ public:
         SetElevator1MotorPosition(pos);
         SetElevator2MotorPosition(pos);
     };
-    void SetElevator1MotorPosition(double pos) { /*elevator1PID.SetReference(pos, rev::CANSparkLowLevel::ControlType::kPosition);*/ };
-    void SetElevator2MotorPosition(double pos) { /*elevator2PID.SetReference(pos, rev::CANSparkLowLevel::ControlType::kPosition);*/ };
+    void SetElevator1MotorPosition(double pos) { SetElevator1Motor(ElevatorPIDCalculate(pos)); };
+    void SetElevator2MotorPosition(double pos) { SetElevator2Motor(ElevatorPIDCalculate(pos)); };
+
+    double ElevatorPIDCalculate(double pos) { return elevatorPID.Calculate((double) shooterAngleEncoder.Get(), pos); };
     
     void SetElevatorMotors(double power) 
     { 
@@ -61,10 +63,7 @@ public:
 private:
     hardware::TalonFX elevator1Motor{RobotMap::ELEVATOR_MOTOR1_ADDRESS, "rio"};
     hardware::TalonFX elevator2Motor{RobotMap::ELEVATOR_MOTOR2_ADDRESS, "rio"};
-    //rev::SparkPIDController elevator1PID = elevator1Motor.GetPIDController();
-    //rev::SparkPIDController elevator2PID = elevator2Motor.GetPIDController();
-    //rev::SparkRelativeEncoder elevator1Encoder = elevator1Motor.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor);
-    //rev::SparkRelativeEncoder elevator2Encoder = elevator2Motor.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor);
+    frc::PIDController elevatorPID{ElevatorConstants::kElevatorP, ElevatorConstants::kElevatorI, ElevatorConstants::kElevatorD, 20_ms};
 
     frc::DutyCycleEncoder shooterAngleEncoder{RobotMap::SHOOTER_ENCODER_ADDRESS};
 

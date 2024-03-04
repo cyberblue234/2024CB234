@@ -119,31 +119,41 @@ void Controls::ElevatorControls()
     // Align to speaker
     else if (controlBoard.GetRawButton(ControlBoardConstants::SHOOT) && GetSelectedRotaryIndex() != ControlBoardConstants::MANUAL_SCORE)
     {
-        if (GetSelectedRotaryIndex() == ControlBoardConstants::AUTO_SCORE)
-            elevator->AlignShooterToSpeaker();
-        else
+    
+        double angle;
+        switch (GetSelectedRotaryIndex())
         {
-            double angle;
-            switch (GetSelectedRotaryIndex())
-            {
-                case ControlBoardConstants::POS_MID:
-                    angle = elevator->GetMidAngle();
-                    break;
-                case ControlBoardConstants::POS_STAGE:
-                    angle = elevator->GetStageAngle();
-                    break;
-                case ControlBoardConstants::POS_AMP:
-                    angle = elevator->GetAmpAngle();
-                    break;
-                case ControlBoardConstants::POS_TRAP:
-                    angle = elevator->GetTrapAngle();
-                    break;
-                // Default is the close angle
-                default:
-                    angle = elevator->GetCloseAngle();
-            }
-            elevator->SetElevatorMotorsPosition(elevator->GetShooterAngleRevolutions() + (angle / 360));
+            case ControlBoardConstants::AUTO_SCORE:
+                angle = elevator->CalculateSpeakerAngle();
+                break;
+            case ControlBoardConstants::POS_MID:
+                angle = elevator->GetMidAngle();
+                break;
+            case ControlBoardConstants::POS_STAGE:
+                angle = elevator->GetStageAngle();
+                break;
+            case ControlBoardConstants::POS_AMP:
+                angle = elevator->GetAmpAngle();
+                break;
+            case ControlBoardConstants::POS_TRAP:
+                angle = elevator->GetTrapAngle();
+                break;
+            // Default is the close angle
+            default:
+                angle = elevator->GetCloseAngle();
         }
+
+        double pos = angle / 360;
+
+        if (elevator->GetElevator1TopLimit() == false && elevator->GetElevator1BottomLimit() == false)
+            elevator->SetElevator1Motor(pos);
+        else
+            elevator->SetElevator1Motor(0.0);
+        if (elevator->GetElevator2TopLimit() == false && elevator->GetElevator2BottomLimit() == false)
+            elevator->SetElevator2Motor(pos);
+        else
+            elevator->SetElevator2Motor(0.0);
+    
     }
     else
         elevator->SetElevatorMotors(0.0);

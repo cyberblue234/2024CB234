@@ -31,21 +31,13 @@ Elevator::Elevator(Limelight *limelight3)
     frc::SmartDashboard::PutNumber("Elevator Speed", elevatorSpeed);
     frc::SmartDashboard::PutNumber("Elevator Amp Angle", ampAngle);
 
-    shooterAngleEncoder.SetPositionOffset(ShooterConstants::SHOOTER_ANGLE_OFFSET);
+    shooterAngleEncoder.SetPositionOffset(ElevatorConstants::SHOOTER_ANGLE_OFFSET);
     shooterAngleEncoder.SetDistancePerRotation(-360);
 }
 
 void Elevator::Periodic()
 {
     UpdateTelemetry();
-}
-
-void Elevator::AlignShooterToSpeaker()
-{
-    double current = GetShooterAngle();
-    double target = CalculateSpeakerAngle();
-    alignmentDifference = current - target;
-    SetElevatorMotorsPosition(GetShooterAngleRevolutions() + (alignmentDifference / 360));
 }
 
 // Returns the Angle from parallel to floor in degrees using limelight
@@ -64,7 +56,5 @@ double Elevator::CalculateSpeakerAngle()
 void Elevator::UpdateTelemetry()
 {
     frc::SmartDashboard::PutNumber("Shooter Encoder Count", shooterAngleEncoder.GetAbsolutePosition());
-    frc::SmartDashboard::PutNumber("Shooter Angle Degrees", GetShooterAngle());
-    frc::SmartDashboard::PutBoolean("Elevator 1 Top Limit", GetElevator1TopLimit());
-    
+    frc::SmartDashboard::PutNumber("Shooter Angle Degrees", GetShooterAngle());    
 }
