@@ -20,6 +20,8 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
 		return PathPlannerAuto("Copy Center Auto").ToPtr();
 	if (frc::SmartDashboard::GetBoolean("Amp Auto", false))
 		return PathPlannerAuto("Amp Auto").ToPtr();
+	if (frc::SmartDashboard::GetBoolean("Source Auto", false))
+		return PathPlannerAuto("Source Auto").ToPtr();
 	return PathPlannerAuto("Copy Center Auto").ToPtr();
 }
 
@@ -30,7 +32,7 @@ frc2::CommandPtr RobotContainer::GetShootCommand()
 		[this]
 		{
 			//this->GetSwerve()->AlignToSpeaker();
-			//this->GetElevator()->AlignShooterToSpeaker();
+			this->GetElevator()->ElevatorControl(this->GetElevator()->CalculateSpeakerAngle());
 			this->GetShooter()->ShootAtSpeaker();
 		}
 	).Until
@@ -38,7 +40,7 @@ frc2::CommandPtr RobotContainer::GetShootCommand()
 		[this]
 		{
 			bool atAlignment = true; //abs(this->GetLimelight3()->GetAprilTagOffset()) < 0.5;// && abs(this->GetElevator()->GetAlignmentDifference()) < 0.5;
-			return this->GetShooter()->GetAverageRPM() >= this->GetShooter()->GetSpeakerRPM() - 300 && atAlignment;
+			return this->GetShooter()->GetAverageRPM() >= this->GetShooter()->GetSpeakerRPM() - 150 && atAlignment;
 		}
 	).AndThen
 	(
@@ -73,7 +75,7 @@ frc2::CommandPtr RobotContainer::GetIntakeCommand()
 	(
 		[this]
 		{
-			this->GetElevator()->SetElevatorMotors(0.5);
+			this->GetElevator()->ElevatorControl(this->GetElevator()->GetIntakeAngle());
 		}
 	).ToPtr().RaceWith
 	(
@@ -105,6 +107,16 @@ void RobotContainer::LogTeleopData()
 
 	double shooter1RPM = shooter.GetShooter1RPM();
 	double shooter2RPM = shooter.GetShooter2RPM();
+	double feedRPM = feeder.GetFeedMotorRPM();
+	double intakeRPM = intake.GetIntakeMotorRPM();
+	double elevator1RPM = elevator.GetElevator1MotorRPM();
+	double elevator2RPM = elevator.GetElevator2MotorRPM();
+	double shooterAngle = elevator.GetShooterAngle();
+	frc::Pose2d robotPose = swerve.GetPose();
+	double odometryX = (double) robotPose.X();
+	double odometryY = (double) robotPose.Y();
+	double odometryRot = (double) robotPose.Rotation().Degrees();
+
 
 	if (count == 0)
 	{
@@ -118,9 +130,9 @@ void RobotContainer::LogTeleopData()
 		{
 			if (count == 0)
 			{
-				fprintf(t_output, "Time,Volts,Shooter1RPM,Shooter2RPM\r\n");
+				fprintf(t_output, "Time,Volts,Shooter1RPM,Shooter2RPM,FeedRPM,IntakeRPM,Elevator1RPM,Elevator2RPM,ShooterAngle,OdomX,OdomY,OdomRot\r\n");
 			}
-			fprintf(t_output, "%10.5f,%7.3f,%7.0f,%7.0f\r\n", time, volts, shooter1RPM, shooter2RPM);
+			fprintf(t_output, "%10.5f,%7.3f,%7.0f,%7.0f,%7.0f,%7.0f,%7.0f,%7.0f,%3.3f,%3.3f,%3.3f,%3.3f\r\n", time, volts, shooter1RPM, shooter2RPM, feedRPM, intakeRPM, elevator1RPM, elevator2RPM, shooterAngle, odometryX, odometryY, odometryRot);
 		}
 	}
 	if (t_output != NULL && count == MAX_COUNT)
@@ -142,6 +154,15 @@ void RobotContainer::LogAutoData()
 
 	double shooter1RPM = shooter.GetShooter1RPM();
 	double shooter2RPM = shooter.GetShooter2RPM();
+	double feedRPM = feeder.GetFeedMotorRPM();
+	double intakeRPM = intake.GetIntakeMotorRPM();
+	double elevator1RPM = elevator.GetElevator1MotorRPM();
+	double elevator2RPM = elevator.GetElevator2MotorRPM();
+	double shooterAngle = elevator.GetShooterAngle();
+	frc::Pose2d robotPose = swerve.GetPose();
+	double odometryX = (double) robotPose.X();
+	double odometryY = (double) robotPose.Y();
+	double odometryRot = (double) robotPose.Rotation().Degrees();
 
 	if (count == 0)
 	{
@@ -155,9 +176,9 @@ void RobotContainer::LogAutoData()
 		{
 			if (count == 0)
 			{
-				fprintf(t_output, "Time,Volts,Shooter1RPM,Shooter2RPM\r\n");
+				fprintf(t_output, "Time,Volts,Shooter1RPM,Shooter2RPM,FeedRPM,IntakeRPM,Elevator1RPM,Elevator2RPM,ShooterAngle,OdomX,OdomY,OdomRot\r\n");
 			}
-			fprintf(t_output, "%10.5f,%7.3f,%7.0f,%7.0f\r\n", time, volts, shooter1RPM, shooter2RPM);
+			fprintf(t_output, "%10.5f,%7.3f,%7.0f,%7.0f,%7.0f,%7.0f,%7.0f,%7.0f,%3.3f,%3.3f,%3.3f,%3.3f\r\n", time, volts, shooter1RPM, shooter2RPM, feedRPM, intakeRPM, elevator1RPM, elevator2RPM, shooterAngle, odometryX, odometryY, odometryRot);
 		}
 	}
 	if (t_output != NULL && count == MAX_COUNT)

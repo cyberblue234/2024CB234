@@ -112,7 +112,7 @@ namespace ElevatorConstants
     inline constexpr double kElevatorD = 0.005;
     inline constexpr double kElevatorF = 0.0;
 
-    inline constexpr double kForce = 45.0;
+    inline constexpr double kForce = 44.0;
     inline constexpr double kKickup = 1.0;
     inline constexpr double kGravity = 9.8;
 

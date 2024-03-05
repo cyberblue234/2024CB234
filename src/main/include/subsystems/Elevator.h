@@ -69,6 +69,9 @@ public:
     bool GetElevator2TopLimit() { return elevator2TopLimit.Get(); };
     bool GetElevator2BottomLimit() { return elevator2BottomLimit.Get(); };
 
+    double GetElevator1MotorRPM() { return elevator1Motor.GetVelocity().GetValueAsDouble(); };
+    double GetElevator2MotorRPM() { return elevator2Motor.GetVelocity().GetValueAsDouble(); };
+
     void ResetShooterEncoder() { shooterAngleEncoder.Reset(); };
 
     void UpdateTelemetry();
@@ -92,7 +95,7 @@ private:
     // Should be a constant eventually
     double ampAngle = -44;
     double closeAngle = -52;
-    double midAngle = -30;
+    double midAngle = -44;
     double stageAngle = -30;
     double trapAngle = -30;
     double intakeAngle = -44;
