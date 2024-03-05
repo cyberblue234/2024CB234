@@ -8,10 +8,18 @@ RobotContainer::RobotContainer() : swerve(GetLimelight3()), elevator(GetLimeligh
 {
 	NamedCommands::registerCommand("Shoot", GetShootCommand());
 	NamedCommands::registerCommand("Intake", GetIntakeCommand());
+
+	frc::SmartDashboard::PutBoolean("Center Auto", false);
+	frc::SmartDashboard::PutBoolean("Amp Auto", false);
+	frc::SmartDashboard::PutBoolean("Source Auto", false);
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand()
 {
+	if (frc::SmartDashboard::GetBoolean("Center Auto", false))
+		return PathPlannerAuto("Copy Center Auto").ToPtr();
+	if (frc::SmartDashboard::GetBoolean("Amp Auto", false))
+		return PathPlannerAuto("Amp Auto").ToPtr();
 	return PathPlannerAuto("Copy Center Auto").ToPtr();
 }
 
@@ -30,7 +38,7 @@ frc2::CommandPtr RobotContainer::GetShootCommand()
 		[this]
 		{
 			bool atAlignment = true; //abs(this->GetLimelight3()->GetAprilTagOffset()) < 0.5;// && abs(this->GetElevator()->GetAlignmentDifference()) < 0.5;
-			return this->GetShooter()->GetAverageRPM() >= this->GetShooter()->GetSpeakerRPM() - 100 && atAlignment;
+			return this->GetShooter()->GetAverageRPM() >= this->GetShooter()->GetSpeakerRPM() - 300 && atAlignment;
 		}
 	).AndThen
 	(
@@ -43,7 +51,7 @@ frc2::CommandPtr RobotContainer::GetShootCommand()
 			}
 		).ToPtr().RaceWith
 		(
-			frc2::WaitCommand(2_s).ToPtr()
+			frc2::WaitCommand(3_s).ToPtr()
 		)
 	).AndThen
 	(
@@ -81,7 +89,7 @@ frc2::CommandPtr RobotContainer::GetIntakeCommand()
 			}
 		).ToPtr().RaceWith
 		(
-			frc2::WaitCommand(10_s).ToPtr()
+			frc2::WaitCommand(2_s).ToPtr()
 		)
 	);
 }

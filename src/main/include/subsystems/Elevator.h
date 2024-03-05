@@ -24,15 +24,26 @@ public:
 
     double CalculateSpeakerAngle();
 
+    void ElevatorControl(double angle);
+
+    void ToIntakeAngle() { ElevatorControl(intakeAngle); };
+    void ToSubwooferAngle() { ElevatorControl(closeAngle); };
+    void ToCalculatedAngle() { ElevatorControl(CalculateSpeakerAngle()); };
+
     void SetElevatorMotorsPosition(double pos) 
     { 
         SetElevator1MotorPosition(pos);
         SetElevator2MotorPosition(pos);
     };
-    void SetElevator1MotorPosition(double pos) { SetElevator1Motor(ElevatorPIDCalculate(pos)); };
+    void SetElevator1MotorPosition(double pos) 
+    { 
+        double calcPos = ElevatorPIDCalculate(pos);
+        frc::SmartDashboard::PutNumber("ElevatorPIDCalcPOS", calcPos);
+        SetElevator1Motor(calcPos); 
+    };
     void SetElevator2MotorPosition(double pos) { SetElevator2Motor(ElevatorPIDCalculate(pos)); };
 
-    double ElevatorPIDCalculate(double pos) { return elevatorPID.Calculate((double) shooterAngleEncoder.Get(), pos); };
+    double ElevatorPIDCalculate(double pos) { return elevatorPID.Calculate(GetShooterAngle(), pos); };
     
     void SetElevatorMotors(double power) 
     { 
@@ -42,8 +53,8 @@ public:
     void SetElevator1Motor(double power) { elevator1Motor.Set(power); };
     void SetElevator2Motor(double power) { elevator2Motor.Set(power); };
 
-    double GetShooterAngle() { return shooterAngleEncoder.GetDistance(); };
-    double GetShooterAngleRevolutions() { return (double)shooterAngleEncoder.Get(); };
+    double GetShooterAngle() { return shooterAngleEncoder.GetDistance() - 15; };
+    double GetShooterAngleRevolutions() { return (double)shooterAngleEncoder.Get() - (15 / 360); };
     double GetElevatorSpeed() { return elevatorSpeed; };
     double GetAlignmentDifference() { return alignmentDifference; };
     double GetAmpAngle() { return ampAngle; };
@@ -79,10 +90,10 @@ private:
     double elevatorSpeed = 1.0;
     double alignmentDifference = 0;
     // Should be a constant eventually
-    double ampAngle = 22;
-    double closeAngle = 50;
-    double midAngle = 30;
-    double stageAngle = 30;
-    double trapAngle = 30;
-    double intakeAngle = 45;
+    double ampAngle = -44;
+    double closeAngle = -52;
+    double midAngle = -30;
+    double stageAngle = -30;
+    double trapAngle = -30;
+    double intakeAngle = -44;
 };

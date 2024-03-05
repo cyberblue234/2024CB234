@@ -116,7 +116,14 @@ void Controls::ElevatorControls()
         else    
             elevator->SetElevator2Motor(0.0);
     }
-    // Align to speaker
+    else if (controlBoard.GetRawButton(ControlBoardConstants::GROUND_INTAKE))
+    {
+        elevator->ElevatorControl(elevator->GetIntakeAngle());
+    }
+    else if (controlBoard.GetRawButton(ControlBoardConstants::SOURCE_INTAKE))
+    {
+        elevator->ElevatorControl(elevator->GetIntakeAngle());
+    }
     else if (controlBoard.GetRawButton(ControlBoardConstants::SHOOT) && GetSelectedRotaryIndex() != ControlBoardConstants::MANUAL_SCORE)
     {
     
@@ -124,7 +131,10 @@ void Controls::ElevatorControls()
         switch (GetSelectedRotaryIndex())
         {
             case ControlBoardConstants::AUTO_SCORE:
-                angle = elevator->CalculateSpeakerAngle();
+                if (limelight3->GetTargetValid() == 1)
+                    angle = elevator->CalculateSpeakerAngle();
+                else
+                    angle = elevator->GetIntakeAngle();
                 break;
             case ControlBoardConstants::POS_MID:
                 angle = elevator->GetMidAngle();
@@ -143,17 +153,7 @@ void Controls::ElevatorControls()
                 angle = elevator->GetCloseAngle();
         }
 
-        double pos = angle / 360;
-
-        if (elevator->GetElevator1TopLimit() == false && elevator->GetElevator1BottomLimit() == false)
-            elevator->SetElevator1Motor(pos);
-        else
-            elevator->SetElevator1Motor(0.0);
-        if (elevator->GetElevator2TopLimit() == false && elevator->GetElevator2BottomLimit() == false)
-            elevator->SetElevator2Motor(pos);
-        else
-            elevator->SetElevator2Motor(0.0);
-    
+        elevator->ElevatorControl(angle);
     }
     else
         elevator->SetElevatorMotors(0.0);
@@ -177,13 +177,18 @@ void Controls::FeederControls()
     else if (controlBoard.GetRawButton(ControlBoardConstants::SOURCE_INTAKE))
     {
         if (feeder->IntakeFromSource()) RumbleGamepad();
+        else StopRumble();
     }
     else if (controlBoard.GetRawButton(ControlBoardConstants::GROUND_INTAKE))
     {
         if (feeder->IntakeFromGround()) RumbleGamepad();
+        else StopRumble();
     }
     else if (controlBoard.GetRawButton(ControlBoardConstants::PURGE))
         feeder->Purge();
     else
+    {
         feeder->SetFeedMotor(0.0);
+        StopRumble();
+    }
 }

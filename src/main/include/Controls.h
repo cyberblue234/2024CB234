@@ -39,6 +39,7 @@ public:
     }; 
 
     void RumbleGamepad() { gamepad.SetRumble(gamepad.kBothRumble, 1.0); };
+    void StopRumble() { gamepad.SetRumble(gamepad.kBothRumble, 0.0); };
 
     frc::XboxController gamepad{0};
     frc::Joystick controlBoard{1};

@@ -98,7 +98,7 @@ void Drivetrain::DriveWithInput(double fwd, double stf, double rot, bool limitSp
     // Get the rate of angular rotation. Needs to be inverted. Remember CCW is positive in mathematics.
     auto rotation = units::radians_per_second_t(-rot * DrivetrainConstants::MAX_ANGULAR_SPEED);
 
-    frc::Rotation2d heading = odometry.GetEstimatedPosition().Rotation().RotateBy(frc::Rotation2d(units::angle::degree_t(180)));
+    frc::Rotation2d heading = gyro.GetRotation2d(); //odometry.GetEstimatedPosition().Rotation().RotateBy(frc::Rotation2d(units::angle::degree_t(180)));
     auto speeds = fieldRelative ? frc::ChassisSpeeds::FromFieldRelativeSpeeds(ySpeed, xSpeed, rotation, heading)
                                 : frc::ChassisSpeeds{ySpeed, xSpeed, rotation};
 

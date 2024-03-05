@@ -15,7 +15,7 @@ Feeder::Feeder()
 bool Feeder::IntakeFromGround()
 {
     SensorControl();
-    if (feedMotorEncoder.GetPosition() < 4)
+    if (feedMotorEncoder.GetPosition() < 1)
     {
         SetFeedMotor(groundIntakeSpeed);
         return false;
@@ -30,7 +30,7 @@ bool Feeder::IntakeFromGround()
 bool Feeder::IntakeFromSource()
 {
     SensorControl();
-    if (feedMotorEncoder.GetPosition() > -4)
+    if (feedMotorEncoder.GetPosition() > -1)
     {
         SetFeedMotor(-sourceIntakeSpeed);
         return false;
