@@ -35,7 +35,10 @@ Elevator::Elevator(Limelight *limelight3)
 
 void Elevator::Periodic()
 {
-    //if (GetElevator1BottomLimit() == true && GetElevator2BottomLimit() == true) ResetShooterEncoder();
+    if (GetElevator1BottomLimit())
+        ResetElevator1Encoder();
+    if (GetElevator2BottomLimit())
+        ResetElevator2Encoder();
     UpdateTelemetry();
 }
 
@@ -67,6 +70,9 @@ void Elevator::ElevatorControl(double angle)
 
 void Elevator::UpdateTelemetry()
 {
-    frc::SmartDashboard::PutNumber("Shooter Encoder Count", shooterAngleEncoder.GetAbsolutePosition());
-    frc::SmartDashboard::PutNumber("Shooter Angle Degrees", GetShooterAngle());    
+    frc::SmartDashboard::PutNumber("Shooter Angle Encoder Count", shooterAngleEncoder.GetAbsolutePosition());
+    frc::SmartDashboard::PutNumber("Shooter Angle Degrees", GetShooterAngle()); 
+    frc::SmartDashboard::PutNumber("Elevator 1 Encoder Pos", GetElevator1Encoder());
+    frc::SmartDashboard::PutNumber("Elevator 2 Encoder Pos", GetElevator2Encoder());
+    
 }

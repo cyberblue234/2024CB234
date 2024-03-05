@@ -32,7 +32,7 @@ frc2::CommandPtr RobotContainer::GetShootCommand()
 		[this]
 		{
 			//this->GetSwerve()->AlignToSpeaker();
-			this->GetElevator()->ElevatorControl(this->GetElevator()->CalculateSpeakerAngle());
+			//this->GetElevator()->ElevatorControl(this->GetElevator()->CalculateSpeakerAngle());
 			this->GetShooter()->ShootAtSpeaker();
 		}
 	).Until

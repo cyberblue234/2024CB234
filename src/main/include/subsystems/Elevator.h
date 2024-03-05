@@ -74,6 +74,13 @@ public:
 
     void ResetShooterEncoder() { shooterAngleEncoder.Reset(); };
 
+    double GetElevator1Encoder() { return elevator1Motor.GetPosition().GetValueAsDouble(); };
+    double GetElevator2Encoder() { return elevator2Motor.GetPosition().GetValueAsDouble(); };
+    void ResetElevator1Encoder() { elevator1Motor.SetPosition(units::angle::turn_t(0.0)); };
+    void ResetElevator2Encoder() { elevator2Motor.SetPosition(units::angle::turn_t(0.0)); };
+
+    double GetHardEncoderLimit() { return hardEncoderLimit; };
+    
     void UpdateTelemetry();
 
 private:
@@ -99,4 +106,6 @@ private:
     double stageAngle = -30;
     double trapAngle = -30;
     double intakeAngle = -44;
+
+    double hardEncoderLimit = 123;
 };
