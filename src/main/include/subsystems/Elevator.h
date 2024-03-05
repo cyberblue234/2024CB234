@@ -35,12 +35,7 @@ public:
         SetElevator1MotorPosition(pos);
         SetElevator2MotorPosition(pos);
     };
-    void SetElevator1MotorPosition(double pos) 
-    { 
-        double calcPos = ElevatorPIDCalculate(pos);
-        frc::SmartDashboard::PutNumber("ElevatorPIDCalcPOS", calcPos);
-        SetElevator1Motor(calcPos); 
-    };
+    void SetElevator1MotorPosition(double pos) { SetElevator1Motor(ElevatorPIDCalculate(pos)); };
     void SetElevator2MotorPosition(double pos) { SetElevator2Motor(ElevatorPIDCalculate(pos)); };
 
     double ElevatorPIDCalculate(double pos) { return elevatorPID.Calculate(GetShooterAngle(), pos); };
@@ -107,5 +102,5 @@ private:
     double trapAngle = -30;
     double intakeAngle = -44;
 
-    double hardEncoderLimit = 123;
+    double hardEncoderLimit = 130;
 };

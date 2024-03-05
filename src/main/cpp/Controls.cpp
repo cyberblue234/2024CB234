@@ -170,7 +170,7 @@ void Controls::FeederControls()
         else if (GetSelectedRotaryIndex() != ControlBoardConstants::MANUAL_SCORE)
         {
             bool atAlignment = abs(limelight3->GetAprilTagOffset()) < 1.0 && abs(elevator->GetAlignmentDifference()) < 0.5;
-            if (shooter->GetAverageRPM() >= shooter->GetSpeakerRPM() - 100 && atAlignment)
+            if (shooter->GetShooter1RPM() >= shooter->GetSpeakerRPM() - 100 && atAlignment)
                 feeder->ShootAtSpeaker();
         }
         else

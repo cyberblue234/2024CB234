@@ -40,7 +40,7 @@ frc2::CommandPtr RobotContainer::GetShootCommand()
 		[this]
 		{
 			bool atAlignment = true; //abs(this->GetLimelight3()->GetAprilTagOffset()) < 0.5;// && abs(this->GetElevator()->GetAlignmentDifference()) < 0.5;
-			return this->GetShooter()->GetAverageRPM() >= this->GetShooter()->GetSpeakerRPM() - 150 && atAlignment;
+			return this->GetShooter()->GetShooter1RPM() >= this->GetShooter()->GetSpeakerRPM() - 150 && atAlignment;
 		}
 	).AndThen
 	(

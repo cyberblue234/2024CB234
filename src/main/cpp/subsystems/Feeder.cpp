@@ -4,11 +4,6 @@ Feeder::Feeder()
 {
     feedMotor.RestoreFactoryDefaults();
 
-    groundIntakeSpeed = frc::SmartDashboard::PutNumber("Feed Ground Speed", groundIntakeSpeed);
-    sourceIntakeSpeed = frc::SmartDashboard::PutNumber("Feed Source Speed", sourceIntakeSpeed);
-    speakerShooterSpeed = frc::SmartDashboard::PutNumber("Feed Speaker Speed", speakerShooterSpeed);
-    ampShooterSpeed = frc::SmartDashboard::PutNumber("Feed Amp Speed", ampShooterSpeed);
-
     feedSensorTimer.Start();
 }
 
@@ -44,13 +39,11 @@ bool Feeder::IntakeFromSource()
 
 void Feeder::ShootAtSpeaker()
 {
-    speakerShooterSpeed = frc::SmartDashboard::GetNumber("Feed Speaker Speed", speakerShooterSpeed);
     SetFeedMotor(0.85);
 }
 
 void Feeder::ShootAtAmp()
 {
-    ampShooterSpeed = frc::SmartDashboard::GetNumber("Feed Amp Speed", ampShooterSpeed);
     SetFeedMotor(0.85);
 }
 

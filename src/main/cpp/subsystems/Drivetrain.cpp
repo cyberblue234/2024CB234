@@ -174,26 +174,6 @@ void Drivetrain::UpdateTelemetry()
     frc::SmartDashboard::PutNumber("FR Swerve Pos", frontRight.GetSwervePosition());
     frc::SmartDashboard::PutNumber("BL Swerve Pos", backLeft.GetSwervePosition());
     frc::SmartDashboard::PutNumber("BR Swerve Pos", backRight.GetSwervePosition());
-
-    frc::SmartDashboard::PutNumber("FL Desired", frontLeft.GetDesiredCount());
-    frc::SmartDashboard::PutNumber("FR Desired", frontRight.GetDesiredCount());
-    frc::SmartDashboard::PutNumber("BL Desired", backLeft.GetDesiredCount());
-    frc::SmartDashboard::PutNumber("BR Desired", backRight.GetDesiredCount());
-
-    frc::SmartDashboard::PutNumber("FL Delta", frontLeft.GetDeltaCount());
-    frc::SmartDashboard::PutNumber("FR Delta", frontRight.GetDeltaCount());
-    frc::SmartDashboard::PutNumber("BL Delta", backLeft.GetDeltaCount());
-    frc::SmartDashboard::PutNumber("BR Delta", backRight.GetDeltaCount());
-
-    frc::SmartDashboard::PutNumber("FL Delta Angle", frontLeft.GetDeltaAngle());
-    frc::SmartDashboard::PutNumber("FR Delta Angle", frontRight.GetDeltaAngle());
-    frc::SmartDashboard::PutNumber("BL Delta Angle", backLeft.GetDeltaAngle());
-    frc::SmartDashboard::PutNumber("BR Delta Angle", backRight.GetDeltaAngle());
-
-    frc::SmartDashboard::PutNumber("FL Current Count", frontLeft.GetCurrentCount());
-    frc::SmartDashboard::PutNumber("FR Current Count", frontRight.GetCurrentCount());
-    frc::SmartDashboard::PutNumber("BL Current Count", backLeft.GetCurrentCount());
-    frc::SmartDashboard::PutNumber("BR Current Count", backRight.GetCurrentCount());
 }
 
 void Drivetrain::SetDriveOpenLoopRamp(double ramp)

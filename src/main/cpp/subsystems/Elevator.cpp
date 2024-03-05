@@ -57,15 +57,28 @@ double Elevator::CalculateSpeakerAngle()
 
 void Elevator::ElevatorControl(double angle)
 {
-
-        if (GetElevator1TopLimit() == false && GetElevator1BottomLimit() == false)
-            SetElevator1MotorPosition(angle);
-        else
-            SetElevator1Motor(0.0);
-        if (GetElevator2TopLimit() == false && GetElevator2BottomLimit() == false)
-            SetElevator2MotorPosition(angle);
-        else
-            SetElevator2Motor(0.0);
+        if (angle > GetShooterAngle()) 
+        {
+            if (GetElevator1TopLimit() == false)
+                SetElevator1MotorPosition(angle);
+            else
+                SetElevator1Motor(0.0);
+            if (GetElevator2TopLimit() == false)
+                SetElevator2MotorPosition(angle);
+            else
+                SetElevator2Motor(0.0);
+        }
+        if (angle < GetShooterAngle()) 
+        {
+            if (GetElevator1BottomLimit() == false)
+                SetElevator1MotorPosition(angle);
+            else
+                SetElevator1Motor(0.0);
+            if (GetElevator2BottomLimit() == false)
+                SetElevator2MotorPosition(angle);
+            else
+                SetElevator2Motor(0.0);
+        }
 }
 
 void Elevator::UpdateTelemetry()
