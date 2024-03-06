@@ -9,15 +9,21 @@ RobotContainer::RobotContainer() : swerve(GetLimelight3()), elevator(GetLimeligh
 	NamedCommands::registerCommand("Shoot", GetShootCommand());
 	NamedCommands::registerCommand("Intake", GetIntakeCommand());
 
-	frc::SmartDashboard::PutBoolean("Center Auto", false);
+	frc::SmartDashboard::PutBoolean("2 Note Center Auto", false);
+	frc::SmartDashboard::PutBoolean("Center and Amp", false);
+	frc::SmartDashboard::PutBoolean("Center and Source", false);
 	frc::SmartDashboard::PutBoolean("Amp Auto", false);
 	frc::SmartDashboard::PutBoolean("Source Auto", false);
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand()
 {
-	if (frc::SmartDashboard::GetBoolean("Center Auto", false))
-		return PathPlannerAuto("Copy Center Auto").ToPtr();
+	if (frc::SmartDashboard::GetBoolean("2 Note Center Auto", false))
+		return PathPlannerAuto("2 Note Center Auto").ToPtr();
+	if (frc::SmartDashboard::GetBoolean("Center and Amp", false))
+		return PathPlannerAuto("Center and Amp").ToPtr();
+	if (frc::SmartDashboard::GetBoolean("Center and Source", false))
+		return PathPlannerAuto("Center and Source").ToPtr();
 	if (frc::SmartDashboard::GetBoolean("Amp Auto", false))
 		return PathPlannerAuto("Amp Auto").ToPtr();
 	if (frc::SmartDashboard::GetBoolean("Source Auto", false))
@@ -53,7 +59,7 @@ frc2::CommandPtr RobotContainer::GetShootCommand()
 			}
 		).ToPtr().RaceWith
 		(
-			frc2::WaitCommand(3_s).ToPtr()
+			frc2::WaitCommand(1.5_s).ToPtr()
 		)
 	).AndThen
 	(

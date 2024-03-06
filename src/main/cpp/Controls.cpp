@@ -1,5 +1,7 @@
 #include "Controls.h"
 
+bool noteInBot = false;
+
 Controls::Controls(Drivetrain *swerve, Shooter *shooter, Intake *intake, Elevator *elevator, Feeder *feeder, Limelight *limelight3)
 {
     this->swerve = swerve;
@@ -54,9 +56,31 @@ void Controls::DriveControls()
 
 void Controls::ShooterControls()
 {
+    switch (GetSelectedRotaryIndex())
+    {
+        case 5:
+            shooter->SetAmpSpeed(0.40);
+            break;
+        case 6:
+            shooter->SetAmpSpeed(0.3);
+            break;
+        case 7:
+            shooter->SetAmpSpeed(0.375);
+            break;
+        case 8:
+            shooter->SetAmpSpeed(0.325);
+            break;
+        default:
+            shooter->SetAmpSpeed(0.35);
+            break;
+    }
     if (controlBoard.GetRawButton(ControlBoardConstants::SHOOTER_MOTORS))
     {
-        if (GetSelectedRotaryIndex() == ControlBoardConstants::POS_AMP)
+        if (GetSelectedRotaryIndex() == ControlBoardConstants::POS_AMP 
+        || GetSelectedRotaryIndex() == 5 
+        || GetSelectedRotaryIndex() == 6 
+        || GetSelectedRotaryIndex() == 7 
+        || GetSelectedRotaryIndex() == 8)
             shooter->ShootAtAmp();
         else
             shooter->ShootAtSpeaker();
@@ -72,7 +96,12 @@ void Controls::ShooterControls()
 void Controls::IntakeControls()
 {
     if (controlBoard.GetRawButton(ControlBoardConstants::GROUND_INTAKE))
-        intake->IntakeFromGround();
+    {
+        if (noteInBot == false)
+            intake->IntakeFromGround();
+        else
+            intake->SetIntakeMotor(-0.1);
+    }
     else if (controlBoard.GetRawButton(ControlBoardConstants::PURGE))
         intake->Purge();
     else
@@ -147,8 +176,17 @@ void Controls::ElevatorControls()
             case ControlBoardConstants::POS_AMP:
                 angle = elevator->GetAmpAngle();
                 break;
-            case ControlBoardConstants::POS_TRAP:
-                angle = elevator->GetTrapAngle();
+            case 5:
+                angle = elevator->GetAmpAngle();
+                break;
+            case 6:
+                angle = elevator->GetAmpAngle();
+                break;
+            case 7:
+                angle = elevator->GetAmpAngle();
+                break;
+            case 8:
+                angle = elevator->GetAmpAngle();
                 break;
             // Default is the close angle
             default:
@@ -183,8 +221,16 @@ void Controls::FeederControls()
     }
     else if (controlBoard.GetRawButton(ControlBoardConstants::GROUND_INTAKE))
     {
-        if (feeder->IntakeFromGround()) RumbleGamepad();
-        else StopRumble();
+        if (feeder->IntakeFromGround()) 
+        {
+            RumbleGamepad();
+            noteInBot = true;
+        }
+        else
+        {
+            StopRumble();
+            noteInBot = false;
+        }
     }
     else if (controlBoard.GetRawButton(ControlBoardConstants::PURGE))
         feeder->Purge();
