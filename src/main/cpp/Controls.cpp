@@ -59,19 +59,19 @@ void Controls::ShooterControls()
     switch (GetSelectedRotaryIndex())
     {
         case 5:
-            shooter->SetAmpSpeed(0.40);
+            shooter->SetAmpRPM(2500);
             break;
         case 6:
-            shooter->SetAmpSpeed(0.3);
+            shooter->SetAmpRPM(2400);
             break;
         case 7:
-            shooter->SetAmpSpeed(0.375);
+            shooter->SetAmpRPM(2100);
             break;
         case 8:
-            shooter->SetAmpSpeed(0.325);
+            shooter->SetAmpRPM(2000);
             break;
         default:
-            shooter->SetAmpSpeed(0.35);
+            shooter->SetAmpRPM(2200);
             break;
     }
     if (controlBoard.GetRawButton(ControlBoardConstants::SHOOTER_MOTORS))

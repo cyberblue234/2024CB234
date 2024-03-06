@@ -59,7 +59,7 @@ frc2::CommandPtr RobotContainer::GetShootCommand()
 			}
 		).ToPtr().RaceWith
 		(
-			frc2::WaitCommand(1.5_s).ToPtr()
+			frc2::WaitCommand(1.0_s).ToPtr()
 		)
 	).AndThen
 	(

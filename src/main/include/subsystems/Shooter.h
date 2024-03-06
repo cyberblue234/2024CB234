@@ -40,13 +40,13 @@ public:
     void SetShooterMotor2RPM(double rpm) { shooter2PID.SetReference(rpm, rev::CANSparkLowLevel::ControlType::kVelocity); };
 
     void SetSpeakerRPM(double rpm) { speakerRPM = rpm; };
-    void SetAmpSpeed(double speed) { ampSpeed = speed; };
+    void SetAmpRPM(double rpm) { ampRPM = rpm; };
 
     double GetAverageRPM() { return (GetShooter1RPM() + GetShooter2RPM()) / 2.0; };
     double GetShooter1RPM() { return shooter1Encoder.GetVelocity(); };
     double GetShooter2RPM() { return shooter2Encoder.GetVelocity(); };
     double GetSpeakerRPM() { return speakerRPM; };
-    double GetAmpSpeed() { return ampSpeed; };
+    double GetAmpRPM() { return ampRPM; };
 
     double GetIntakeSpeed() { return intakeSpeed; };
 
@@ -59,6 +59,6 @@ private:
     rev::SparkPIDController shooter2PID = shooter2Motor.GetPIDController();
 
     double speakerRPM = 4500;
-    double ampSpeed = 0.35;
+    double ampRPM = 2200;
     double intakeSpeed = 0.25;
 };
