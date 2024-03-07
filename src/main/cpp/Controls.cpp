@@ -59,19 +59,19 @@ void Controls::ShooterControls()
     switch (GetSelectedRotaryIndex())
     {
         case 5:
-            shooter->SetAmpRPM(2500);
+            shooter->SetAmpRPM(2200);
             break;
         case 6:
-            shooter->SetAmpRPM(2400);
-            break;
-        case 7:
             shooter->SetAmpRPM(2100);
             break;
+        case 7:
+            shooter->SetAmpRPM(1900);
+            break;
         case 8:
-            shooter->SetAmpRPM(2000);
+            shooter->SetAmpRPM(1800);
             break;
         default:
-            shooter->SetAmpRPM(2200);
+            shooter->SetAmpRPM(1700);
             break;
     }
     if (controlBoard.GetRawButton(ControlBoardConstants::SHOOTER_MOTORS))
@@ -203,7 +203,11 @@ void Controls::FeederControls()
 {
     if (controlBoard.GetRawButton(ControlBoardConstants::SHOOT))
     {
-        if (GetSelectedRotaryIndex() == ControlBoardConstants::POS_AMP)
+        if (GetSelectedRotaryIndex() == ControlBoardConstants::POS_AMP
+        || GetSelectedRotaryIndex() == 5 
+        || GetSelectedRotaryIndex() == 6 
+        || GetSelectedRotaryIndex() == 7 
+        || GetSelectedRotaryIndex() == 8)
             feeder->ShootAtAmp();
         else if (GetSelectedRotaryIndex() != ControlBoardConstants::MANUAL_SCORE)
         {

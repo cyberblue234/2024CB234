@@ -59,6 +59,6 @@ private:
     rev::SparkPIDController shooter2PID = shooter2Motor.GetPIDController();
 
     double speakerRPM = 4500;
-    double ampRPM = 2200;
+    double ampRPM = 2000;
     double intakeSpeed = 0.25;
 };
