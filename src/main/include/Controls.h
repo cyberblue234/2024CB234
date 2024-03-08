@@ -9,6 +9,7 @@
 #include "subsystems/Feeder.h"
 #include "subsystems/Elevator.h"
 #include "subsystems/Limelight.h"
+#include <ctre/phoenix6/Orchestra.hpp>
 
 class Controls : frc2::SubsystemBase
 {

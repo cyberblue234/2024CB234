@@ -75,6 +75,9 @@ public:
     void ResetElevator2Encoder() { elevator2Motor.SetPosition(units::angle::turn_t(0.0)); };
 
     double GetHardEncoderLimit() { return hardEncoderLimit; };
+
+    hardware::TalonFX *GetElevator1Motor() { return &elevator1Motor; };
+    hardware::TalonFX *GetElevator2Motor() { return &elevator2Motor; };
     
     void UpdateTelemetry();
 

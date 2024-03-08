@@ -2,7 +2,7 @@
 
 bool noteInBot = false;
 
-Controls::Controls(Drivetrain *swerve, Shooter *shooter, Intake *intake, Elevator *elevator, Feeder *feeder, Limelight *limelight3)
+Controls::Controls(Drivetrain *swerve, Shooter *shooter, Intake *intake, Elevator *elevator, Feeder *feeder, Limelight *limelight3, ctre::phoenix6::Orchestra *orchestra)
 {
     this->swerve = swerve;
     this->shooter = shooter;
@@ -10,14 +10,13 @@ Controls::Controls(Drivetrain *swerve, Shooter *shooter, Intake *intake, Elevato
     this->feeder = feeder;
     this->elevator = elevator;
     this->limelight3 = limelight3;
+    this->orchestra = orchestra;
 }
 
 void Controls::Periodic()
 {
     SetSelectedRotaryIndex(AnalogToRotaryIndex(controlBoard.GetX()));
-    frc::SmartDashboard::PutNumber("Control Board X", controlBoard.GetX());
-
-    frc::SmartDashboard::PutNumber("Rotary Index", GetSelectedRotaryIndex());
+    
     DriveControls();
     ShooterControls();
     IntakeControls();
@@ -44,9 +43,14 @@ void Controls::DriveControls()
     if (swerve->IsAlignmentOn())
         swerve->AlignSwerveDrive();
     else if (controlBoard.GetRawButton(ControlBoardConstants::ANCHOR))
+    {
         swerve->SetAnchorState();
+        orchestra->Play();
+    }
     else
     {
+        if (orchestra->IsPlaying())
+            orchestra->Pause();
         double rot = swerve->RotationControl(gamepad.GetRightX(), 
                                 controlBoard.GetRawButton(ControlBoardConstants::SHOOT) 
                                 && GetSelectedRotaryIndex() != ControlBoardConstants::MANUAL_SCORE);

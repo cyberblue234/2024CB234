@@ -176,14 +176,6 @@ void Drivetrain::UpdateTelemetry()
     frc::SmartDashboard::PutNumber("BR Swerve Pos", backRight.GetSwervePosition());
 }
 
-void Drivetrain::SetDriveOpenLoopRamp(double ramp)
-{
-    frontLeft.SetDriveOpenLoopRamp(ramp);
-    frontRight.SetDriveOpenLoopRamp(ramp);
-    backLeft.SetDriveOpenLoopRamp(ramp);
-    backRight.SetDriveOpenLoopRamp(ramp);
-}
-
 void Drivetrain::ResetCancoders()
 {
     frontLeft.ResetCanCoder();

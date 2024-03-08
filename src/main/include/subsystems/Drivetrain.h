@@ -4,6 +4,7 @@
 #define _DRIVETRAIN_H
 
 #include <numbers>
+#include <vector>
 
 #include <frc/XboxController.h>
 #include <frc/DriverStation.h>
@@ -66,8 +67,6 @@ public:
 
     void UpdateTelemetry();
 
-    // Sets all of the motors ramp (the minimun time to accelerate to full throttle)
-    void SetDriveOpenLoopRamp(double ramp);
     // Sets the bool that determines if the robot drives field or robot relative
     void SetFieldRelative(bool isFieldRelative) { fieldRelative = isFieldRelative; };
     // Resets all of the motors swerve cancoders
@@ -123,6 +122,30 @@ public:
     double GetBLSwerveCurrent() { return backLeft.GetSwerveCurrent(); };
     // Returns the current being pulled by the back right swerve motor
     double GetBRSwerveCurrent() { return backRight.GetSwerveCurrent(); };
+
+    // Returns a pointer to the front left module
+    SwerveModule *GetFrontLeftModule() { return &frontLeft; };
+    // Returns a pointer to the front right module
+    SwerveModule *GetFrontRightModule() { return &frontRight; };
+    // Returns a pointer to the back left module
+    SwerveModule *GetBackLeftModule() { return &backLeft; };
+    // Returns a pointer to the back right module
+    SwerveModule *GetBackRightModule() { return &backRight; };
+
+    std::vector<ctre::hardware::TalonFX *> GetAllMotors()
+    {
+        return std::vector<ctre::hardware::TalonFX *>
+        {
+            frontLeft.GetDriveMotor(),
+            frontLeft.GetSwerveMotor(),
+            frontRight.GetDriveMotor(),
+            frontRight.GetSwerveMotor(),
+            backLeft.GetDriveMotor(),
+            backLeft.GetSwerveMotor(),
+            backRight.GetDriveMotor(),
+            backRight.GetSwerveMotor()
+        }
+    }
 
     // Resets all drive motor encoders
     void ResetDriveEncoders();

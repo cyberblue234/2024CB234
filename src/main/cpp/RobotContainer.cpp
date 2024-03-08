@@ -4,7 +4,7 @@ using namespace pathplanner;
 
 RobotContainer::RobotContainer() : swerve(GetLimelight3()), elevator(GetLimelight3()), limelight3("limelight"), limelight2("limelight-intake"),
 								   pdp(1, frc::PowerDistribution::ModuleType::kRev),
-								   controls(GetSwerve(), GetShooter(), GetIntake(), GetElevator(), GetFeeder(), GetLimelight3())
+								   controls(GetSwerve(), GetShooter(), GetIntake(), GetElevator(), GetFeeder(), GetLimelight3(), GetOrchestra())
 {
 	NamedCommands::registerCommand("Shoot", GetShootCommand());
 	NamedCommands::registerCommand("Intake", GetIntakeCommand());
@@ -14,6 +14,12 @@ RobotContainer::RobotContainer() : swerve(GetLimelight3()), elevator(GetLimeligh
 	frc::SmartDashboard::PutBoolean("Center and Source", false);
 	frc::SmartDashboard::PutBoolean("Amp Auto", false);
 	frc::SmartDashboard::PutBoolean("Source Auto", false);
+
+	std::vector<ctre::hardware::TalonFX *> allTalons = swerve.GetAllMotors();
+	allTalons.push_back(elevator.GetElevator1Motor());
+	allTalons.push_back(elevator.GetElevator2Motor());
+	orchestra = ctre::phoenix6::Orchestra::Orchestra(allTalons);
+	orchestra.LoadMusic("Anchor Music");
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand()

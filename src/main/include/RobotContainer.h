@@ -22,6 +22,7 @@
 #include "subsystems/Feeder.h"
 #include "subsystems/Elevator.h"
 #include "subsystems/Limelight.h"
+#include <ctre/phoenix6/Orchestra.hpp>
 #include "Controls.h"
 
 class RobotContainer
@@ -47,6 +48,7 @@ public:
 	Feeder *GetFeeder() { return &feeder; };
 	Limelight *GetLimelight3() { return &limelight3; };
 	Limelight *GetLimelight2() { return &limelight2; };
+	ctre::phoenix6::Orchestra *GetOrchestra() { return orchestra; };
 
 	void LogTeleopData();
 	void LogAutoData();
@@ -59,6 +61,8 @@ private:
 	Feeder feeder;
 	Limelight limelight3;
 	Limelight limelight2;
+
+	ctre::phoenix6::Orchestra orchestra;
 
 	frc::PowerDistribution pdp;
 

@@ -20,7 +20,16 @@ SwerveModule::SwerveModule(int driveMotorChannel, int swerveMotorChannel, int ca
     swerveMotorOutput.WithInverted(signals::InvertedValue::Clockwise_Positive);
     swerveMotorConfig.WithMotorOutput(swerveMotorOutput);
 
-    // TODO: find replacement
+    configs::CurrentLimitConfigs swerveCurrentLimit{};
+    swerveCurrentLimit.WithStatorCurrentLimit(120);
+    swerveCurrentLimit.WithStatorCurrentLimitEnable(true);
+    swerveMotorConfig.WithCurrentLimits(swerveCurrentLimit);
+
+    configs::OpenLoopRampsConfigs swerveMotorOpenLoopRamps{};
+    swerveMotorOpenLoopRamps.WithDutyCycleOpenLoopRampPeriod(0.025);
+    swerveMotorConfig.WithOpenLoopRamps(swerveMotorOpenLoopRamps);
+
+    // TODO: find replacement -- try configs::MotorOutputConfigs::WithPeakForwardDutyCycle and configs::MotorOutputConfigs::WithPeakReverseDutyCycle
     // swerveMotor.ConfigVoltageCompSaturation(11.0);
     // swerveMotor.EnableVoltageCompensation(true);
 
@@ -48,6 +57,15 @@ SwerveModule::SwerveModule(int driveMotorChannel, int swerveMotorChannel, int ca
     configs::MotorOutputConfigs driveMotorOutput{};
     driveMotorOutput.WithNeutralMode(signals::NeutralModeValue::Brake);
     driveMotorConfig.WithMotorOutput(driveMotorOutput);
+
+    configs::CurrentLimitConfigs driveCurrentLimit{};
+    driveCurrentLimit.WithStatorCurrentLimit(120);
+    driveCurrentLimit.WithStatorCurrentLimitEnable(true);
+    driveMotorConfig.WithCurrentLimits(driveCurrentLimit);
+
+    configs::OpenLoopRampsConfigs driveMotorOpenLoopRamps{};
+    driveMotorOpenLoopRamps.WithDutyCycleOpenLoopRampPeriod(0.025);
+    driveMotorConfig.WithOpenLoopRamps(driveMotorOpenLoopRamps);
 
     driveMotor.GetConfigurator().Apply(driveMotorConfig);
 
@@ -114,15 +132,6 @@ void SwerveModule::SetDesiredState(const frc::SwerveModuleState desiredState, do
 
     percentSpeed = optimizedState.speed / DrivetrainConstants::MAX_SPEED;
     driveMotor.Set(percentSpeed * speedAdjustment);
-}
-
-void SwerveModule::SetDriveOpenLoopRamp(double ramp)
-{
-    configs::TalonFXConfiguration driveMotorConfig{};
-    configs::OpenLoopRampsConfigs driveMotorOpenLoopRamps{};
-    driveMotorOpenLoopRamps.WithDutyCycleOpenLoopRampPeriod(ramp);
-    driveMotorConfig.WithOpenLoopRamps(driveMotorOpenLoopRamps);
-    driveMotor.GetConfigurator().Apply(driveMotorConfig);
 }
 
 void SwerveModule::SetDrivePIDF(double P, double I, double D, double FF)
