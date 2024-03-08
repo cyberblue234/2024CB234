@@ -28,6 +28,7 @@ void Robot::AutonomousInit()
 
 void Robot::AutonomousPeriodic() 
 {
+	container.LogAutoData();
 }
 
 void Robot::TeleopInit()
@@ -42,7 +43,7 @@ void Robot::TeleopInit()
 
 void Robot::TeleopPeriodic()
 {
-	container.RunTeleop();
+	container.LogTeleopData();
 }
 
 void Robot::TestPeriodic() {}

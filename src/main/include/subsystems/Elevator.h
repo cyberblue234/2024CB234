@@ -5,6 +5,7 @@
 #include "frc/geometry/Pose2d.h"
 #include <frc/DigitalInput.h>
 #include <frc/DutyCycleEncoder.h>
+#include <frc/controller/PIDController.h>
 #include "rev/CANSparkMax.h"
 #include <ctre/phoenix6/TalonFX.hpp>
 #include <ctre/phoenix6/configs/Configurator.hpp>
@@ -21,16 +22,23 @@ public:
     Elevator(Limelight *);
     void Periodic() override;
 
-    void AlignShooterToSpeaker();
     double CalculateSpeakerAngle();
+
+    void ElevatorControl(double angle);
+
+    void ToIntakeAngle() { ElevatorControl(intakeAngle); };
+    void ToSubwooferAngle() { ElevatorControl(closeAngle); };
+    void ToCalculatedAngle() { ElevatorControl(CalculateSpeakerAngle()); };
 
     void SetElevatorMotorsPosition(double pos) 
     { 
         SetElevator1MotorPosition(pos);
         SetElevator2MotorPosition(pos);
     };
-    void SetElevator1MotorPosition(double pos) { /*elevator1PID.SetReference(pos, rev::CANSparkLowLevel::ControlType::kPosition);*/ };
-    void SetElevator2MotorPosition(double pos) { /*elevator2PID.SetReference(pos, rev::CANSparkLowLevel::ControlType::kPosition);*/ };
+    void SetElevator1MotorPosition(double pos) { SetElevator1Motor(ElevatorPIDCalculate(pos)); };
+    void SetElevator2MotorPosition(double pos) { SetElevator2Motor(ElevatorPIDCalculate(pos)); };
+
+    double ElevatorPIDCalculate(double pos) { return elevatorPID.Calculate(GetShooterAngle(), pos); };
     
     void SetElevatorMotors(double power) 
     { 
@@ -40,8 +48,8 @@ public:
     void SetElevator1Motor(double power) { elevator1Motor.Set(power); };
     void SetElevator2Motor(double power) { elevator2Motor.Set(power); };
 
-    double GetShooterAngle() { return shooterAngleEncoder.GetDistance(); };
-    double GetShooterAngleRevolutions() { return (double)shooterAngleEncoder.Get(); };
+    double GetShooterAngle() { return shooterAngleEncoder.GetDistance() - 15; };
+    double GetShooterAngleRevolutions() { return (double)shooterAngleEncoder.Get() - (15 / 360); };
     double GetElevatorSpeed() { return elevatorSpeed; };
     double GetAlignmentDifference() { return alignmentDifference; };
     double GetAmpAngle() { return ampAngle; };
@@ -56,15 +64,24 @@ public:
     bool GetElevator2TopLimit() { return elevator2TopLimit.Get(); };
     bool GetElevator2BottomLimit() { return elevator2BottomLimit.Get(); };
 
+    double GetElevator1MotorRPM() { return elevator1Motor.GetVelocity().GetValueAsDouble(); };
+    double GetElevator2MotorRPM() { return elevator2Motor.GetVelocity().GetValueAsDouble(); };
+
+    void ResetShooterEncoder() { shooterAngleEncoder.Reset(); };
+
+    double GetElevator1Encoder() { return elevator1Motor.GetPosition().GetValueAsDouble(); };
+    double GetElevator2Encoder() { return elevator2Motor.GetPosition().GetValueAsDouble(); };
+    void ResetElevator1Encoder() { elevator1Motor.SetPosition(units::angle::turn_t(0.0)); };
+    void ResetElevator2Encoder() { elevator2Motor.SetPosition(units::angle::turn_t(0.0)); };
+
+    double GetHardEncoderLimit() { return hardEncoderLimit; };
+    
     void UpdateTelemetry();
 
 private:
     hardware::TalonFX elevator1Motor{RobotMap::ELEVATOR_MOTOR1_ADDRESS, "rio"};
     hardware::TalonFX elevator2Motor{RobotMap::ELEVATOR_MOTOR2_ADDRESS, "rio"};
-    //rev::SparkPIDController elevator1PID = elevator1Motor.GetPIDController();
-    //rev::SparkPIDController elevator2PID = elevator2Motor.GetPIDController();
-    //rev::SparkRelativeEncoder elevator1Encoder = elevator1Motor.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor);
-    //rev::SparkRelativeEncoder elevator2Encoder = elevator2Motor.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor);
+    frc::PIDController elevatorPID{ElevatorConstants::kElevatorP, ElevatorConstants::kElevatorI, ElevatorConstants::kElevatorD, 20_ms};
 
     frc::DutyCycleEncoder shooterAngleEncoder{RobotMap::SHOOTER_ENCODER_ADDRESS};
 
@@ -78,10 +95,12 @@ private:
     double elevatorSpeed = 1.0;
     double alignmentDifference = 0;
     // Should be a constant eventually
-    double ampAngle = 22;
-    double closeAngle = 50;
-    double midAngle = 30;
-    double stageAngle = 30;
-    double trapAngle = 30;
-    double intakeAngle = 45;
+    double ampAngle = -44;
+    double closeAngle = -52;
+    double midAngle = -44;
+    double stageAngle = -30;
+    double trapAngle = -30;
+    double intakeAngle = -44;
+
+    double hardEncoderLimit = 130;
 };

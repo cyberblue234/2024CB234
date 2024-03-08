@@ -163,7 +163,7 @@ private:
 
     int time = 0;
 
-    frc::PIDController rotationController{DrivetrainConstants::kRotationP, DrivetrainConstants::kRotationP, DrivetrainConstants::kRotationI, 20_ms};
+    frc::PIDController rotationController{DrivetrainConstants::kRotationP, DrivetrainConstants::kRotationI, DrivetrainConstants::kRotationD, 20_ms};
 };
 
 #endif

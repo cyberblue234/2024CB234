@@ -103,22 +103,22 @@ namespace ShooterConstants
     inline constexpr double kShooterI = 0.0;
     inline constexpr double kShooterD = 0.000022;
     inline constexpr double kShooterF = 0.000185;
-
-    inline constexpr double SHOOTER_ANGLE_OFFSET = 0.0;
 }
 
 namespace ElevatorConstants
 {
-    inline constexpr double kElevatorP = 0.0;
+    inline constexpr double kElevatorP = 0.075;
     inline constexpr double kElevatorI = 0.0;
-    inline constexpr double kElevatorD = 0.0;
+    inline constexpr double kElevatorD = 0.005;
     inline constexpr double kElevatorF = 0.0;
 
-    inline constexpr double kForce = 45.0;
+    inline constexpr double kForce = 44.0;
     inline constexpr double kKickup = 1.0;
     inline constexpr double kGravity = 9.8;
 
     inline constexpr double kSpeakerHeight = 1.0914; // Speaker height to target in meters
+
+    inline constexpr double SHOOTER_ANGLE_OFFSET = 52.0 / 360;
 
     inline constexpr double kRotationsPerDegree = 0.0;
 }

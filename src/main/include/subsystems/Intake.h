@@ -17,6 +17,7 @@ public:
     void Purge() { SetIntakeMotor(-1.0); };
     void SetIntakeMotor(double power) { intake.Set(power); };
     void UpdateTelemetry();
+    double GetIntakeMotorRPM() { return intakeEncoder.GetVelocity(); };
     double GetGroundSpeed() { return groundSpeed; };
 
 private:
