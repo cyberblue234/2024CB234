@@ -40,8 +40,6 @@ public:
 		limelight3.UpdateTelemetry();
 	};
 
-	void RunTeleop();
-
 	Drivetrain *GetSwerve() { return &swerve; };
 	Shooter *GetShooter() { return &shooter; };
 	Intake *GetIntake() { return &intake; };
@@ -51,6 +49,7 @@ public:
 	Limelight *GetLimelight2() { return &limelight2; };
 
 	void LogTeleopData();
+	void LogAutoData();
 
 private:
 	Drivetrain swerve;

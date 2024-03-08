@@ -98,7 +98,7 @@ void Drivetrain::DriveWithInput(double fwd, double stf, double rot, bool limitSp
     // Get the rate of angular rotation. Needs to be inverted. Remember CCW is positive in mathematics.
     auto rotation = units::radians_per_second_t(-rot * DrivetrainConstants::MAX_ANGULAR_SPEED);
 
-    frc::Rotation2d heading = odometry.GetEstimatedPosition().Rotation().RotateBy(frc::Rotation2d(units::angle::degree_t(180)));
+    frc::Rotation2d heading = gyro.GetRotation2d(); //odometry.GetEstimatedPosition().Rotation().RotateBy(frc::Rotation2d(units::angle::degree_t(180)));
     auto speeds = fieldRelative ? frc::ChassisSpeeds::FromFieldRelativeSpeeds(ySpeed, xSpeed, rotation, heading)
                                 : frc::ChassisSpeeds{ySpeed, xSpeed, rotation};
 
@@ -137,11 +137,6 @@ double Drivetrain::RotationControl(double rotInput, bool alignToAprilTag)
         rotInput = -rotationController.Calculate(limelight3->GetAprilTagOffset(), 0);
         return rotInput;
     }
-    // else if (abs(rotInput) < 0.05)
-    // {
-    //     rotInput = rotationController.Calculate((double)gyro.GetRotation2d().Degrees(), lastGyroYaw);
-    //     return std::clamp(rotInput, -1.0, 1.0);
-    // }
     else
     {
         limelight3->SetPipelineID(Limelight::kAprilTag);
@@ -156,6 +151,19 @@ void Drivetrain::AlignToSpeaker()
     DriveWithInput(0.0, 0.0, RotationControl(0, true), false);    
 }
 
+void Drivetrain::SetAnchorState()
+{
+    frc::SwerveModuleState fl = {0_mps, frc::Rotation2d(units::angle::degree_t(45))};
+    frc::SwerveModuleState fr = {0_mps, frc::Rotation2d(units::angle::degree_t(-45))};
+    frc::SwerveModuleState bl = {0_mps, frc::Rotation2d(units::angle::degree_t(-45))};
+    frc::SwerveModuleState br = {0_mps, frc::Rotation2d(units::angle::degree_t(45))};
+
+    frontLeft.SetDesiredState(fl, 0.0);
+    frontRight.SetDesiredState(fr, 0.0);
+    backLeft.SetDesiredState(bl, 0.0);
+    backRight.SetDesiredState(br, 0.0);
+}
+
 void Drivetrain::UpdateTelemetry()
 {
     frc::SmartDashboard::PutNumber("Odometry X", (double)GetPose().X());
@@ -166,26 +174,6 @@ void Drivetrain::UpdateTelemetry()
     frc::SmartDashboard::PutNumber("FR Swerve Pos", frontRight.GetSwervePosition());
     frc::SmartDashboard::PutNumber("BL Swerve Pos", backLeft.GetSwervePosition());
     frc::SmartDashboard::PutNumber("BR Swerve Pos", backRight.GetSwervePosition());
-
-    frc::SmartDashboard::PutNumber("FL Desired", frontLeft.GetDesiredCount());
-    frc::SmartDashboard::PutNumber("FR Desired", frontRight.GetDesiredCount());
-    frc::SmartDashboard::PutNumber("BL Desired", backLeft.GetDesiredCount());
-    frc::SmartDashboard::PutNumber("BR Desired", backRight.GetDesiredCount());
-
-    frc::SmartDashboard::PutNumber("FL Delta", frontLeft.GetDeltaCount());
-    frc::SmartDashboard::PutNumber("FR Delta", frontRight.GetDeltaCount());
-    frc::SmartDashboard::PutNumber("BL Delta", backLeft.GetDeltaCount());
-    frc::SmartDashboard::PutNumber("BR Delta", backRight.GetDeltaCount());
-
-    frc::SmartDashboard::PutNumber("FL Delta Angle", frontLeft.GetDeltaAngle());
-    frc::SmartDashboard::PutNumber("FR Delta Angle", frontRight.GetDeltaAngle());
-    frc::SmartDashboard::PutNumber("BL Delta Angle", backLeft.GetDeltaAngle());
-    frc::SmartDashboard::PutNumber("BR Delta Angle", backRight.GetDeltaAngle());
-
-    frc::SmartDashboard::PutNumber("FL Current Count", frontLeft.GetCurrentCount());
-    frc::SmartDashboard::PutNumber("FR Current Count", frontRight.GetCurrentCount());
-    frc::SmartDashboard::PutNumber("BL Current Count", backLeft.GetCurrentCount());
-    frc::SmartDashboard::PutNumber("BR Current Count", backRight.GetCurrentCount());
 }
 
 void Drivetrain::SetDriveOpenLoopRamp(double ramp)

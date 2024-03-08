@@ -11,11 +11,12 @@ class Feeder : frc2::SubsystemBase
 {
 public:
     Feeder();
-    void IntakeFromGround();
-    void IntakeFromSource();
+    bool IntakeFromGround();
+    bool IntakeFromSource();
     void ShootAtSpeaker();
     void ShootAtAmp();
     void SensorControl();
+    void Purge() { SetFeedMotor(-1.0); };
     void SetFeedMotor(double power) { feedMotor.Set(power); };
 
     double GetFeedMotorRPM() { return feedMotorEncoder.GetVelocity(); }

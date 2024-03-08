@@ -37,6 +37,12 @@
           }
         },
         {
+          "type": "path",
+          "data": {
+            "pathName": "Amp Side End"
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "Shoot"

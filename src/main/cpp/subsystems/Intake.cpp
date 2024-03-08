@@ -3,7 +3,6 @@
 Intake::Intake()
 {
     intake.RestoreFactoryDefaults();
-    frc::SmartDashboard::PutNumber("Intake Ground Speed", groundSpeed);
 }
 
 void Intake::Periodic()
@@ -13,7 +12,6 @@ void Intake::Periodic()
 
 void Intake::IntakeFromGround()
 {
-    groundSpeed = frc::SmartDashboard::GetNumber("Intake Ground Speed", groundSpeed);
     SetIntakeMotor(groundSpeed);
 }
 

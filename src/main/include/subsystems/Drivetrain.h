@@ -62,6 +62,7 @@ public:
 
     double RotationControl(double rotInput, bool alignToAprilTag);
     void AlignToSpeaker();
+    void SetAnchorState();
 
     void UpdateTelemetry();
 
@@ -71,7 +72,7 @@ public:
     void SetFieldRelative(bool isFieldRelative) { fieldRelative = isFieldRelative; };
     // Resets all of the motors swerve cancoders
     void ResetCancoders();
-    // Resets the gyro, if first time since auton reverses the angle
+    // Resets the gyro
     void ResetGyroAngle();
     // Gets the gyro as a rotation2d
     frc::Rotation2d GetGyro2d() { return gyro.GetRotation2d(); };
@@ -162,7 +163,7 @@ private:
 
     int time = 0;
 
-    frc::PIDController rotationController{DrivetrainConstants::kRotationP, DrivetrainConstants::kRotationP, DrivetrainConstants::kRotationI, 20_ms};
+    frc::PIDController rotationController{DrivetrainConstants::kRotationP, DrivetrainConstants::kRotationI, DrivetrainConstants::kRotationD, 20_ms};
 };
 
 #endif
