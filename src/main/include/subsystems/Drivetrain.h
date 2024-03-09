@@ -132,21 +132,6 @@ public:
     // Returns a pointer to the back right module
     SwerveModule *GetBackRightModule() { return &backRight; };
 
-    std::vector<ctre::hardware::TalonFX *> GetAllMotors()
-    {
-        return std::vector<ctre::hardware::TalonFX *>
-        {
-            frontLeft.GetDriveMotor(),
-            frontLeft.GetSwerveMotor(),
-            frontRight.GetDriveMotor(),
-            frontRight.GetSwerveMotor(),
-            backLeft.GetDriveMotor(),
-            backLeft.GetSwerveMotor(),
-            backRight.GetDriveMotor(),
-            backRight.GetSwerveMotor()
-        }
-    }
-
     // Resets all drive motor encoders
     void ResetDriveEncoders();
     // Sets all motors to a speed of zero

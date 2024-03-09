@@ -15,10 +15,17 @@ RobotContainer::RobotContainer() : swerve(GetLimelight3()), elevator(GetLimeligh
 	frc::SmartDashboard::PutBoolean("Amp Auto", false);
 	frc::SmartDashboard::PutBoolean("Source Auto", false);
 
-	std::vector<ctre::hardware::TalonFX *> allTalons = swerve.GetAllMotors();
-	allTalons.push_back(elevator.GetElevator1Motor());
-	allTalons.push_back(elevator.GetElevator2Motor());
-	orchestra = ctre::phoenix6::Orchestra::Orchestra(allTalons);
+	orchestra.AddInstrument(*swerve.GetFrontLeftModule()->GetDriveMotor());
+	orchestra.AddInstrument(*swerve.GetFrontLeftModule()->GetSwerveMotor());
+	orchestra.AddInstrument(*swerve.GetFrontRightModule()->GetDriveMotor());
+	orchestra.AddInstrument(*swerve.GetFrontRightModule()->GetSwerveMotor());
+	orchestra.AddInstrument(*swerve.GetBackLeftModule()->GetDriveMotor());
+	orchestra.AddInstrument(*swerve.GetBackLeftModule()->GetSwerveMotor());
+	orchestra.AddInstrument(*swerve.GetBackRightModule()->GetDriveMotor());
+	orchestra.AddInstrument(*swerve.GetBackRightModule()->GetSwerveMotor());
+	orchestra.AddInstrument(*elevator.GetElevator1Motor());
+	orchestra.AddInstrument(*elevator.GetElevator2Motor());
+
 	orchestra.LoadMusic("Anchor Music");
 }
 

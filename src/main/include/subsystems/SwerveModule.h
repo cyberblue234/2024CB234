@@ -58,9 +58,9 @@ public:
     // Sets the swerve motor to a provided speed
     void SetSwerveMotor(double speed) { swerveMotor.Set(speed); };
     // Returns a pointer to the drive motor
-    hardware::TalonFX *GetDriveMotor() { return &driveMotor; };
+    const hardware::TalonFX *GetDriveMotor() { return &driveMotor; };
     // Returns a pointer to the swerve motor
-    hardware::TalonFX *GetSwerveMotor() { return &swerveMotor; };
+    const hardware::TalonFX *GetSwerveMotor() { return &swerveMotor; };
     // Resets the swerve motor's cancoder
     void ResetCanCoder() { canCoder.SetPosition(units::angle::turn_t(0)); }
     // Resets the drive motor's encoder

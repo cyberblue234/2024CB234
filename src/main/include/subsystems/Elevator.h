@@ -76,8 +76,8 @@ public:
 
     double GetHardEncoderLimit() { return hardEncoderLimit; };
 
-    hardware::TalonFX *GetElevator1Motor() { return &elevator1Motor; };
-    hardware::TalonFX *GetElevator2Motor() { return &elevator2Motor; };
+    const hardware::TalonFX *GetElevator1Motor() { return &elevator1Motor; };
+    const hardware::TalonFX *GetElevator2Motor() { return &elevator2Motor; };
     
     void UpdateTelemetry();
 

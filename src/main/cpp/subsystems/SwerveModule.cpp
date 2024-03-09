@@ -20,7 +20,7 @@ SwerveModule::SwerveModule(int driveMotorChannel, int swerveMotorChannel, int ca
     swerveMotorOutput.WithInverted(signals::InvertedValue::Clockwise_Positive);
     swerveMotorConfig.WithMotorOutput(swerveMotorOutput);
 
-    configs::CurrentLimitConfigs swerveCurrentLimit{};
+    configs::CurrentLimitsConfigs swerveCurrentLimit{};
     swerveCurrentLimit.WithStatorCurrentLimit(120);
     swerveCurrentLimit.WithStatorCurrentLimitEnable(true);
     swerveMotorConfig.WithCurrentLimits(swerveCurrentLimit);
@@ -58,7 +58,7 @@ SwerveModule::SwerveModule(int driveMotorChannel, int swerveMotorChannel, int ca
     driveMotorOutput.WithNeutralMode(signals::NeutralModeValue::Brake);
     driveMotorConfig.WithMotorOutput(driveMotorOutput);
 
-    configs::CurrentLimitConfigs driveCurrentLimit{};
+    configs::CurrentLimitsConfigs driveCurrentLimit{};
     driveCurrentLimit.WithStatorCurrentLimit(120);
     driveCurrentLimit.WithStatorCurrentLimitEnable(true);
     driveMotorConfig.WithCurrentLimits(driveCurrentLimit);
