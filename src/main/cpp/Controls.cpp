@@ -155,7 +155,7 @@ void Controls::ElevatorControls()
     {
         elevator->ElevatorControl(elevator->GetIntakeAngle());
     }
-    else if (controlBoard.GetRawButton(ControlBoardConstants::SHOOT) && GetSelectedRotaryIndex() != ControlBoardConstants::MANUAL_SCORE)
+    else if (controlBoard.GetRawButton(ControlBoardConstants::SHOOTER_MOTORS) && GetSelectedRotaryIndex() != ControlBoardConstants::MANUAL_SCORE)
     {
     
         double angle;

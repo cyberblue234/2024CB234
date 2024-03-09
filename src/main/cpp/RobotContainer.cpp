@@ -50,16 +50,16 @@ frc2::CommandPtr RobotContainer::GetShootCommand()
 	(
 		[this]
 		{
-			//this->GetSwerve()->AlignToSpeaker();
-			//this->GetElevator()->ElevatorControl(this->GetElevator()->CalculateSpeakerAngle());
+			this->GetSwerve()->AlignToSpeaker();
+			this->GetElevator()->ElevatorControl(this->GetElevator()->CalculateSpeakerAngle());
 			this->GetShooter()->ShootAtSpeaker();
 		}
 	).Until
 	(
 		[this]
 		{
-			bool atAlignment = true; //abs(this->GetLimelight3()->GetAprilTagOffset()) < 0.5;// && abs(this->GetElevator()->GetAlignmentDifference()) < 0.5;
-			return this->GetShooter()->GetShooter1RPM() >= this->GetShooter()->GetSpeakerRPM() - 150 && atAlignment;
+			bool atAlignment = abs(this->GetLimelight3()->GetAprilTagOffset()) < 5.0 && abs(this->GetElevator()->GetShooterAngle() - this->GetElevator()->CalculateSpeakerAngle()) < 0.5;
+			return this->GetShooter()->GetShooter1RPM() >= this->GetShooter()->GetSpeakerRPM() - 100 && atAlignment;
 		}
 	).AndThen
 	(
@@ -96,9 +96,12 @@ frc2::CommandPtr RobotContainer::GetIntakeCommand()
 		{
 			this->GetElevator()->ElevatorControl(this->GetElevator()->GetIntakeAngle());
 		}
-	).ToPtr().RaceWith
+	).ToPtr().Until
 	(
-		frc2::WaitCommand(1.0_s).ToPtr()
+		[this]
+		{
+			return abs(this->GetElevator()->GetShooterAngle() - this->GetElevator()->GetIntakeAngle()) < 0.5;
+		}
 	).AndThen
 	(
 		frc2::RunCommand

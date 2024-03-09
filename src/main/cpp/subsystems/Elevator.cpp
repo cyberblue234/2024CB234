@@ -40,6 +40,7 @@ double Elevator::CalculateSpeakerAngle()
 {
     // Distance from speaker in meters
     auto distance = limelight3->GetDistanceFromTarget();
+    if ((double) distance < 1.45) return -52;
     if ((double) distance < 1.6) return -51;
     if ((double) distance < 1.8) return -49;
     if ((double) distance < 2.0) return intakeAngle;
@@ -55,11 +56,11 @@ void Elevator::ElevatorControl(double angle)
 {
     if (angle > GetShooterAngle()) 
     {
-        if (GetElevator1TopLimit() == false)
+        if (GetElevator1TopLimit() == false && GetElevator1Encoder() < GetHardEncoderLimit())
             SetElevator1MotorPosition(angle);
         else
             SetElevator1Motor(0.0);
-        if (GetElevator2TopLimit() == false)
+        if (GetElevator2TopLimit() == false && GetElevator2Encoder() < GetHardEncoderLimit())
             SetElevator2MotorPosition(angle);
         else
             SetElevator2Motor(0.0);

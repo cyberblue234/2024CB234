@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.9113560946263224,
+        "x": 2.7190686223948486,
         "y": 5.541275082550166
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.6772413030353144,
+        "x": 2.484953830803841,
         "y": 5.456896245717592
       },
       "isLocked": false,
-      "linkedName": "Center Start Begin"
+      "linkedName": "Center Start End"
     },
     {
       "anchor": {
@@ -62,7 +62,7 @@
   "eventMarkers": [
     {
       "name": "New Event Marker",
-      "waypointRelativePos": 0.8,
+      "waypointRelativePos": 0.3,
       "command": {
         "type": "parallel",
         "data": {
@@ -71,12 +71,6 @@
               "type": "named",
               "data": {
                 "name": "Intake"
-              }
-            },
-            {
-              "type": "wait",
-              "data": {
-                "waitTime": 0.4
               }
             }
           ]

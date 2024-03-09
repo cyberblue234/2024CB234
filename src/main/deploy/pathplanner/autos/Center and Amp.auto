@@ -28,28 +28,9 @@
                 }
               },
               {
-                "type": "sequential",
+                "type": "path",
                 "data": {
-                  "commands": [
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "Center Start"
-                      }
-                    },
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 0.25
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "Center End"
-                      }
-                    }
-                  ]
+                  "pathName": "Center Start"
                 }
               }
             ]
@@ -65,18 +46,6 @@
           "type": "path",
           "data": {
             "pathName": "Center 2nd Note"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.1
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Amp Side End"
           }
         },
         {
