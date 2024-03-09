@@ -107,16 +107,16 @@ namespace ShooterConstants
 
 namespace ElevatorConstants
 {
-    inline constexpr double kElevatorP = 0.075;
+    inline constexpr double kElevatorP = 0.1;
     inline constexpr double kElevatorI = 0.0;
-    inline constexpr double kElevatorD = 0.005;
+    inline constexpr double kElevatorD = 0.0065;
     inline constexpr double kElevatorF = 0.0;
 
-    inline constexpr double kForce = 44.0;
+    inline constexpr double kForce = 41.5;
     inline constexpr double kKickup = 1.0;
     inline constexpr double kGravity = 9.8;
 
-    inline constexpr double kSpeakerHeight = 1.0914; // Speaker height to target in meters
+    inline constexpr double kSpeakerHeight = 1.15; //1.0914; // Speaker height to target in meters
 
     inline constexpr double SHOOTER_ANGLE_OFFSET = 52.0 / 360;
 
@@ -148,12 +148,16 @@ namespace ControlBoardConstants
     inline constexpr int POS_MID = 1;
     // Scoring position with the bot touching the stage
     inline constexpr int POS_STAGE = 2;
-    // Scoring position for the amp
-    inline constexpr int POS_AMP = 3;
+    // Scoring position for the amp main
+    inline constexpr int POS_AMP_MAIN = 3;
+    // Scoring position for the amp 2
+    inline constexpr int POS_AMP_2 = 6;
+    // Scoring position for the amp 2
+    inline constexpr int POS_AMP_3 = 7;
+    // Scoring position for the amp 2
+    inline constexpr int POS_AMP_4 = 8;
     // Auto alignment scoring position
     inline constexpr int AUTO_SCORE = 4;
-    // Scoring position for the trap
-    inline constexpr int POS_TRAP = 7;
     // Manual control for angle and elevator
-    inline constexpr int MANUAL_SCORE = 9;
+    inline constexpr int MANUAL_SCORE = 5;
 }

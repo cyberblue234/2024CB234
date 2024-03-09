@@ -9,7 +9,7 @@
 #include <frc/DutyCycleEncoder.h>
 #include <frc/Timer.h>
 #include <frc/DigitalInput.h>
-#include "rev/CANSparkMax.h"
+#include "rev/CANSparkFlex.h"
 #include "Constants.h"
 
 class Shooter : frc2::SubsystemBase
@@ -51,8 +51,8 @@ public:
     double GetIntakeSpeed() { return intakeSpeed; };
 
 private:
-    rev::CANSparkMax shooter1Motor{RobotMap::SHOOTER_MOTOR1_ADDRESS, rev::CANSparkMax::MotorType::kBrushless};
-    rev::CANSparkMax shooter2Motor{RobotMap::SHOOTER_MOTOR2_ADDRESS, rev::CANSparkMax::MotorType::kBrushless};
+    rev::CANSparkFlex shooter1Motor{RobotMap::SHOOTER_MOTOR1_ADDRESS, rev::CANSparkFlex::MotorType::kBrushless};
+    rev::CANSparkFlex shooter2Motor{RobotMap::SHOOTER_MOTOR2_ADDRESS, rev::CANSparkFlex::MotorType::kBrushless};
     rev::SparkRelativeEncoder shooter1Encoder = shooter1Motor.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor);
     rev::SparkRelativeEncoder shooter2Encoder = shooter2Motor.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor);
     rev::SparkPIDController shooter1PID = shooter1Motor.GetPIDController();

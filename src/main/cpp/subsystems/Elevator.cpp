@@ -23,13 +23,6 @@ Elevator::Elevator(Limelight *limelight3)
 
     elevator2Motor.GetConfigurator().Apply(elevator2Config);
 
-    frc::SmartDashboard::PutNumber("Elevator P", ElevatorConstants::kElevatorP);
-    frc::SmartDashboard::PutNumber("Elevator I", ElevatorConstants::kElevatorI);
-    frc::SmartDashboard::PutNumber("Elevator D", ElevatorConstants::kElevatorD);
-    frc::SmartDashboard::PutNumber("Elevator F", ElevatorConstants::kElevatorF);
-
-    frc::SmartDashboard::PutNumber("Elevator Speed", elevatorSpeed);
-    frc::SmartDashboard::PutNumber("Elevator Amp Angle", ampAngle);
     shooterAngleEncoder.SetDistancePerRotation(-360);
 }
 
@@ -47,6 +40,9 @@ double Elevator::CalculateSpeakerAngle()
 {
     // Distance from speaker in meters
     auto distance = limelight3->GetDistanceFromTarget();
+    if ((double) distance < 1.6) return -51;
+    if ((double) distance < 1.8) return -49;
+    if ((double) distance < 2.0) return intakeAngle;
     // Height we are targetting in meters
     double targetHeight = ElevatorConstants::kSpeakerHeight + (((double)distance / ElevatorConstants::kForce) * ElevatorConstants::kGravity);
     // Get the angle we want to go to in order to shoot in radians, then converting it to degrees
@@ -57,28 +53,28 @@ double Elevator::CalculateSpeakerAngle()
 
 void Elevator::ElevatorControl(double angle)
 {
-        if (angle > GetShooterAngle()) 
-        {
-            if (GetElevator1TopLimit() == false)
-                SetElevator1MotorPosition(angle);
-            else
-                SetElevator1Motor(0.0);
-            if (GetElevator2TopLimit() == false)
-                SetElevator2MotorPosition(angle);
-            else
-                SetElevator2Motor(0.0);
-        }
-        if (angle < GetShooterAngle()) 
-        {
-            if (GetElevator1BottomLimit() == false)
-                SetElevator1MotorPosition(angle);
-            else
-                SetElevator1Motor(0.0);
-            if (GetElevator2BottomLimit() == false)
-                SetElevator2MotorPosition(angle);
-            else
-                SetElevator2Motor(0.0);
-        }
+    if (angle > GetShooterAngle()) 
+    {
+        if (GetElevator1TopLimit() == false)
+            SetElevator1MotorPosition(angle);
+        else
+            SetElevator1Motor(0.0);
+        if (GetElevator2TopLimit() == false)
+            SetElevator2MotorPosition(angle);
+        else
+            SetElevator2Motor(0.0);
+    }
+    if (angle < GetShooterAngle()) 
+    {
+        if (GetElevator1BottomLimit() == false)
+            SetElevator1MotorPosition(angle);
+        else
+            SetElevator1Motor(0.0);
+        if (GetElevator2BottomLimit() == false)
+            SetElevator2MotorPosition(angle);
+        else
+            SetElevator2Motor(0.0);
+    }
 }
 
 void Elevator::UpdateTelemetry()

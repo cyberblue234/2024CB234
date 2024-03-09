@@ -35,15 +35,12 @@ Drivetrain::Drivetrain(Limelight *limelight3) : frontLeft(RobotMap::FL_DRIVE_ADD
         this);
 
     this->limelight3 = limelight3;
-
-    frc::SmartDashboard::PutNumber("ROTATION P", DrivetrainConstants::kRotationP);
-    frc::SmartDashboard::PutNumber("ROTATION I", DrivetrainConstants::kRotationI);
-    frc::SmartDashboard::PutNumber("ROTATION D", DrivetrainConstants::kRotationD);
 }
 
 void Drivetrain::Periodic()
 {
-    limelight3->UpdateLimelightTracking();
+    if (time % 5 == 0)
+        limelight3->UpdateLimelightTracking();
     limelight3->UpdateTelemetry();
     odometry.Update(gyro.GetRotation2d(), {frontLeft.GetModulePosition(), frontRight.GetModulePosition(), backLeft.GetModulePosition(), backRight.GetModulePosition()});
     if (limelight3->GetTargetValid() == 1 && abs((double)limelight3->GetRobotPose().X() - (double)odometry.GetEstimatedPosition().X()) < 1)
@@ -51,9 +48,6 @@ void Drivetrain::Periodic()
     if (time < 10)
         ResetPose(limelight3->GetRobotPose());
     time++;
-
-    alignmentOn = frc::SmartDashboard::GetBoolean("ALIGNMENT_ON", false);
-    frc::SmartDashboard::PutBoolean("ALIGNMENT_ON", alignmentOn);
 
     UpdateTelemetry();
 }
@@ -121,8 +115,6 @@ void Drivetrain::Drive(const frc::ChassisSpeeds &speeds)
     frc::SwerveModuleState bl = states[2];
     frc::SwerveModuleState br = states[3];
 
-    frc::SmartDashboard::PutNumber("FL Desired Degrees", (double)fl.angle.Degrees());
-
     frontLeft.SetDesiredState(fl, DrivetrainConstants::FL_DRIVE_ADJUSTMENT);
     frontRight.SetDesiredState(fr, DrivetrainConstants::FR_DRIVE_ADJUSTMENT);
     backLeft.SetDesiredState(bl, DrivetrainConstants::BL_DRIVE_ADJUSTMENT);
@@ -169,11 +161,6 @@ void Drivetrain::UpdateTelemetry()
     frc::SmartDashboard::PutNumber("Odometry X", (double)GetPose().X());
     frc::SmartDashboard::PutNumber("Odometry Y", (double)GetPose().Y());
     frc::SmartDashboard::PutNumber("Odometry Rot", (double)GetPose().Rotation().Degrees());
-
-    frc::SmartDashboard::PutNumber("FL Swerve Pos", frontLeft.GetSwervePosition());
-    frc::SmartDashboard::PutNumber("FR Swerve Pos", frontRight.GetSwervePosition());
-    frc::SmartDashboard::PutNumber("BL Swerve Pos", backLeft.GetSwervePosition());
-    frc::SmartDashboard::PutNumber("BR Swerve Pos", backRight.GetSwervePosition());
 }
 
 void Drivetrain::ResetCancoders()

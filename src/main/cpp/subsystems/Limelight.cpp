@@ -77,8 +77,8 @@ double Limelight::GetAprilTagOffset()
 {
     if (targetpose_robotspace.at(2) == 0.0) return 0.0;
     double offset = atan(targetpose_robotspace.at(0) / targetpose_robotspace.at(2));
-    frc::SmartDashboard::PutNumber("Target Rotatation Offset", offset);
     offset *= 180 / std::numbers::pi;
+    frc::SmartDashboard::PutNumber("Target Rotatation Offset", offset);
     return offset;
 }
 

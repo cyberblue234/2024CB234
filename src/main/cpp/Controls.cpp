@@ -45,12 +45,12 @@ void Controls::DriveControls()
     else if (controlBoard.GetRawButton(ControlBoardConstants::ANCHOR))
     {
         swerve->SetAnchorState();
-        orchestra->Play();
+        // orchestra->Play();
     }
     else
     {
-        if (orchestra->IsPlaying())
-            orchestra->Pause();
+        // if (orchestra->IsPlaying())
+        //     orchestra->Pause();
         double rot = swerve->RotationControl(gamepad.GetRightX(), 
                                 controlBoard.GetRawButton(ControlBoardConstants::SHOOT) 
                                 && GetSelectedRotaryIndex() != ControlBoardConstants::MANUAL_SCORE);
@@ -62,29 +62,25 @@ void Controls::ShooterControls()
 {
     switch (GetSelectedRotaryIndex())
     {
-        case 5:
-            shooter->SetAmpRPM(2200);
+        case ControlBoardConstants::POS_AMP_2:
+            shooter->SetAmpRPM(2300);
             break;
-        case 6:
+        case ControlBoardConstants::POS_AMP_3:
             shooter->SetAmpRPM(2100);
             break;
-        case 7:
-            shooter->SetAmpRPM(1900);
-            break;
-        case 8:
-            shooter->SetAmpRPM(1800);
+        case ControlBoardConstants::POS_AMP_4:
+            shooter->SetAmpRPM(2000);
             break;
         default:
-            shooter->SetAmpRPM(1700);
+            shooter->SetAmpRPM(2200);
             break;
     }
     if (controlBoard.GetRawButton(ControlBoardConstants::SHOOTER_MOTORS))
     {
-        if (GetSelectedRotaryIndex() == ControlBoardConstants::POS_AMP 
-        || GetSelectedRotaryIndex() == 5 
-        || GetSelectedRotaryIndex() == 6 
-        || GetSelectedRotaryIndex() == 7 
-        || GetSelectedRotaryIndex() == 8)
+        if (GetSelectedRotaryIndex() == ControlBoardConstants::POS_AMP_MAIN
+        || GetSelectedRotaryIndex() == ControlBoardConstants::POS_AMP_2
+        || GetSelectedRotaryIndex() == ControlBoardConstants::POS_AMP_3
+        || GetSelectedRotaryIndex() == ControlBoardConstants::POS_AMP_4)
             shooter->ShootAtAmp();
         else
             shooter->ShootAtSpeaker();
@@ -101,7 +97,7 @@ void Controls::IntakeControls()
 {
     if (controlBoard.GetRawButton(ControlBoardConstants::GROUND_INTAKE))
     {
-        if (noteInBot == false)
+        if (noteInBot == false && abs(elevator->GetShooterAngle() - elevator->GetIntakeAngle()) < 0.5)
             intake->IntakeFromGround();
         else
             intake->SetIntakeMotor(-0.1);
@@ -177,26 +173,23 @@ void Controls::ElevatorControls()
             case ControlBoardConstants::POS_STAGE:
                 angle = elevator->GetStageAngle();
                 break;
-            case ControlBoardConstants::POS_AMP:
+            case ControlBoardConstants::POS_AMP_MAIN:
                 angle = elevator->GetAmpAngle();
                 break;
-            case 5:
+            case ControlBoardConstants::POS_AMP_2:
                 angle = elevator->GetAmpAngle();
                 break;
-            case 6:
+            case ControlBoardConstants::POS_AMP_3:
                 angle = elevator->GetAmpAngle();
                 break;
-            case 7:
-                angle = elevator->GetAmpAngle();
-                break;
-            case 8:
+            case ControlBoardConstants::POS_AMP_4:
                 angle = elevator->GetAmpAngle();
                 break;
             // Default is the close angle
             default:
                 angle = elevator->GetCloseAngle();
         }
-
+        frc::SmartDashboard::PutNumber("Desired Elevator Angle", angle);
         elevator->ElevatorControl(angle);
     }
     else
@@ -207,15 +200,18 @@ void Controls::FeederControls()
 {
     if (controlBoard.GetRawButton(ControlBoardConstants::SHOOT))
     {
-        if (GetSelectedRotaryIndex() == ControlBoardConstants::POS_AMP
-        || GetSelectedRotaryIndex() == 5 
-        || GetSelectedRotaryIndex() == 6 
-        || GetSelectedRotaryIndex() == 7 
-        || GetSelectedRotaryIndex() == 8)
+        if (GetSelectedRotaryIndex() == ControlBoardConstants::POS_AMP_MAIN
+        || GetSelectedRotaryIndex() == ControlBoardConstants::POS_AMP_2
+        || GetSelectedRotaryIndex() == ControlBoardConstants::POS_AMP_3
+        || GetSelectedRotaryIndex() == ControlBoardConstants::POS_AMP_4)
             feeder->ShootAtAmp();
         else if (GetSelectedRotaryIndex() != ControlBoardConstants::MANUAL_SCORE)
         {
-            bool atAlignment = abs(limelight3->GetAprilTagOffset()) < 1.0 && abs(elevator->GetAlignmentDifference()) < 0.5;
+            bool swerveAlignment = abs(limelight3->GetAprilTagOffset()) < 5.0;
+            bool elevatorAlignment = abs(elevator->GetShooterAngle() - elevator->CalculateSpeakerAngle()) < 0.5;
+            frc::SmartDashboard::PutBoolean("Swerve Alignment", swerveAlignment);
+            frc::SmartDashboard::PutBoolean("Elevator Alignment", elevatorAlignment);
+            bool atAlignment = swerveAlignment && elevatorAlignment;
             if (shooter->GetShooter1RPM() >= shooter->GetSpeakerRPM() - 100 && atAlignment)
                 feeder->ShootAtSpeaker();
         }
