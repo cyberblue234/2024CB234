@@ -24,13 +24,15 @@ Elevator::Elevator(Limelight *limelight3)
     elevator2Motor.GetConfigurator().Apply(elevator2Config);
 
     shooterAngleEncoder.SetDistancePerRotation(-360);
+
+    elevatorPID.SetTolerance(0.5);
 }
 
 void Elevator::Periodic()
 {
-    if (GetElevator1BottomLimit())
+    if (GetElevator1BottomLimit() && GetElevator1Encoder() > 0.025)
         ResetElevator1Encoder();
-    if (GetElevator2BottomLimit())
+    if (GetElevator2BottomLimit() && GetElevator1Encoder() > 0.025)
         ResetElevator2Encoder();
     UpdateTelemetry();
 }

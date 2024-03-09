@@ -8,36 +8,62 @@
 
 namespace RobotMap
 {
+    // TalonFX
     constexpr int FL_DRIVE_ADDRESS = 8;
+    // TalonFX
     constexpr int FL_SWERVE_ADDRESS = 9;
+    // CANCoder
     constexpr int FL_CANCODER_ADDRESS = 21;
 
+    // TalonFX
     constexpr int FR_DRIVE_ADDRESS = 2;
+    // TalonFX
     constexpr int FR_SWERVE_ADDRESS = 3;
+    // CANCoder
     constexpr int FR_CANCODER_ADDRESS = 22;
 
+    // TalonFX
     constexpr int BL_DRIVE_ADDRESS = 7;
+    // TalonFX
     constexpr int BL_SWERVE_ADDRESS = 6;
+    // CANCoder
     constexpr int BL_CANCODER_ADDRESS = 23;
 
+    // TalonFX
     constexpr int BR_DRIVE_ADDRESS = 4;
+    // TalonFX
     constexpr int BR_SWERVE_ADDRESS = 5;
+    // CANCoder
     constexpr int BR_CANCODER_ADDRESS = 24;
 
+    // Spark Flex
     constexpr int SHOOTER_MOTOR1_ADDRESS = 2;
+    // Spakr Flex
     constexpr int SHOOTER_MOTOR2_ADDRESS = 3;
+    // DIO
     constexpr int SHOOTER_ENCODER_ADDRESS = 0;
 
+    // Spark Max
     constexpr int FEED_MOTOR_ADDRESS = 5;
-    constexpr int FEED_SENSOR_ADDRESS = 1;
+    // DIO
+    constexpr int TOP_FEED_SENSOR_ADDRESS = 1;
+    // DIO
+    constexpr int BOTTOM_FEED_SENSOR_ADDRESS = 2;
 
+    // Spark Max
     constexpr int INTAKE_MOTOR_ADDRESS = 4;
 
+    // TalonFX
     constexpr int ELEVATOR_MOTOR1_ADDRESS = 12;
+    // TalonFX
     constexpr int ELEVATOR_MOTOR2_ADDRESS = 13;
+    // DIO
     constexpr int ELEVATOR1_TOP_LIMIT_SWITCH = 3;
+    // DIO
     constexpr int ELEVATOR1_BOTTOM_LIMIT_SWITCH = 4;
+    // DIO
     constexpr int ELEVATOR2_TOP_LIMIT_SWITCH = 5;
+    // DIO
     constexpr int ELEVATOR2_BOTTOM_LIMIT_SWITCH = 6;
 
 }
@@ -116,7 +142,7 @@ namespace ElevatorConstants
     inline constexpr double kKickup = 1.0;
     inline constexpr double kGravity = 9.8;
 
-    inline constexpr double kSpeakerHeight = 1.15; //1.0914; // Speaker height to target in meters
+    inline constexpr double kSpeakerHeight = 1.15; // Speaker height to target in meters
 
     inline constexpr double SHOOTER_ANGLE_OFFSET = 52.0 / 360;
 
@@ -150,11 +176,11 @@ namespace ControlBoardConstants
     inline constexpr int POS_STAGE = 2;
     // Scoring position for the amp main
     inline constexpr int POS_AMP_MAIN = 3;
-    // Scoring position for the amp 2
+    // Scoring position for the amp speed 2
     inline constexpr int POS_AMP_2 = 6;
-    // Scoring position for the amp 2
+    // Scoring position for the amp speed 3
     inline constexpr int POS_AMP_3 = 7;
-    // Scoring position for the amp 2
+    // Scoring position for the amp speed 4
     inline constexpr int POS_AMP_4 = 8;
     // Auto alignment scoring position
     inline constexpr int AUTO_SCORE = 4;

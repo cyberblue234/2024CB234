@@ -58,7 +58,7 @@ frc2::CommandPtr RobotContainer::GetShootCommand()
 	(
 		[this]
 		{
-			bool atAlignment = abs(this->GetLimelight3()->GetAprilTagOffset()) < 5.0 && abs(this->GetElevator()->GetShooterAngle() - this->GetElevator()->CalculateSpeakerAngle()) < 0.5;
+			bool atAlignment = this->GetSwerve()->AtSetpoint() && this->GetElevator()->AtSetpoint();
 			return this->GetShooter()->GetShooter1RPM() >= this->GetShooter()->GetSpeakerRPM() - 100 && atAlignment;
 		}
 	).AndThen
@@ -100,7 +100,7 @@ frc2::CommandPtr RobotContainer::GetIntakeCommand()
 	(
 		[this]
 		{
-			return abs(this->GetElevator()->GetShooterAngle() - this->GetElevator()->GetIntakeAngle()) < 0.5;
+			return this->GetElevator()->AtSetpoint();
 		}
 	).AndThen
 	(
