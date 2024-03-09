@@ -39,6 +39,8 @@ public:
     void SetElevator2MotorPosition(double pos) { SetElevator2Motor(ElevatorPIDCalculate(pos)); };
 
     double ElevatorPIDCalculate(double pos) { return elevatorPID.Calculate(GetShooterAngle(), pos); };
+
+    bool AtSetpoint() { return elevatorPID.AtSetpoint(); };
     
     void SetElevatorMotors(double power) 
     { 

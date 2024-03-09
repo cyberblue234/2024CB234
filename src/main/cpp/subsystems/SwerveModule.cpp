@@ -12,8 +12,6 @@ SwerveModule::SwerveModule(int driveMotorChannel, int swerveMotorChannel, int ca
     configs::FeedbackConfigs swerveMotorFeedback{};
     swerveMotorFeedback.WithRemoteCANcoder(canCoder);
 
-    // swerveMotorFeedback.WithFeedbackSensorSource(signals::FeedbackSensorSourceValue::RemoteCANcoder);
-    // swerveMotorFeedback.WithFeedbackRemoteSensorID(canCoderChannel);
     swerveMotorConfig.WithFeedback(swerveMotorFeedback);
 
     configs::MotorOutputConfigs swerveMotorOutput{};
@@ -132,24 +130,4 @@ void SwerveModule::SetDesiredState(const frc::SwerveModuleState desiredState, do
 
     percentSpeed = optimizedState.speed / DrivetrainConstants::MAX_SPEED;
     driveMotor.Set(percentSpeed * speedAdjustment);
-}
-
-void SwerveModule::SetDrivePIDF(double P, double I, double D, double FF)
-{
-    // configs::SlotConfigs drivePIDFConfigs{};
-    // drivePIDFConfigs.kP = P;
-    // drivePIDFConfigs.kI = I;
-    // drivePIDFConfigs.kD = D;
-    // drivePIDFConfigs.kV = FF;
-    // driveMotor.GetConfigurator().Apply(drivePIDFConfigs);
-}
-
-void SwerveModule::SetSwervePIDF(double P, double I, double D, double FF)
-{
-    // configs::SlotConfigs swervePIDFConfigs{};
-    // swervePIDFConfigs.kP = P;
-    // swervePIDFConfigs.kI = I;
-    // swervePIDFConfigs.kD = D;
-    // swervePIDFConfigs.kV = FF;
-    // swerveMotor.GetConfigurator().Apply(swervePIDFConfigs);
 }

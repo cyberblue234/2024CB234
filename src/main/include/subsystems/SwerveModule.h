@@ -65,8 +65,6 @@ public:
     void ResetCanCoder() { canCoder.SetPosition(units::angle::turn_t(0)); }
     // Resets the drive motor's encoder
     void ResetEncoder() { driveMotor.SetPosition(units::angle::turn_t(0)); };
-    void SetDrivePIDF(double P, double I, double D, double FF);
-    void SetSwervePIDF(double P, double I, double D, double FF);
 
 private:
     double desiredCount;

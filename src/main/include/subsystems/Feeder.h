@@ -11,11 +11,11 @@ class Feeder : frc2::SubsystemBase
 {
 public:
     Feeder();
-    bool IntakeFromGround();
-    bool IntakeFromSource();
+    void IntakeFromGround();
+    void IntakeFromSource();
     void ShootAtSpeaker();
     void ShootAtAmp();
-    void SensorControl();
+    bool IsNoteSecured() { return GetTopSensorInput() && GetBottomSensorInput(); };
     void Purge() { SetFeedMotor(-1.0); };
     void SetFeedMotor(double power) { feedMotor.Set(power); };
 
@@ -25,13 +25,15 @@ public:
     double GetSpeakerShooterSpeed() { return speakerShooterSpeed; };
     double GetAmpShooterSpeed() { return ampShooterSpeed; };
 
-    bool GetSensorInput() { return feedSensor.Get(); };
+    bool GetTopSensorInput() { return topFeedSensor.Get(); };
+    bool GetBottomSensorInput() { return bottomFeedSensor.Get(); };
 
 private:
     rev::CANSparkMax feedMotor{RobotMap::FEED_MOTOR_ADDRESS, rev::CANSparkMax::MotorType::kBrushless};
     rev::SparkRelativeEncoder feedMotorEncoder = feedMotor.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor);
 
-    frc::DigitalInput feedSensor{RobotMap::FEED_SENSOR_ADDRESS};
+    frc::DigitalInput topFeedSensor{RobotMap::TOP_FEED_SENSOR_ADDRESS};
+    frc::DigitalInput bottomFeedSensor{RobotMap::BOTTOM_FEED_SENSOR_ADDRESS};
     frc::Timer feedSensorTimer{};
 
     // Speeds should be from 0.0 - 1.0

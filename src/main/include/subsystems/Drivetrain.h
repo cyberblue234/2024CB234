@@ -137,11 +137,9 @@ public:
     // Sets all motors to a speed of zero
     void AlignSwerveDrive();
 
-    void SetPIDFs();
-
     bool IsAlignmentOn() { return alignmentOn; };
 
-    bool GetAtAlignment() { return abs(limelight3->GetAprilTagOffset()) < 0.5; };
+    bool AtSetpoint() { return rotationController.AtSetpoint(); };
 
 private:
     SwerveModule frontLeft;
@@ -169,7 +167,7 @@ private:
 
     frc::SwerveDrivePoseEstimator<4> odometry;
 
-    int time = 0;
+    int cycle = 0;
 
     frc::PIDController rotationController{DrivetrainConstants::kRotationP, DrivetrainConstants::kRotationI, DrivetrainConstants::kRotationD, 20_ms};
 };

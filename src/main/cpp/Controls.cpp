@@ -1,7 +1,5 @@
 #include "Controls.h"
 
-bool noteInBot = false;
-
 Controls::Controls(Drivetrain *swerve, Shooter *shooter, Intake *intake, Elevator *elevator, Feeder *feeder, Limelight *limelight3, ctre::phoenix6::Orchestra *orchestra)
 {
     this->swerve = swerve;
@@ -36,9 +34,6 @@ void Controls::DriveControls()
         if (limelight3->GetTargetValid() == 1)
             swerve->ResetPose(limelight3->GetRobotPose());
     }
-
-    if (gamepad.GetRightBumper()) 
-        swerve->SetPIDFs();
 
     if (swerve->IsAlignmentOn())
         swerve->AlignSwerveDrive();
@@ -95,9 +90,9 @@ void Controls::ShooterControls()
 
 void Controls::IntakeControls()
 {
-    if (controlBoard.GetRawButton(ControlBoardConstants::GROUND_INTAKE))
+    if (controlBoard.GetRawButton(ControlBoardConstants::GROUND_INTAKE) && elevator->AtSetpoint())
     {
-        if (noteInBot == false && abs(elevator->GetShooterAngle() - elevator->GetIntakeAngle()) < 0.5)
+        if (feeder->IsNoteSecured() == false)
             intake->IntakeFromGround();
         else
             intake->SetIntakeMotor(-0.1);
@@ -207,8 +202,8 @@ void Controls::FeederControls()
             feeder->ShootAtAmp();
         else if (GetSelectedRotaryIndex() != ControlBoardConstants::MANUAL_SCORE)
         {
-            bool swerveAlignment = abs(limelight3->GetAprilTagOffset()) < 5.0;
-            bool elevatorAlignment = abs(elevator->GetShooterAngle() - elevator->CalculateSpeakerAngle()) < 0.5;
+            bool swerveAlignment = swerve->AtSetpoint();
+            bool elevatorAlignment = elevator->AtSetpoint();
             frc::SmartDashboard::PutBoolean("Swerve Alignment", swerveAlignment);
             frc::SmartDashboard::PutBoolean("Elevator Alignment", elevatorAlignment);
             bool atAlignment = swerveAlignment && elevatorAlignment;
@@ -220,21 +215,15 @@ void Controls::FeederControls()
     }
     else if (controlBoard.GetRawButton(ControlBoardConstants::SOURCE_INTAKE))
     {
-        if (feeder->IntakeFromSource()) RumbleGamepad();
+        feeder->IntakeFromSource();
+        if (feeder->IsNoteSecured() == false) RumbleGamepad();
         else StopRumble();
     }
     else if (controlBoard.GetRawButton(ControlBoardConstants::GROUND_INTAKE))
     {
-        if (feeder->IntakeFromGround()) 
-        {
-            RumbleGamepad();
-            noteInBot = true;
-        }
-        else
-        {
-            StopRumble();
-            noteInBot = false;
-        }
+        feeder->IntakeFromGround();
+        if (feeder->IsNoteSecured() == false) RumbleGamepad();
+        else StopRumble();
     }
     else if (controlBoard.GetRawButton(ControlBoardConstants::PURGE))
         feeder->Purge();

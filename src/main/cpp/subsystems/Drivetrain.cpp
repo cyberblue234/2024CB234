@@ -35,19 +35,26 @@ Drivetrain::Drivetrain(Limelight *limelight3) : frontLeft(RobotMap::FL_DRIVE_ADD
         this);
 
     this->limelight3 = limelight3;
+
+    rotationController.SetTolerance(5.0);
 }
 
 void Drivetrain::Periodic()
 {
-    if (time % 5 == 0)
-        limelight3->UpdateLimelightTracking();
-    limelight3->UpdateTelemetry();
     odometry.Update(gyro.GetRotation2d(), {frontLeft.GetModulePosition(), frontRight.GetModulePosition(), backLeft.GetModulePosition(), backRight.GetModulePosition()});
-    if (limelight3->GetTargetValid() == 1 && abs((double)limelight3->GetRobotPose().X() - (double)odometry.GetEstimatedPosition().X()) < 1)
-        odometry.AddVisionMeasurement(limelight3->GetRobotPose(), frc::Timer::GetFPGATimestamp());
-    if (time < 10)
+    if (cycle % 5 == 0)
+    {
+        limelight3->UpdateLimelightTracking();
+        limelight3->UpdateTelemetry();
+        if (limelight3->GetTargetValid() == 1 && abs((double)limelight3->GetRobotPose().X() - (double)odometry.GetEstimatedPosition().X()) < 1)
+            odometry.AddVisionMeasurement(limelight3->GetRobotPose(), frc::Timer::GetFPGATimestamp());
+    }
+    if (cycle < 10)
+    {
+        limelight3->UpdateLimelightTracking();
         ResetPose(limelight3->GetRobotPose());
-    time++;
+    }
+    cycle++;
 
     UpdateTelemetry();
 }
@@ -205,12 +212,4 @@ void Drivetrain::AlignSwerveDrive()
     frontRight.SetSwerveMotor(speed);
     backLeft.SetSwerveMotor(speed);
     backRight.SetSwerveMotor(speed);
-}
-
-void Drivetrain::SetPIDFs() {
-    rotationController.SetPID(
-        frc::SmartDashboard::GetNumber("ROTATION P", DrivetrainConstants::kRotationP),
-        frc::SmartDashboard::GetNumber("ROTATION I", DrivetrainConstants::kRotationI),
-        frc::SmartDashboard::GetNumber("ROTATION D", DrivetrainConstants::kRotationD)
-    );
 }

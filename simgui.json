@@ -6,6 +6,21 @@
       }
     },
     "Other Devices": {
+      " Talon FX (v6)[12]": {
+        "header": {
+          "open": true
+        }
+      },
+      " Talon FX (v6)[13]": {
+        "header": {
+          "open": true
+        }
+      },
+      "DutyCycleEncoder[0]": {
+        "header": {
+          "open": true
+        }
+      },
       "Talon FX[8]": {
         "header": {
           "open": true
@@ -21,6 +36,9 @@
     },
     "RoboRIO": {
       "6V Rail": {
+        "open": true
+      },
+      "RoboRIO Input": {
         "open": true
       },
       "window": {
