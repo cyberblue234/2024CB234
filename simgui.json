@@ -51,6 +51,9 @@
       "open": false
     },
     "transitory": {
+      "FMSInfo": {
+        "open": true
+      },
       "LiveWindow": {
         "open": true
       },
