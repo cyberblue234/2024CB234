@@ -15,18 +15,18 @@ RobotContainer::RobotContainer() : swerve(GetLimelight3()), elevator(GetLimeligh
 	frc::SmartDashboard::PutBoolean("Amp Auto", false);
 	frc::SmartDashboard::PutBoolean("Source Auto", false);
 
-	orchestra.AddInstrument(*swerve.GetFrontLeftModule()->GetDriveMotor());
-	orchestra.AddInstrument(*swerve.GetFrontLeftModule()->GetSwerveMotor());
-	orchestra.AddInstrument(*swerve.GetFrontRightModule()->GetDriveMotor());
-	orchestra.AddInstrument(*swerve.GetFrontRightModule()->GetSwerveMotor());
-	orchestra.AddInstrument(*swerve.GetBackLeftModule()->GetDriveMotor());
-	orchestra.AddInstrument(*swerve.GetBackLeftModule()->GetSwerveMotor());
-	orchestra.AddInstrument(*swerve.GetBackRightModule()->GetDriveMotor());
-	orchestra.AddInstrument(*swerve.GetBackRightModule()->GetSwerveMotor());
-	orchestra.AddInstrument(*elevator.GetElevator1Motor());
-	orchestra.AddInstrument(*elevator.GetElevator2Motor());
+	orchestra.AddInstrument(*swerve.GetFrontLeftModule()->GetDriveMotor(), 5);
+	orchestra.AddInstrument(*swerve.GetFrontLeftModule()->GetSwerveMotor(), 0);
+	orchestra.AddInstrument(*swerve.GetFrontRightModule()->GetDriveMotor(), 2);
+	orchestra.AddInstrument(*swerve.GetFrontRightModule()->GetSwerveMotor(), 1);
+	orchestra.AddInstrument(*swerve.GetBackLeftModule()->GetDriveMotor(), 3);
+	orchestra.AddInstrument(*swerve.GetBackLeftModule()->GetSwerveMotor(), 6);
+	orchestra.AddInstrument(*swerve.GetBackRightModule()->GetDriveMotor(), 4);
+	orchestra.AddInstrument(*swerve.GetBackRightModule()->GetSwerveMotor(), 7);
+	orchestra.AddInstrument(*elevator.GetElevator1Motor(), 8);
+	orchestra.AddInstrument(*elevator.GetElevator2Motor(), 9);
 
-	orchestra.LoadMusic("AnchorMusic");
+	orchestra.LoadMusic("I Believe I Can Fly");
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand()

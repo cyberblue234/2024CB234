@@ -12,6 +12,10 @@ Elevator::Elevator(Limelight *limelight3)
     elevator1MotorOutput.WithNeutralMode(signals::NeutralModeValue::Brake);
     elevator1Config.WithMotorOutput(elevator1MotorOutput);
 
+    configs::AudioConfigs elevator1Audio{};
+    elevator1Audio.WithAllowMusicDurDisable(true);
+    elevator1Config.WithAudio(elevator1Audio);
+
     elevator1Motor.GetConfigurator().Apply(elevator1Config);
 
     elevator2Motor.GetConfigurator().Apply(configs::TalonFXConfiguration{});
@@ -20,6 +24,10 @@ Elevator::Elevator(Limelight *limelight3)
     configs::MotorOutputConfigs elevator2MotorOutput{};
     elevator2MotorOutput.WithNeutralMode(signals::NeutralModeValue::Brake);
     elevator2Config.WithMotorOutput(elevator2MotorOutput);
+
+    configs::AudioConfigs elevator2Audio{};
+    elevator2Audio.WithAllowMusicDurDisable(true);
+    elevator2Config.WithAudio(elevator2Audio);
 
     elevator2Motor.GetConfigurator().Apply(elevator2Config);
 

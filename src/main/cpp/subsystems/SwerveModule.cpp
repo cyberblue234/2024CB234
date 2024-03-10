@@ -31,6 +31,10 @@ SwerveModule::SwerveModule(int driveMotorChannel, int swerveMotorChannel, int ca
     // swerveMotor.ConfigVoltageCompSaturation(11.0);
     // swerveMotor.EnableVoltageCompensation(true);
 
+    configs::AudioConfigs swerveMotorAudio{};
+    swerveMotorAudio.WithAllowMusicDurDisable(true);
+    swerveMotorConfig.WithAudio(swerveMotorAudio);
+
     swerveMotor.GetConfigurator().Apply(swerveMotorConfig);
 
     // Set PID values for angle motor
@@ -64,6 +68,10 @@ SwerveModule::SwerveModule(int driveMotorChannel, int swerveMotorChannel, int ca
     configs::OpenLoopRampsConfigs driveMotorOpenLoopRamps{};
     driveMotorOpenLoopRamps.WithDutyCycleOpenLoopRampPeriod(0.025);
     driveMotorConfig.WithOpenLoopRamps(driveMotorOpenLoopRamps);
+
+    configs::AudioConfigs driveMotorAudio{};
+    driveMotorAudio.WithAllowMusicDurDisable(true);
+    driveMotorConfig.WithAudio(driveMotorAudio);
 
     driveMotor.GetConfigurator().Apply(driveMotorConfig);
 
