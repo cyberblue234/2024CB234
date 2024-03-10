@@ -28,8 +28,6 @@ RobotContainer::RobotContainer() : swerve(GetLimelight3()), elevator(GetLimeligh
 	orchestra.AddInstrument(*swerve.GetBackRightModule()->GetSwerveMotor());
 	orchestra.AddInstrument(*elevator.GetElevator1Motor());
 	orchestra.AddInstrument(*elevator.GetElevator2Motor());
-
-	orchestra.LoadMusic("AnchorMusic");
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand()

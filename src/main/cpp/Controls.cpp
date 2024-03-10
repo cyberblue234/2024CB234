@@ -40,12 +40,9 @@ void Controls::DriveControls()
     else if (controlBoard.GetRawButton(ControlBoardConstants::ANCHOR))
     {
         swerve->SetAnchorState();
-        orchestra->Play();
     }
     else
     {
-        if (orchestra->IsPlaying())
-            orchestra->Pause();
         double rot = swerve->RotationControl(gamepad.GetRightX(), 
                                 controlBoard.GetRawButton(ControlBoardConstants::SHOOT) 
                                 && GetSelectedRotaryIndex() != ControlBoardConstants::MANUAL_SCORE);
