@@ -2,7 +2,7 @@
 
 using namespace pathplanner;
 
-RobotContainer::RobotContainer() : swerve(GetLimelight3()), elevator(GetLimelight3()), limelight3("limelight"), limelight2("limelight-intake"),
+RobotContainer::RobotContainer() : swerve(GetLimelight3()), elevator(GetLimelight3(), GetSwerve()), limelight3("limelight"), limelight2("limelight-intake"),
 								   pdp(1, frc::PowerDistribution::ModuleType::kRev),
 								   controls(GetSwerve(), GetShooter(), GetIntake(), GetElevator(), GetFeeder(), GetLimelight3(), GetOrchestra())
 {
@@ -48,8 +48,8 @@ frc2::CommandPtr RobotContainer::GetShootCommand()
 	(
 		[this]
 		{
-			this->GetSwerve()->AlignToSpeaker();
-			this->GetElevator()->ElevatorControl(this->GetElevator()->CalculateSpeakerAngle());
+			this->GetSwerve()->AlignToSpeaker(true);
+			this->GetElevator()->ElevatorControl(this->GetElevator()->CalculateSpeakerAngle(true));
 			this->GetShooter()->ShootAtSpeaker();
 		}
 	).Until

@@ -10,6 +10,7 @@
 #include <ctre/phoenix6/TalonFX.hpp>
 #include <ctre/phoenix6/configs/Configurator.hpp>
 #include "subsystems/Limelight.h"
+#include "subsystems/Drivetrain.h"
 #include "Constants.h"
 #include <numbers>
 
@@ -19,16 +20,16 @@ class Elevator : frc2::SubsystemBase
 {
 
 public:
-    Elevator(Limelight *);
+    Elevator(Limelight *, Drivetrain *);
     void Periodic() override;
 
-    double CalculateSpeakerAngle();
+    double CalculateSpeakerAngle(bool useLimelight);
 
     void ElevatorControl(double angle);
 
     void ToIntakeAngle() { ElevatorControl(intakeAngle); };
     void ToSubwooferAngle() { ElevatorControl(closeAngle); };
-    void ToCalculatedAngle() { ElevatorControl(CalculateSpeakerAngle()); };
+    void ToCalculatedAngle(bool useLimelight) { ElevatorControl(CalculateSpeakerAngle(useLimelight)); };
 
     void SetElevatorMotorsPosition(double pos) 
     { 
@@ -96,6 +97,7 @@ private:
     frc::DigitalInput elevator2BottomLimit{RobotMap::ELEVATOR2_BOTTOM_LIMIT_SWITCH};
 
     Limelight *limelight3;
+    Drivetrain *swerve;
 
     double elevatorSpeed = 1.0;
     double alignmentDifference = 0;
