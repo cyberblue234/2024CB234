@@ -105,6 +105,9 @@ void Controls::IntakeControls()
 
 void Controls::ElevatorControls()
 {
+    if (orchestra->IsPlaying())
+        orchestra->Pause();
+
     if (gamepad.GetPOV() == 270) 
     {
         elevator->SetElevator1Motor(gamepad.GetRightBumper() ? -0.5 : 0.5);
@@ -188,7 +191,11 @@ void Controls::ElevatorControls()
         elevator->ElevatorControl(angle);
     }
     else
+    {
+        if (orchestra->GetCurrentTime() != 0.0)
+            orchestra->Play();
         elevator->SetElevatorMotors(0.0);
+    }
 }
 
 void Controls::FeederControls()
