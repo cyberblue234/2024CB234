@@ -8,12 +8,15 @@ RobotContainer::RobotContainer() : swerve(GetLimelight3()), elevator(GetLimeligh
 {
 	NamedCommands::registerCommand("Shoot", GetShootCommand());
 	NamedCommands::registerCommand("Intake", GetIntakeCommand());
+	NamedCommands::registerCommand("ShooterMotorsOn", GetShooterMotorsOnCommand());
 
-	frc::SmartDashboard::PutBoolean("2 Note Center Auto", false);
-	frc::SmartDashboard::PutBoolean("Center and Amp", false);
-	frc::SmartDashboard::PutBoolean("Center and Source", false);
-	frc::SmartDashboard::PutBoolean("Amp Auto", false);
-	frc::SmartDashboard::PutBoolean("Source Auto", false);
+	autoChooser.SetDefaultOption(AutoConstants::kAutoShoot, AutoConstants::kAutoShoot);
+	for (auto i = AutoConstants::kAutoArray.begin(); i != AutoConstants::kAutoArray.end(); ++i)
+	{
+		autoChooser.AddOption(*i, *i);
+	}
+
+	frc::SmartDashboard::PutData("Auto Chooser", &autoChooser);
 
 	orchestra.AddInstrument(*swerve.GetFrontLeftModule()->GetDriveMotor());
 	orchestra.AddInstrument(*swerve.GetFrontLeftModule()->GetSwerveMotor());
@@ -31,17 +34,9 @@ RobotContainer::RobotContainer() : swerve(GetLimelight3()), elevator(GetLimeligh
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand()
 {
-	if (frc::SmartDashboard::GetBoolean("2 Note Center Auto", false))
-		return PathPlannerAuto("2 Note Center Auto").ToPtr();
-	if (frc::SmartDashboard::GetBoolean("Center and Amp", false))
-		return PathPlannerAuto("Center and Amp").ToPtr();
-	if (frc::SmartDashboard::GetBoolean("Center and Source", false))
-		return PathPlannerAuto("Center and Source").ToPtr();
-	if (frc::SmartDashboard::GetBoolean("Amp Auto", false))
-		return PathPlannerAuto("Amp Auto").ToPtr();
-	if (frc::SmartDashboard::GetBoolean("Source Auto", false))
-		return PathPlannerAuto("Source Auto").ToPtr();
-	return PathPlannerAuto("Copy Center Auto").ToPtr();
+	std::string auton = GetAuto();
+	if (auton == AutoConstants::kAutoShoot) return GetShootCommand();
+	return PathPlannerAuto(auton).ToPtr();
 }
 
 frc2::CommandPtr RobotContainer::GetShootCommand()
@@ -52,7 +47,6 @@ frc2::CommandPtr RobotContainer::GetShootCommand()
 		{
 			this->GetSwerve()->AlignToSpeaker();
 			this->GetElevator()->ElevatorControl(this->GetElevator()->CalculateSpeakerAngle());
-			this->GetShooter()->ShootAtSpeaker();
 		}
 	).Until
 	(
@@ -70,9 +64,12 @@ frc2::CommandPtr RobotContainer::GetShootCommand()
 				this->GetShooter()->ShootAtSpeaker();
 				this->GetFeeder()->ShootAtSpeaker();
 			}
-		).ToPtr().RaceWith
+		).Until
 		(
-			frc2::WaitCommand(1.0_s).ToPtr()
+			[this]
+			{
+				return this->GetFeeder()->GetTopSensorInput() == false;
+			}
 		)
 	).AndThen
 	(
@@ -82,7 +79,6 @@ frc2::CommandPtr RobotContainer::GetShootCommand()
 			{
 				this->GetShooter()->SetShooterMotors(0.0);
 				this->GetElevator()->SetElevatorMotors(0.0);
-				this->GetFeeder()->SetFeedMotor(0.0);
 			}
 		).ToPtr()
 	);
@@ -111,11 +107,25 @@ frc2::CommandPtr RobotContainer::GetIntakeCommand()
 				this->GetIntake()->IntakeFromGround();
 				this->GetFeeder()->IntakeFromGround();
 			}
-		).ToPtr().RaceWith
+		).Until
 		(
-			frc2::WaitCommand(2_s).ToPtr()
+			[this]
+			{
+				return this->GetFeeder()->IsNoteSecured() == true;
+			}
 		)
 	);
+}
+
+frc2::CommandPtr RobotContainer::GetShooterMotorsOnCommand()
+{
+	return frc2::RunCommand
+	(
+		[this]
+		{
+			this->GetShooter()->ShootAtSpeaker();
+		}
+	).ToPtr();
 }
 
 void RobotContainer::LogTeleopData()

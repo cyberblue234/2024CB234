@@ -2,9 +2,23 @@
   "robotWidth": 0.89,
   "robotLength": 0.99,
   "holonomicMode": true,
-  "pathFolders": [],
-  "autoFolders": [],
-  "defaultMaxVel": 1.3,
+  "pathFolders": [
+    "Amp Start",
+    "Center Start",
+    "Close Notes",
+    "Far Bottom Notes",
+    "Far Top Notes",
+    "Source Start"
+  ],
+  "autoFolders": [
+    "Amp to Amp Note",
+    "Center to Amp Note",
+    "Center to Center Note",
+    "Center to Source Note",
+    "Source to Note 5",
+    "Source to Source Note"
+  ],
+  "defaultMaxVel": 1.0,
   "defaultMaxAccel": 1.3,
   "defaultMaxAngVel": 540.0,
   "defaultMaxAngAccel": 720.0,
