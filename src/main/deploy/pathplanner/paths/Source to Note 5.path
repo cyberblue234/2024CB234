@@ -1,0 +1,64 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 0.7508522385465825,
+        "y": 4.345864025061384
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 0.9793724850607597,
+        "y": 3.179685306739035
+      },
+      "isLocked": false,
+      "linkedName": "Source Starting"
+    },
+    {
+      "anchor": {
+        "x": 7.880321199238891,
+        "y": 0.9126193690983879
+      },
+      "prevControl": {
+        "x": 7.454112802962448,
+        "y": 0.8763463140961375
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Note 5"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [
+    {
+      "name": "Slow Down at End",
+      "minWaypointRelativePos": 0.85,
+      "maxWaypointRelativePos": 1.0,
+      "constraints": {
+        "maxVelocity": 2.5,
+        "maxAcceleration": 3.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0
+      }
+    }
+  ],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.5,
+    "maxAcceleration": 3.5,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -11.093723011557781,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "Source Start",
+  "previewStartingState": {
+    "rotation": -60.85192815428696,
+    "velocity": 0
+  },
+  "useDefaultConstraints": false
+}

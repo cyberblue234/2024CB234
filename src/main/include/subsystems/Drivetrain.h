@@ -10,7 +10,7 @@
 #include <frc/DriverStation.h>
 
 #include <frc/smartdashboard/SmartDashboard.h>
-#include <frc/smartdashboard/SendableChooser.h>
+#include <frc/smartdashboard/Field2d.h>
 
 #include <frc/kinematics/SwerveDriveKinematics.h>
 #include <frc/kinematics/SwerveDriveOdometry.h>
@@ -30,6 +30,7 @@
 #include <pathplanner/lib/util/HolonomicPathFollowerConfig.h>
 #include <pathplanner/lib/util/PIDConstants.h>
 #include <pathplanner/lib/util/ReplanningConfig.h>
+#include <pathplanner/lib/util/PathPlannerLogging.h>
 
 #include "AHRS.h"
 
@@ -132,6 +133,8 @@ public:
     // Returns a pointer to the back right module
     SwerveModule *GetBackRightModule() { return &backRight; };
 
+    frc::Field2d *GetField() { return &field; };
+
     // Resets all drive motor encoders
     void ResetDriveEncoders();
     // Sets all motors to a speed of zero
@@ -170,6 +173,8 @@ private:
     int cycle = 0;
 
     frc::PIDController rotationController{DrivetrainConstants::kRotationP, DrivetrainConstants::kRotationI, DrivetrainConstants::kRotationD, 20_ms};
+
+    frc::Field2d field;
 };
 
 #endif

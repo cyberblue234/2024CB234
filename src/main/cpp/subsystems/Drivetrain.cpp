@@ -37,6 +37,12 @@ Drivetrain::Drivetrain(Limelight *limelight3) : frontLeft(RobotMap::FL_DRIVE_ADD
     this->limelight3 = limelight3;
 
     rotationController.SetTolerance(5.0);
+
+    pathplanner::PathPlannerLogging::setLogActivePathCallback([this](auto poses) {
+        this->field.GetObject("path")->SetPoses(poses);
+    });
+
+    frc::SmartDashboard::PutData("Field", &field);
 }
 
 void Drivetrain::Periodic()
@@ -55,6 +61,8 @@ void Drivetrain::Periodic()
         ResetPose(limelight3->GetRobotPose());
     }
     cycle++;
+
+    field.SetRobotPose(GetPose());
 
     UpdateTelemetry();
 }

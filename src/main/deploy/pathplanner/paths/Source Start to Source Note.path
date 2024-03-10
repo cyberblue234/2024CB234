@@ -3,49 +3,49 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.6117057948401614,
-        "y": 6.860626292681157
+        "x": 0.7508522385465825,
+        "y": 4.345864025061384
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.5235916965833867,
-        "y": 6.828868516639195
+        "x": 1.405580881333213,
+        "y": 3.9958290442871287
       },
       "isLocked": false,
-      "linkedName": "Pickup Amp"
+      "linkedName": "Source Starting"
     },
     {
       "anchor": {
-        "x": 1.9407274592724506,
-        "y": 6.711356821640298
+        "x": 2.458724917449835,
+        "y": 4.272288544577089
       },
       "prevControl": {
-        "x": 2.146327011795348,
-        "y": 6.828842280224811
+        "x": 2.1401102451287826,
+        "y": 4.240672165552319
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Source Note"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 0.5,
-    "maxAcceleration": 0.5,
+    "maxVelocity": 0.85,
+    "maxAcceleration": 1.3,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 30.0,
+    "rotation": -14.922069124802467,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Source Start",
   "previewStartingState": {
-    "rotation": 11.63,
+    "rotation": -59.96671956400485,
     "velocity": 0
   },
   "useDefaultConstraints": false

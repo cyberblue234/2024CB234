@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/Commands.h>
 #include <frc2/command/StartEndCommand.h>
@@ -14,6 +16,7 @@
 #include <pathplanner/lib/auto/NamedCommands.h>
 
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <frc/smartdashboard/SendableChooser.h>
 #include <frc/PowerDistribution.h>
 
 #include "subsystems/Drivetrain.h"
@@ -32,6 +35,7 @@ public:
 	frc2::CommandPtr GetAutonomousCommand();
 	frc2::CommandPtr GetShootCommand();
 	frc2::CommandPtr GetIntakeCommand();
+	frc2::CommandPtr GetShooterMotorsOnCommand();
 
 	void OdometryInit()
 	{
@@ -48,6 +52,8 @@ public:
 	Limelight *GetLimelight3() { return &limelight3; };
 	Limelight *GetLimelight2() { return &limelight2; };
 	ctre::phoenix6::Orchestra *GetOrchestra() { return &orchestra; };
+
+	std::string GetAuto() { return autoChooser.GetSelected(); };
 
 	void LogTeleopData();
 	void LogAutoData();
@@ -67,7 +73,8 @@ private:
 
 	Controls controls;
 
-	std::unique_ptr<frc2::Command> testAuto;
+	frc::SendableChooser<std::string> autoChooser;
+	
 
 	FILE *t_output;
 	frc::Timer logTimer;
