@@ -1,6 +1,6 @@
 #include "subsystems/Drivetrain.h"
 
-Drivetrain::Drivetrain(Limelight *limelight3) : frontLeft(RobotMap::FL_DRIVE_ADDRESS, RobotMap::FL_SWERVE_ADDRESS, RobotMap::FL_CANCODER_ADDRESS, DrivetrainConstants::FL_OFFSET_DEGREES),
+Drivetrain::Drivetrain(Limelight *limelight3, Limelight *limelight2) : frontLeft(RobotMap::FL_DRIVE_ADDRESS, RobotMap::FL_SWERVE_ADDRESS, RobotMap::FL_CANCODER_ADDRESS, DrivetrainConstants::FL_OFFSET_DEGREES),
                                                 frontRight(RobotMap::FR_DRIVE_ADDRESS, RobotMap::FR_SWERVE_ADDRESS, RobotMap::FR_CANCODER_ADDRESS, DrivetrainConstants::FR_OFFSET_DEGREES),
                                                 backLeft(RobotMap::BL_DRIVE_ADDRESS, RobotMap::BL_SWERVE_ADDRESS, RobotMap::BL_CANCODER_ADDRESS, DrivetrainConstants::BL_OFFSET_DEGREES),
                                                 backRight(RobotMap::BR_DRIVE_ADDRESS, RobotMap::BR_SWERVE_ADDRESS, RobotMap::BR_CANCODER_ADDRESS, DrivetrainConstants::BR_OFFSET_DEGREES),
@@ -35,6 +35,7 @@ Drivetrain::Drivetrain(Limelight *limelight3) : frontLeft(RobotMap::FL_DRIVE_ADD
         this);
 
     this->limelight3 = limelight3;
+    this->limelight2 = limelight2;
 
     rotationController.SetTolerance(5.0);
 }
@@ -148,6 +149,24 @@ double Drivetrain::RotationControl(double rotInput, bool alignToAprilTag)
 void Drivetrain::AlignToSpeaker()
 {
     DriveWithInput(0.0, 0.0, RotationControl(0, true), false);    
+}
+
+std::optional<frc2::CommandPtr> Drivetrain::PathfindToNote()
+{
+    limelight2->SetPipelineID(Limelight::PipelineID::kNoteDetection);
+    if (limelight2->GetTargetValid() != 1) return std::nullopt;
+    frc::Pose2d currentPose = odometry.GetEstimatedPosition();
+    double noteDistance = limelight2->GetDistanceFromGamepiece();
+    double noteTX = limelight2->GetTargetX();
+    double degreeOffset = (90 + noteTX) * std::numbers::pi / 180;
+    units::length::meter_t xTranslation{cos(degreeOffset) * noteDistance};
+    units::length::meter_t yTranslation{sin(degreeOffset) * noteDistance};
+    frc::Translation2d translation{xTranslation, yTranslation};
+    frc::Rotation2d noteOffset{units::angle::degree_t(noteTX)};
+    frc::Pose2d targetPose = currentPose.TransformBy(frc::Transform2d(translation, noteOffset));
+
+    pathplanner::PathConstraints constraints{1.5_mps, 3.0_mps_sq, 540_deg_per_s, 720_deg_per_s_sq};
+    return pathplanner::AutoBuilder::pathfindToPose(targetPose, constraints, 0.0_mps, 0.0_m);
 }
 
 void Drivetrain::SetAnchorState()
