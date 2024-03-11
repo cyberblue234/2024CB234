@@ -21,6 +21,8 @@ void Limelight::UpdateLimelightTracking()
     target_x = table->GetNumber("tx", 0.0);         // X in relation to crosshair in Limelight view
     target_y = table->GetNumber("ty", 0.0);         // Y in relation to crosshair in Limelight view
     target_area = table->GetNumber("ta", 0.0);      // Target Area
+    target_long = table->GetNumber("tlong", 0.0);
+    target_short = table->GetNumber("tshort", 0.0);
     target_valid = table->GetNumber("tv", 0.0);     // Checks to see if there is a valid target. 0 = no, 1 = yes
     april_tag_id = table->GetNumber("tid", 0);      // Gets the ID of the current targetted AprilTag
     active_pipe = table->GetNumber("getpipe", 0.0); // Gets the active pipeline ID
@@ -80,6 +82,11 @@ double Limelight::GetAprilTagOffset()
     offset *= 180 / std::numbers::pi;
     frc::SmartDashboard::PutNumber("Target Rotatation Offset", offset);
     return offset;
+}
+
+double Limelight::GetDistanceFromGamepiece()
+{
+    return (LimelightConstants::noteWidth * LimelightConstants::focalLength) / target_long;
 }
 
 // Returns the Robot Pose in Field space (Blue Origin) as a Pose2d Object

@@ -9,6 +9,7 @@
 #include "networktables/NetworkTableInstance.h"
 #include "networktables/NetworkTableEntry.h"
 #include "networktables/NetworkTableValue.h"
+#include "Constants.h"
 #include <numbers>
 
 class Limelight
@@ -43,15 +44,19 @@ public:
     double GetTargetX() { return target_x; };
     double GetTargetY() { return target_y; };
     double GetTargetArea() { return target_area; };
+    double GetTargetLong() { return target_long; };
+    double GetTargetShort() { return target_short; };
     double GetAprilTagID() { return april_tag_id; };
     double GetTargetValid() { return target_valid; };   // 0 for no, 1 for yes
     double GetActivePipeline() { return active_pipe; }; // Returns the active pipeline id
     double GetTotalLatency() { return pipeline_latency + capture_latency; }
+    
     void SetLEDMode(LEDMode);
     void SetCamMode(CamMode);
     void SetPipelineID(PipelineID);
     double GetDistanceFromTarget();
     double GetAprilTagOffset();
+    double GetDistanceFromGamepiece();
     frc::Pose2d GetRobotPose();
     void UpdateTelemetry();
 
@@ -60,6 +65,8 @@ private:
     double target_x;
     double target_y;
     double target_area;
+    double target_long;
+    double target_short;
     double target_valid;
     double active_pipe;
     double april_tag_id;

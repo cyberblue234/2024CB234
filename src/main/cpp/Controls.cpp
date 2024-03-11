@@ -35,11 +35,25 @@ void Controls::DriveControls()
             swerve->ResetPose(limelight3->GetRobotPose());
     }
 
+    if (!gamepad.GetLeftBumper() || !controlBoard.GetRawButton(ControlBoardConstants::GROUND_INTAKE))
+    {
+        if (pathFindToNote && pathFindToNote->IsScheduled())
+            pathFindToNote->Cancel();
+    }
+
     if (swerve->IsAlignmentOn())
         swerve->AlignSwerveDrive();
     else if (controlBoard.GetRawButton(ControlBoardConstants::ANCHOR))
     {
         swerve->SetAnchorState();
+    }
+    else if (gamepad.GetLeftBumper() && controlBoard.GetRawButton(ControlBoardConstants::GROUND_INTAKE))
+    {
+        if (gamepad.GetLeftBumperPressed())
+        {
+            pathFindToNote = swerve->PathfindToNote();
+            pathFindToNote->Schedule();
+        }
     }
     else
     {

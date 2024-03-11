@@ -3,6 +3,11 @@
 void Robot::RobotInit()
 {
 	container.OdometryInit();
+
+	for (int port = 5800; port <= 5805; port++)
+	{
+		wpi::PortForwarder::GetInstance().Add(port, "limelight.local", port);
+	}
 }
 
 void Robot::RobotPeriodic()

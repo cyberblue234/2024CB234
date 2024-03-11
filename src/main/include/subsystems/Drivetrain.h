@@ -42,7 +42,7 @@ extern frc::PIDController rotationController;
 class Drivetrain : frc2::SubsystemBase
 {
 public:
-    Drivetrain(Limelight *);
+    Drivetrain(Limelight *, Limelight *);
 
     void Periodic() override;
 
@@ -63,6 +63,9 @@ public:
 
     double RotationControl(double rotInput, bool alignToAprilTag);
     void AlignToSpeaker();
+
+    std::optional<frc2::CommandPtr> PathfindToNote();
+
     void SetAnchorState();
 
     void UpdateTelemetry();
@@ -148,6 +151,7 @@ private:
     SwerveModule backRight;
 
     Limelight *limelight3;
+    Limelight *limelight2;
 
     AHRS gyro;
     double lastGyroPitch = 0;

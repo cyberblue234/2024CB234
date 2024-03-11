@@ -54,5 +54,7 @@ private:
     Limelight *limelight3;
     ctre::phoenix6::Orchestra *orchestra;
 
+    std::optional<frc2::CommandPtr> pathFindToNote;
+
     int selectedRotaryIndex = 0;
 };
