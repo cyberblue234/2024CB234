@@ -32,7 +32,7 @@ void Elevator::Periodic()
 {
     if (GetElevator1BottomLimit() && GetElevator1Encoder() > 0.025)
         ResetElevator1Encoder();
-    if (GetElevator2BottomLimit() && GetElevator1Encoder() > 0.025)
+    if (GetElevator2BottomLimit() && GetElevator2Encoder() > 0.025)
         ResetElevator2Encoder();
     UpdateTelemetry();
 }
