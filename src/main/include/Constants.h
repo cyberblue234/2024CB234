@@ -133,12 +133,12 @@ namespace ShooterConstants
 
 namespace ElevatorConstants
 {
-    inline constexpr double kElevatorP = 0.1;
+    inline constexpr double kElevatorP = 0.125;
     inline constexpr double kElevatorI = 0.0;
     inline constexpr double kElevatorD = 0.0065;
     inline constexpr double kElevatorF = 0.0;
 
-    inline constexpr double kForce = 41.5;
+    inline constexpr double kForce = 41.0;
     inline constexpr double kKickup = 1.0;
     inline constexpr double kGravity = 9.8;
 
