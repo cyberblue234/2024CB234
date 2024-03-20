@@ -118,11 +118,11 @@ void Controls::ElevatorControls()
     // Manual up - dpad up
     if (controlBoard.GetRawButton(ControlBoardConstants::ELEVATOR_UP))
     {
-        if (elevator->GetElevator1TopLimit() == false && elevator->GetElevator1Encoder() < elevator->GetHardEncoderLimit())
+        if (elevator->GetElevator1Encoder() < elevator->GetHardEncoderLimit())
             elevator->SetElevator1Motor(elevator->GetElevatorSpeed());
         else    
             elevator->SetElevator1Motor(0.0);
-        if (elevator->GetElevator2TopLimit() == false && elevator->GetElevator2Encoder() < elevator->GetHardEncoderLimit())
+        if (elevator->GetElevator2Encoder() < elevator->GetHardEncoderLimit())
             elevator->SetElevator2Motor(elevator->GetElevatorSpeed());
         else    
             elevator->SetElevator2Motor(0.0);

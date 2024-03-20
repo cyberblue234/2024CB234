@@ -30,9 +30,9 @@ Elevator::Elevator(Limelight *limelight3)
 
 void Elevator::Periodic()
 {
-    if (GetElevator1BottomLimit() && GetElevator1Encoder() > 0.025)
+    if (GetElevator1BottomLimit() && (GetElevator1Encoder() > 0.025 || GetElevator1Encoder() < -0.025))
         ResetElevator1Encoder();
-    if (GetElevator2BottomLimit() && GetElevator1Encoder() > 0.025)
+    if (GetElevator2BottomLimit() && (GetElevator2Encoder() > 0.025 || GetElevator2Encoder() < -0.025))
         ResetElevator2Encoder();
     UpdateTelemetry();
 }
@@ -45,7 +45,7 @@ double Elevator::CalculateSpeakerAngle()
     if ((double) distance < 1.45) return -52;
     if ((double) distance < 1.6) return -51;
     if ((double) distance < 1.8) return -49;
-    if ((double) distance < 2.0) return intakeAngle;
+    if ((double) distance < 2.1) return intakeAngle;
     // Height we are targetting in meters
     double targetHeight = ElevatorConstants::kSpeakerHeight + (((double)distance / ElevatorConstants::kForce) * ElevatorConstants::kGravity);
     // Get the angle we want to go to in order to shoot in radians, then converting it to degrees
@@ -58,11 +58,11 @@ void Elevator::ElevatorControl(double angle)
 {
     if (angle > GetShooterAngle()) 
     {
-        if (GetElevator1TopLimit() == false && GetElevator1Encoder() < GetHardEncoderLimit())
+        if (GetElevator1Encoder() < GetHardEncoderLimit())
             SetElevator1MotorPosition(angle);
         else
             SetElevator1Motor(0.0);
-        if (GetElevator2TopLimit() == false && GetElevator2Encoder() < GetHardEncoderLimit())
+        if (GetElevator2Encoder() < GetHardEncoderLimit())
             SetElevator2MotorPosition(angle);
         else
             SetElevator2Motor(0.0);
@@ -86,5 +86,6 @@ void Elevator::UpdateTelemetry()
     frc::SmartDashboard::PutNumber("Shooter Angle Degrees", GetShooterAngle()); 
     frc::SmartDashboard::PutNumber("Elevator 1 Encoder Pos", GetElevator1Encoder());
     frc::SmartDashboard::PutNumber("Elevator 2 Encoder Pos", GetElevator2Encoder());
-    
+    frc::SmartDashboard::PutBoolean("Limit Switch 1", GetElevator1BottomLimit());
+    frc::SmartDashboard::PutBoolean("Limit Switch 2", GetElevator2BottomLimit());
 }
