@@ -22,12 +22,6 @@
           "data": {
             "commands": [
               {
-                "type": "named",
-                "data": {
-                  "name": "Intake"
-                }
-              },
-              {
                 "type": "sequential",
                 "data": {
                   "commands": [
@@ -44,9 +38,9 @@
                       }
                     },
                     {
-                      "type": "path",
+                      "type": "named",
                       "data": {
-                        "pathName": "Center End"
+                        "name": "Shoot"
                       }
                     }
                   ]
@@ -65,12 +59,6 @@
           "type": "path",
           "data": {
             "pathName": "Center to Source"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Source to Score"
           }
         },
         {

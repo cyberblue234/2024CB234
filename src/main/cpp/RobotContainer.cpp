@@ -101,11 +101,12 @@ frc2::CommandPtr RobotContainer::GetIntakeCommand()
 			return this->GetElevator()->AtSetpoint();
 		}
 	).AndThen
-	(
+	(																																																																																																																																																																																																																																																																																																																																																																																																		
 		frc2::RunCommand
 		(
 			[this]
 			{
+				this->GetElevator()->ElevatorControl(this->GetElevator()->GetIntakeAngle());
 				this->GetIntake()->IntakeFromGround();
 				this->GetFeeder()->IntakeFromGround();
 			}
