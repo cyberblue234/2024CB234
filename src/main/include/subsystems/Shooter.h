@@ -33,7 +33,7 @@ public:
     void SetShooterMotor2(double power) { shooter2Motor.Set(power); };
     void SetShooterMotorsRPM(double rpm)
     {
-        SetShooterMotor1RPM(rpm);
+        SetShooterMotor1RPM(rpm + 2000);
         SetShooterMotor2RPM(rpm);
     };
     void SetShooterMotor1RPM(double rpm) { shooter1PID.SetReference(rpm, rev::CANSparkLowLevel::ControlType::kVelocity); };
@@ -60,5 +60,5 @@ private:
 
     double speakerRPM = 4500;
     double ampRPM = 2200;
-    double intakeSpeed = 0.25;
+    double intakeSpeed = 0.225;
 };

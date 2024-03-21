@@ -213,13 +213,13 @@ void Controls::FeederControls()
     else if (controlBoard.GetRawButton(ControlBoardConstants::SOURCE_INTAKE))
     {
         feeder->IntakeFromSource();
-        if (feeder->IsNoteSecured() == false) RumbleGamepad();
+        if (feeder->IsNoteSecured() == true) RumbleGamepad();
         else StopRumble();
     }
     else if (controlBoard.GetRawButton(ControlBoardConstants::GROUND_INTAKE))
     {
         feeder->IntakeFromGround();
-        if (feeder->IsNoteSecured() == false) RumbleGamepad();
+        if (feeder->IsNoteSecured() == true) RumbleGamepad();
         else StopRumble();
     }
     else if (controlBoard.GetRawButton(ControlBoardConstants::PURGE))
