@@ -14,6 +14,7 @@ RobotContainer::RobotContainer() : swerve(GetLimelight3()), elevator(GetLimeligh
 	frc::SmartDashboard::PutBoolean("Center and Source", false);
 	frc::SmartDashboard::PutBoolean("Amp Auto", false);
 	frc::SmartDashboard::PutBoolean("Source Auto", false);
+	frc::SmartDashboard::PutBoolean("4 Note", false);
 
 	orchestra.AddInstrument(*swerve.GetFrontLeftModule()->GetDriveMotor());
 	orchestra.AddInstrument(*swerve.GetFrontLeftModule()->GetSwerveMotor());
@@ -39,6 +40,8 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
 		return PathPlannerAuto("Amp Auto").ToPtr();
 	if (frc::SmartDashboard::GetBoolean("Source Auto", false))
 		return PathPlannerAuto("Source Auto").ToPtr();
+	if (frc::SmartDashboard::GetBoolean("4 Note", false))
+		return PathPlannerAuto("4 Note").ToPtr();
 	return PathPlannerAuto("2 Note Center Auto").ToPtr();
 }
 
@@ -48,6 +51,7 @@ frc2::CommandPtr RobotContainer::GetShootCommand()
 	(
 		[this]
 		{
+			this->GetIntake()->SetIntakeMotor(0.0);
 			this->GetSwerve()->AlignToSpeaker();
 			this->GetElevator()->ElevatorControl(this->GetElevator()->CalculateSpeakerAngle());
 			this->GetShooter()->ShootAtSpeaker();
@@ -93,30 +97,15 @@ frc2::CommandPtr RobotContainer::GetIntakeCommand()
 		[this]
 		{
 			this->GetElevator()->ElevatorControl(this->GetElevator()->GetIntakeAngle());
+			this->GetIntake()->IntakeFromGround();
+			this->GetFeeder()->IntakeFromGround();
 		}
 	).ToPtr().Until
 	(
 		[this]
 		{
-			return this->GetElevator()->AtSetpoint();
+			return this->GetFeeder()->IsNoteSecured();
 		}
-	).AndThen
-	(																																																																																																																																																																																																																																																																																																																																																																																																		
-		frc2::RunCommand
-		(
-			[this]
-			{
-				this->GetElevator()->ElevatorControl(this->GetElevator()->GetIntakeAngle());
-				this->GetIntake()->IntakeFromGround();
-				this->GetFeeder()->IntakeFromGround();
-			}
-		).Until
-		(
-			[this]
-			{
-				return this->GetFeeder()->IsNoteSecured();
-			}
-		)
 	);
 }
 

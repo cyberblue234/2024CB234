@@ -12,15 +12,28 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Source Path"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Source Path"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              }
+            ]
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "New Path"
+            "pathName": "Note 5 to Shoot"
           }
         },
         {
