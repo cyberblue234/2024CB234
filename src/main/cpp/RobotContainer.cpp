@@ -39,7 +39,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
 		return PathPlannerAuto("Amp Auto").ToPtr();
 	if (frc::SmartDashboard::GetBoolean("Source Auto", false))
 		return PathPlannerAuto("Source Auto").ToPtr();
-	return PathPlannerAuto("Copy Center Auto").ToPtr();
+	return PathPlannerAuto("2 Note Center Auto").ToPtr();
 }
 
 frc2::CommandPtr RobotContainer::GetShootCommand()
@@ -110,9 +110,12 @@ frc2::CommandPtr RobotContainer::GetIntakeCommand()
 				this->GetIntake()->IntakeFromGround();
 				this->GetFeeder()->IntakeFromGround();
 			}
-		).ToPtr().RaceWith
+		).Until
 		(
-			frc2::WaitCommand(2_s).ToPtr()
+			[this]
+			{
+				return this->GetFeeder()->IsNoteSecured();
+			}
 		)
 	);
 }
@@ -124,7 +127,7 @@ void RobotContainer::LogTeleopData()
 	static long count = 0;
 
 	double time = (double)logTimer.Get();
-	double volts = pdp.GetVoltage();
+	double volts = 0.0; //pdp.GetVoltage();
 
 	double shooter1RPM = shooter.GetShooter1RPM();
 	double shooter2RPM = shooter.GetShooter2RPM();
@@ -171,7 +174,7 @@ void RobotContainer::LogAutoData()
 	static long count = 0;
 
 	double time = (double)logTimer.Get();
-	double volts = pdp.GetVoltage();
+	double volts = 0.0; //pdp.GetVoltage();
 
 	double shooter1RPM = shooter.GetShooter1RPM();
 	double shooter2RPM = shooter.GetShooter2RPM();
