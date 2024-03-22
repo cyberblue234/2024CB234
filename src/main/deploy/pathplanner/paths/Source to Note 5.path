@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.7939330164374621,
-        "y": 3.9873725461736647
+        "x": 2.366493044674401,
+        "y": 1.4126386694331816
       },
       "isLocked": false,
       "linkedName": null
@@ -20,16 +20,34 @@
         "y": 0.7622918102979067
       },
       "prevControl": {
-        "x": 6.2179324358648715,
-        "y": 1.5832214521571912
+        "x": 5.711514799652976,
+        "y": 0.8662406935203472
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "Center Source 1"
     }
   ],
-  "rotationTargets": [],
-  "constraintZones": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.65,
+      "rotationDegrees": 0,
+      "rotateFast": false
+    }
+  ],
+  "constraintZones": [
+    {
+      "name": "Slow Down",
+      "minWaypointRelativePos": 0.7,
+      "maxWaypointRelativePos": 1.0,
+      "constraints": {
+        "maxVelocity": 1.5,
+        "maxAcceleration": 3.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0
+      }
+    }
+  ],
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
