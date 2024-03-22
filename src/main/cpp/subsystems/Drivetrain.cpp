@@ -168,6 +168,9 @@ void Drivetrain::UpdateTelemetry()
     frc::SmartDashboard::PutNumber("Odometry X", (double)GetPose().X());
     frc::SmartDashboard::PutNumber("Odometry Y", (double)GetPose().Y());
     frc::SmartDashboard::PutNumber("Odometry Rot", (double)GetPose().Rotation().Degrees());
+
+    frc::SmartDashboard::PutNumber("FL Drive Rotations", frontLeft.GetDriveEncoder());
+
 }
 
 void Drivetrain::ResetCancoders()
