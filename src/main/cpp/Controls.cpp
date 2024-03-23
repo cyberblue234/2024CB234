@@ -189,8 +189,6 @@ void Controls::FeederControls()
         {
             bool swerveAlignment = swerve->AtSetpoint();
             bool elevatorAlignment = elevator->AtSetpoint();
-            frc::SmartDashboard::PutBoolean("Swerve Alignment", swerveAlignment);
-            frc::SmartDashboard::PutBoolean("Elevator Alignment", elevatorAlignment);
             bool atAlignment = swerveAlignment && elevatorAlignment;
             if (shooter->GetShooter1RPM() >= shooter->GetSpeakerRPM() - 100 && atAlignment)
                 feeder->ShootAtSpeaker();
