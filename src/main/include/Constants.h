@@ -184,4 +184,6 @@ namespace ControlBoardConstants
     inline constexpr int AUTO_SCORE = 4;
     // Manual control for angle and elevator
     inline constexpr int MANUAL_SCORE = 5;
+    // Manual control for amp scoring
+    inline constexpr int MANUAL_AMP = 9;
 }

@@ -72,7 +72,8 @@ void Controls::ShooterControls()
         if (GetSelectedRotaryIndex() == ControlBoardConstants::POS_AMP_MAIN
         || GetSelectedRotaryIndex() == ControlBoardConstants::POS_AMP_2
         || GetSelectedRotaryIndex() == ControlBoardConstants::POS_AMP_3
-        || GetSelectedRotaryIndex() == ControlBoardConstants::POS_AMP_4)
+        || GetSelectedRotaryIndex() == ControlBoardConstants::POS_AMP_4
+        || GetSelectedRotaryIndex() == ControlBoardConstants::MANUAL_AMP)
             shooter->ShootAtAmp();
         else
             shooter->ShootAtSpeaker();
@@ -132,7 +133,8 @@ void Controls::ElevatorControls()
     {
         elevator->ElevatorControl(elevator->GetIntakeAngle());
     }
-    else if (controlBoard.GetRawButton(ControlBoardConstants::SHOOTER_MOTORS) && GetSelectedRotaryIndex() != ControlBoardConstants::MANUAL_SCORE)
+    else if (controlBoard.GetRawButton(ControlBoardConstants::SHOOTER_MOTORS) 
+    && GetSelectedRotaryIndex() != ControlBoardConstants::MANUAL_SCORE && GetSelectedRotaryIndex() != ControlBoardConstants::MANUAL_AMP)
     {
     
         double angle;
