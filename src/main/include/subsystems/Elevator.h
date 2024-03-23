@@ -100,7 +100,7 @@ private:
     double elevatorSpeed = 1.0;
     double alignmentDifference = 0;
     // Should be a constant eventually
-    double ampAngle = -44;
+    double ampAngle = -54;
     double closeAngle = -52;
     double midAngle = -44;
     double stageAngle = -30;

@@ -55,16 +55,16 @@ void Controls::ShooterControls()
     switch (GetSelectedRotaryIndex())
     {
         case ControlBoardConstants::POS_AMP_2:
-            shooter->SetAmpRPM(2300);
+            shooter->SetAmpRPM(2200);
             break;
         case ControlBoardConstants::POS_AMP_3:
-            shooter->SetAmpRPM(2100);
-            break;
-        case ControlBoardConstants::POS_AMP_4:
             shooter->SetAmpRPM(2000);
             break;
+        case ControlBoardConstants::POS_AMP_4:
+            shooter->SetAmpRPM(1900);
+            break;
         default:
-            shooter->SetAmpRPM(2200);
+            shooter->SetAmpRPM(2100);
             break;
     }
     if (controlBoard.GetRawButton(ControlBoardConstants::SHOOTER_MOTORS))
@@ -113,9 +113,6 @@ void Controls::ElevatorControls()
         return;
     }
 
-    
-
-    // Manual up - dpad up
     if (controlBoard.GetRawButton(ControlBoardConstants::ELEVATOR_UP))
     {
         if (elevator->GetElevator1Encoder() < elevator->GetHardEncoderLimit())
@@ -127,7 +124,6 @@ void Controls::ElevatorControls()
         else    
             elevator->SetElevator2Motor(0.0);
     }
-    // Manual down - dpad down
     else if (controlBoard.GetRawButton(ControlBoardConstants::ELEVATOR_DOWN))
     {
         if (elevator->GetElevator1BottomLimit() == false)
@@ -141,7 +137,19 @@ void Controls::ElevatorControls()
     }
     else if (controlBoard.GetRawButton(ControlBoardConstants::GROUND_INTAKE))
     {
-        elevator->ElevatorControl(elevator->GetIntakeAngle());
+        if (feeder->IsNoteSecured() == false)
+            elevator->ElevatorControl(elevator->GetIntakeAngle());
+        else
+        {
+            if (elevator->GetElevator1BottomLimit() == false)
+                elevator->SetElevator1Motor(-elevator->GetElevatorSpeed());
+            else    
+                elevator->SetElevator1Motor(0.0);
+            if (elevator->GetElevator2BottomLimit() == false)
+                elevator->SetElevator2Motor(-elevator->GetElevatorSpeed());
+            else    
+                elevator->SetElevator2Motor(0.0);
+        }
     }
     else if (controlBoard.GetRawButton(ControlBoardConstants::SOURCE_INTAKE))
     {

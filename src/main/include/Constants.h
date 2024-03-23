@@ -138,13 +138,13 @@ namespace ElevatorConstants
     inline constexpr double kElevatorD = 0.0065;
     inline constexpr double kElevatorF = 0.0;
 
-    inline constexpr double kForce = 41;
-    inline constexpr double kKickup = 0.8;
+    inline constexpr double kForce = 41.5;
+    inline constexpr double kKickup = 1.0;
     inline constexpr double kGravity = 9.8;
 
-    inline constexpr double kSpeakerHeight = 1.15; // Speaker height to target in meters
+    inline constexpr double kSpeakerHeight = 1.35; // Speaker height to target in meters
 
-    inline constexpr double SHOOTER_ANGLE_OFFSET = 52.0 / 360;
+    inline constexpr double SHOOTER_ANGLE_OFFSET = 54.0 / 360;
 
     inline constexpr double kRotationsPerDegree = 0.0;
 }

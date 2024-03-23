@@ -41,7 +41,8 @@ void Shooter::ShootAtSpeaker()
 
 void Shooter::ShootAtAmp()
 {
-    SetShooterMotorsRPM(ampRPM);
+    SetShooterMotor1RPM(ampRPM);
+    SetShooterMotor2RPM(ampRPM);
 }
 
 void Shooter::IntakeFromSource()
