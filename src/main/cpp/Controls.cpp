@@ -115,41 +115,18 @@ void Controls::ElevatorControls()
 
     if (controlBoard.GetRawButton(ControlBoardConstants::ELEVATOR_UP))
     {
-        if (elevator->GetElevator1Encoder() < elevator->GetHardEncoderLimit())
-            elevator->SetElevator1Motor(elevator->GetElevatorSpeed());
-        else    
-            elevator->SetElevator1Motor(0.0);
-        if (elevator->GetElevator2Encoder() < elevator->GetHardEncoderLimit())
-            elevator->SetElevator2Motor(elevator->GetElevatorSpeed());
-        else    
-            elevator->SetElevator2Motor(0.0);
+        elevator->SetElevatorMotorsWithLimits(elevator->GetElevatorSpeed());
     }
     else if (controlBoard.GetRawButton(ControlBoardConstants::ELEVATOR_DOWN))
     {
-        if (elevator->GetElevator1BottomLimit() == false)
-            elevator->SetElevator1Motor(-elevator->GetElevatorSpeed());
-        else    
-            elevator->SetElevator1Motor(0.0);
-        if (elevator->GetElevator2BottomLimit() == false)
-            elevator->SetElevator2Motor(-elevator->GetElevatorSpeed());
-        else    
-            elevator->SetElevator2Motor(0.0);
+        elevator->SetElevatorMotorsWithLimits(-elevator->GetElevatorSpeed());
     }
     else if (controlBoard.GetRawButton(ControlBoardConstants::GROUND_INTAKE))
     {
         if (feeder->IsNoteSecured() == false)
             elevator->ElevatorControl(elevator->GetIntakeAngle());
         else
-        {
-            if (elevator->GetElevator1BottomLimit() == false)
-                elevator->SetElevator1Motor(-elevator->GetElevatorSpeed());
-            else    
-                elevator->SetElevator1Motor(0.0);
-            if (elevator->GetElevator2BottomLimit() == false)
-                elevator->SetElevator2Motor(-elevator->GetElevatorSpeed());
-            else    
-                elevator->SetElevator2Motor(0.0);
-        }
+            elevator->SetElevatorMotorsWithLimits(-elevator->GetElevatorSpeed());
     }
     else if (controlBoard.GetRawButton(ControlBoardConstants::SOURCE_INTAKE))
     {

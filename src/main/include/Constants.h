@@ -144,9 +144,7 @@ namespace ElevatorConstants
 
     inline constexpr double kSpeakerHeight = 1.35; // Speaker height to target in meters
 
-    inline constexpr double SHOOTER_ANGLE_OFFSET = 54.0 / 360;
-
-    inline constexpr double kRotationsPerDegree = 0.0;
+    inline constexpr double SHOOTER_ANGLE_OFFSET = 15;
 }
 
 namespace ControlBoardConstants
