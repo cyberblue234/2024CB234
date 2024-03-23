@@ -82,8 +82,8 @@ void Elevator::ElevatorControl(double angle)
 
 void Elevator::SetElevatorMotorsWithLimits(double power)
 {
-    bool elevator1Limit = power > 0 ? GetElevator1Encoder() < GetHardEncoderLimit() : GetElevator1BottomLimit() == false;
-    bool elevator2Limit = power > 0 ? GetElevator2Encoder() < GetHardEncoderLimit() : GetElevator2BottomLimit() == false;
+    bool elevator1Limit = power > 0 ? GetElevator1Encoder() > GetHardEncoderLimit() : GetElevator1BottomLimit() == true;
+    bool elevator2Limit = power > 0 ? GetElevator2Encoder() > GetHardEncoderLimit() : GetElevator2BottomLimit() == true;
     if (elevator1Limit == false)
         SetElevator1Motor(power);
     else    

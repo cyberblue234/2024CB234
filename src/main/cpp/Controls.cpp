@@ -182,7 +182,8 @@ void Controls::FeederControls()
         if (GetSelectedRotaryIndex() == ControlBoardConstants::POS_AMP_MAIN
         || GetSelectedRotaryIndex() == ControlBoardConstants::POS_AMP_2
         || GetSelectedRotaryIndex() == ControlBoardConstants::POS_AMP_3
-        || GetSelectedRotaryIndex() == ControlBoardConstants::POS_AMP_4)
+        || GetSelectedRotaryIndex() == ControlBoardConstants::POS_AMP_4
+        || GetSelectedRotaryIndex() == ControlBoardConstants::MANUAL_AMP)
             feeder->ShootAtAmp();
         else if (GetSelectedRotaryIndex() != ControlBoardConstants::MANUAL_SCORE)
         {
