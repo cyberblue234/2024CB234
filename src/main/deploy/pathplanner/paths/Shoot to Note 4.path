@@ -3,45 +3,39 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.1604194636960707,
-        "y": 3.7967995935991876
+        "x": 3.242062484124969,
+        "y": 2.374832178235786
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.828440799738743,
-        "y": 2.066983562538554
+        "x": 4.854602852062849,
+        "y": 1.4659457890344358
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Source Far Shoot"
     },
     {
       "anchor": {
-        "x": 8.035705214267571,
-        "y": 0.7622918102979067
+        "x": 8.182299793171016,
+        "y": 2.374832178235786
       },
       "prevControl": {
-        "x": 5.968721651729018,
-        "y": 1.5245836205958132
+        "x": 7.1268188250662226,
+        "y": 1.583221452157191
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Center Source 1"
+      "linkedName": "Note 4"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.75,
-      "rotationDegrees": 0,
-      "rotateFast": false
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [
     {
       "name": "Slow Down",
       "minWaypointRelativePos": 0.75,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
-        "maxVelocity": 1.5,
+        "maxVelocity": 2.0,
         "maxAcceleration": 3.0,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0
@@ -57,13 +51,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
+    "rotation": 39.61068824002649,
     "rotateFast": false
   },
   "reversed": false,
   "folder": "Source Paths",
   "previewStartingState": {
-    "rotation": -62.65012421993009,
+    "rotation": 0,
     "velocity": 0
   },
   "useDefaultConstraints": true

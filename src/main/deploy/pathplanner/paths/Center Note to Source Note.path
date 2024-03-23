@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.5397411833784704,
-        "y": 5.59724755813148
+        "x": 2.6850030842918833,
+        "y": 5.52661562465982
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.7268076094593745,
-        "y": 5.2107709410224015
+        "x": 1.8720695103727873,
+        "y": 5.140139007550742
       },
       "isLocked": false,
       "linkedName": "Center Note"
@@ -55,7 +55,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Center Paths",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

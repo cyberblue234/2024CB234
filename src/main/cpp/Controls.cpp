@@ -37,10 +37,6 @@ void Controls::DriveControls()
 
     if (swerve->IsAlignmentOn())
         swerve->AlignSwerveDrive();
-    else if (controlBoard.GetRawButton(ControlBoardConstants::ANCHOR))
-    {
-        swerve->SetAnchorState();
-    }
     else
     {
         double rot = swerve->RotationControl(gamepad.GetRightX(), 
@@ -113,8 +109,7 @@ void Controls::ElevatorControls()
         elevator->SetElevator2Motor(gamepad.GetRightBumper() ? -0.5 : 0.5);
         return;
     }
-
-    if (controlBoard.GetRawButton(ControlBoardConstants::ELEVATOR_UP))
+    else if (controlBoard.GetRawButton(ControlBoardConstants::ELEVATOR_UP))
     {
         elevator->SetElevatorMotorsWithLimits(elevator->GetElevatorSpeed());
     }
@@ -124,10 +119,7 @@ void Controls::ElevatorControls()
     }
     else if (controlBoard.GetRawButton(ControlBoardConstants::GROUND_INTAKE))
     {
-        if (feeder->IsNoteSecured() == false)
-            elevator->ElevatorControl(elevator->GetIntakeAngle());
-        else
-            elevator->SetElevatorMotorsWithLimits(-elevator->GetElevatorSpeed());
+        elevator->ElevatorControl(elevator->GetIntakeAngle());
     }
     else if (controlBoard.GetRawButton(ControlBoardConstants::SOURCE_INTAKE))
     {
@@ -172,7 +164,17 @@ void Controls::ElevatorControls()
         elevator->ElevatorControl(angle);
     }
     else
-        elevator->SetElevatorMotors(0.0);
+    {
+        if (controlBoard.GetRawButton(ControlBoardConstants::AUTO_ELEVATOR_DOWN) == true)
+        {
+            elevator->SetElevatorMotorsWithLimits(-elevator->GetElevatorSpeed());
+        }
+        else
+        {
+            elevator->SetElevatorMotors(0.0);
+        }
+        
+    }
 }
 
 void Controls::FeederControls()

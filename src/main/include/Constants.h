@@ -118,7 +118,7 @@ namespace DrivetrainConstants
 
     inline constexpr double DRIVE_SLOW_ADJUSTMENT = 0.20;
 
-    inline constexpr double kRotationP = 0.025;
+    inline constexpr double kRotationP = 0.023;
     inline constexpr double kRotationI = 0.00;
     inline constexpr double kRotationD = 0.002;
 }
@@ -161,8 +161,8 @@ namespace ControlBoardConstants
     inline constexpr int ELEVATOR_UP = 3;
     // Move the elevator down switch
     inline constexpr int ELEVATOR_DOWN = 4;
-    // Turn the anchor on switch
-    inline constexpr int ANCHOR = 6;
+    // Toggle for the elevator to automatically move down
+    inline constexpr int AUTO_ELEVATOR_DOWN = 6;
     // Purge any notes button
     inline constexpr int PURGE = 5;
     // Rotary switches: 0 - 9, easier to deal with than the raw analog inputs 
