@@ -147,6 +147,12 @@ namespace ElevatorConstants
     inline constexpr double SHOOTER_ANGLE_OFFSET = 15;
 }
 
+namespace LimelightConstants
+{
+    inline constexpr double focalLength = 0.0;
+    inline constexpr double noteWidth = 14.0; // Width of note in inches
+}
+
 namespace ControlBoardConstants
 {
     // Shoot button
