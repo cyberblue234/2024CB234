@@ -86,7 +86,7 @@ namespace SwerveModuleConstants
     // Wheel rotations to motor rotations
     inline constexpr double DRIVE_GEAR_RATIO = 8.75 / 1;
     // Circumference in meters
-    inline constexpr double WHEEL_CIRCUMFERENCE = 0.32385;
+    inline constexpr double WHEEL_CIRCUMFERENCE = 0.309211257;
 }
 
 namespace DrivetrainConstants
