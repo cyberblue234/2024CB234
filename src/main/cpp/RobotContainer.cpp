@@ -59,7 +59,6 @@ frc2::CommandPtr RobotContainer::GetShootCommand()
 		(
 			[this]
 			{
-				this->GetShooter()->ShootAtSpeaker();
 				this->GetFeeder()->ShootAtSpeaker();
 			}
 		).Until
@@ -75,7 +74,7 @@ frc2::CommandPtr RobotContainer::GetShootCommand()
 		(
 			[this]
 			{
-				this->GetShooter()->SetShooterMotors(0.0);
+				this->GetFeeder()->SetFeedMotor(0.0);
 				this->GetElevator()->SetElevatorMotors(0.0);
 			}
 		).ToPtr()
@@ -112,6 +111,17 @@ frc2::CommandPtr RobotContainer::GetIntakeCommand()
 				return this->GetFeeder()->IsNoteSecured() == true;
 			}
 		)
+	).AndThen
+	(
+		frc2::InstantCommand
+		(
+			[this]
+			{
+				this->GetIntake()->SetIntakeMotor(0.0);
+				this->GetFeeder()->SetFeedMotor(0.0);
+				this->GetElevator()->SetElevatorMotors(0.0);
+			}
+		).ToPtr()
 	);
 }
 

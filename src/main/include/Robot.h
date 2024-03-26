@@ -28,5 +28,4 @@ public:
 private:
     std::optional<frc2::CommandPtr> autonomousCommand;
     RobotContainer container;
-    std::string auton;
 };

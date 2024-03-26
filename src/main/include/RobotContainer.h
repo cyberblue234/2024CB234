@@ -55,6 +55,37 @@ public:
 
 	std::string GetAuto() { return autoChooser.GetSelected(); };
 
+	void PlotAutonomousPath()
+	{
+		static std::string auton = "";
+		std::string newAuton = GetAuto();
+		if (auton != newAuton)
+		{
+			if (auton != "" && auton != AutoConstants::kAutoShoot)
+			{
+				auto oldPathGroup = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile(auton);
+				char count = 48;
+				for (auto path = oldPathGroup.begin(); path != oldPathGroup.end(); ++path)
+				{
+					swerve.GetField()->GetObject(std::string({'p', 'a', 't', 'h', count}))->SetPose(frc::Pose2d());
+					count++;
+				}
+			}
+
+			auton = newAuton;
+
+			if (newAuton == AutoConstants::kAutoShoot) return;
+			
+			auto pathGroup = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile(auton);
+			char count = 48;
+			for (auto path = pathGroup.begin(); path != pathGroup.end(); ++path)
+			{
+				swerve.GetField()->GetObject(std::string({'p', 'a', 't', 'h', count}))->SetPoses(path->get()->getPathPoses());
+				count++;
+			}
+		}
+	}
+
 	void LogTeleopData();
 	void LogAutoData();
 

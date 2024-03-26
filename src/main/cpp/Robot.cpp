@@ -14,32 +14,7 @@ void Robot::DisabledInit() {}
 
 void Robot::DisabledPeriodic() 
 {
-	std::string newAuton = container.GetAuto();
-	if (auton != newAuton)
-	{
-		if (auton != "" && auton != AutoConstants::kAutoShoot)
-		{
-			auto oldPathGroup = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile(auton);
-			char count = 48;
-			for (auto path = oldPathGroup.begin(); path != oldPathGroup.end(); ++path)
-			{
-				container.GetSwerve()->GetField()->GetObject(std::string({'p', 'a', 't', 'h', count}))->SetPose(frc::Pose2d());
-				count++;
-			}
-		}
-
-		auton = newAuton;
-
-		if (newAuton == AutoConstants::kAutoShoot) return;
-		
-		auto pathGroup = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile(auton);
-		char count = 48;
-		for (auto path = pathGroup.begin(); path != pathGroup.end(); ++path)
-		{
-			container.GetSwerve()->GetField()->GetObject(std::string({'p', 'a', 't', 'h', count}))->SetPoses(path->get()->getPathPoses());
-			count++;
-		}
-	}
+	container.PlotAutonomousPath();
 }
 
 void Robot::AutonomousInit()
