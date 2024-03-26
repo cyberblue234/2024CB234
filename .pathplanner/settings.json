@@ -3,17 +3,23 @@
   "robotLength": 0.99,
   "holonomicMode": true,
   "pathFolders": [
-    "Center Paths",
-    "Amp Paths",
-    "Source Paths"
+    "0 Center Start",
+    "1 Amp Start",
+    "3 Close Notes",
+    "4 Far Bottom Notes",
+    "5 Far Top Notes",
+    "2 Source Start"
   ],
   "autoFolders": [
-    "Center Autos",
-    "Amp Autos",
-    "Source Autos"
+    "3 Amp to Amp Note",
+    "1 Center to Amp Note",
+    "0 Center to Center Note",
+    "2 Center to Source Note",
+    "5 Source to Note 5",
+    "4 Source to Source Note"
   ],
-  "defaultMaxVel": 3.0,
-  "defaultMaxAccel": 3.0,
+  "defaultMaxVel": 1.75,
+  "defaultMaxAccel": 2.0,
   "defaultMaxAngVel": 540.0,
   "defaultMaxAngAccel": 720.0,
   "maxModuleSpeed": 4.5

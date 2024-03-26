@@ -3,47 +3,47 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.035705214267571,
-        "y": 0.7622918102979067
+        "x": 1.43,
+        "y": 5.5542831962242065
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.112159367175877,
-        "y": 0.9235458470916952
+        "x": 1.5799999999999998,
+        "y": 5.5542831962242065
       },
       "isLocked": false,
-      "linkedName": "Center Source 1"
+      "linkedName": "Center Starting"
     },
     {
       "anchor": {
-        "x": 3.242062484124969,
-        "y": 2.374832178235786
+        "x": 2.5285750571501144,
+        "y": 5.5542831962242065
       },
       "prevControl": {
-        "x": 3.6965056787256443,
-        "y": 2.0083457309771764
+        "x": 2.3785750571501145,
+        "y": 5.5542831962242065
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Source Far Shoot"
+      "linkedName": "Center Note"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 1.75,
+    "maxAcceleration": 2.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -43.87669728592464,
+    "rotation": 0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Source Paths",
+  "folder": "0 Center Start",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

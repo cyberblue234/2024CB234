@@ -12,7 +12,7 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "deadline",
           "data": {
             "commands": [
               {
@@ -24,7 +24,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Center Start"
+                  "pathName": "Amp Start to Amp Note"
                 }
               }
             ]
@@ -39,6 +39,6 @@
       ]
     }
   },
-  "folder": "Center Autos",
+  "folder": "3 Amp to Amp Note",
   "choreoAuto": false
 }

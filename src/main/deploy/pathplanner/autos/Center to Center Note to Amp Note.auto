@@ -12,7 +12,7 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "deadline",
           "data": {
             "commands": [
               {
@@ -24,7 +24,32 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Amp Side Start"
+                  "pathName": "Center Start to Center Note"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Center Note to Amp Note"
                 }
               }
             ]
@@ -39,6 +64,6 @@
       ]
     }
   },
-  "folder": "Amp Autos",
+  "folder": "0 Center to Center Note",
   "choreoAuto": false
 }

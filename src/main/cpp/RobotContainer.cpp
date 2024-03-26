@@ -8,14 +8,17 @@ RobotContainer::RobotContainer() : swerve(GetLimelight3()), elevator(GetLimeligh
 {
 	NamedCommands::registerCommand("Shoot", GetShootCommand());
 	NamedCommands::registerCommand("Intake", GetIntakeCommand());
+	NamedCommands::registerCommand("ShooterMotorsOn", GetShooterMotorsOnCommand());
 
-	frc::SmartDashboard::PutBoolean("2 Note Center Auto", false);
-	frc::SmartDashboard::PutBoolean("Center and Amp", false);
-	frc::SmartDashboard::PutBoolean("Center and Source", false);
-	frc::SmartDashboard::PutBoolean("2 Note Amp Auto", false);
-	frc::SmartDashboard::PutBoolean("Source Auto", false);
-	frc::SmartDashboard::PutBoolean("4 Note", false);
-	frc::SmartDashboard::PutBoolean("3 Note Amp Auto", false);
+	autoChooser.SetDefaultOption(AutoConstants::kAutoShoot, AutoConstants::kAutoShoot);
+	for (auto i = AutoConstants::kAutoArray.begin(); i != AutoConstants::kAutoArray.end(); ++i)
+	{
+		autoChooser.AddOption(*i, *i);
+	}
+
+	frc::SmartDashboard::PutData("Auto Chooser", &autoChooser);
+
+	shooterMotorsOnCommand = GetShooterMotorsOnCommand();
 
 	orchestra.AddInstrument(*swerve.GetFrontLeftModule()->GetDriveMotor());
 	orchestra.AddInstrument(*swerve.GetFrontLeftModule()->GetSwerveMotor());
@@ -31,53 +34,54 @@ RobotContainer::RobotContainer() : swerve(GetLimelight3()), elevator(GetLimeligh
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand()
 {
-	if (frc::SmartDashboard::GetBoolean("2 Note Center Auto", false))
-		return PathPlannerAuto("2 Note Center Auto").ToPtr();
-	if (frc::SmartDashboard::GetBoolean("Center and Amp", false))
-		return PathPlannerAuto("Center and Amp").ToPtr();
-	if (frc::SmartDashboard::GetBoolean("Center and Source", false))
-		return PathPlannerAuto("Center and Source").ToPtr();
-	if (frc::SmartDashboard::GetBoolean("2 Note Amp Auto", false))
-		return PathPlannerAuto("2 Note Amp Auto").ToPtr();
-	if (frc::SmartDashboard::GetBoolean("Source Auto", false))
-		return PathPlannerAuto("Source Auto").ToPtr();
-	if (frc::SmartDashboard::GetBoolean("4 Note", false))
-		return PathPlannerAuto("4 Note").ToPtr();
-	if (frc::SmartDashboard::GetBoolean("3 Note Amp Auto", false))
-		return PathPlannerAuto("3 Note Amp Auto").ToPtr();
-	return PathPlannerAuto("2 Note Center Auto").ToPtr();
+	std::string auton = GetAuto();
+	if (auton == AutoConstants::kAutoShoot) return GetShootCommand();
+	return PathPlannerAuto(auton).ToPtr();
 }
 
 frc2::CommandPtr RobotContainer::GetShootCommand()
 {
-	return frc2::RunCommand
+	return frc2::InstantCommand
 	(
 		[this]
 		{
-			this->GetIntake()->SetIntakeMotor(0.0);
-			this->GetSwerve()->AlignToSpeaker();
-			this->GetElevator()->ElevatorControl(this->GetElevator()->CalculateSpeakerAngle());
-			this->GetShooter()->ShootAtSpeaker();
+			if (this->shooterMotorsOnCommand->IsScheduled() == false)
+			{
+				this->shooterMotorsOnCommand->Schedule();
+			}
 		}
-	).Until
+	).ToPtr().AndThen
 	(
-		[this]
-		{
-			bool atAlignment = this->GetSwerve()->AtSetpoint() && this->GetElevator()->AtSetpoint();
-			return this->GetShooter()->GetShooter1RPM() >= this->GetShooter()->GetSpeakerRPM() - 100 && atAlignment;
-		}
+		frc2::RunCommand
+		(
+			[this]
+			{
+				this->GetIntake()->SetIntakeMotor(0.0);
+				this->GetSwerve()->AlignToSpeaker();
+				this->GetElevator()->ElevatorControl(this->GetElevator()->CalculateSpeakerAngle());
+			}
+		).Until
+		(
+			[this]
+			{
+				bool atAlignment = this->GetSwerve()->AtSetpoint() && this->GetElevator()->AtSetpoint();
+				return this->GetShooter()->GetShooter1RPM() >= this->GetShooter()->GetSpeakerRPM() - 100 && atAlignment;
+			}
+		)
 	).AndThen
 	(
 		frc2::RunCommand
 		(
 			[this]
 			{
-				this->GetShooter()->ShootAtSpeaker();
 				this->GetFeeder()->ShootAtSpeaker();
 			}
-		).ToPtr().RaceWith
+		).Until
 		(
-			frc2::WaitCommand(1.0_s).ToPtr()
+			[this]
+			{
+				return this->GetFeeder()->GetTopSensorInput() == false;
+			}
 		)
 	).AndThen
 	(
@@ -85,9 +89,8 @@ frc2::CommandPtr RobotContainer::GetShootCommand()
 		(
 			[this]
 			{
-				this->GetShooter()->SetShooterMotors(0.0);
-				this->GetElevator()->SetElevatorMotors(0.0);
 				this->GetFeeder()->SetFeedMotor(0.0);
+				this->GetElevator()->SetElevatorMotors(0.0);
 			}
 		).ToPtr()
 	);
@@ -110,6 +113,48 @@ frc2::CommandPtr RobotContainer::GetIntakeCommand()
 			return this->GetFeeder()->IsNoteSecured();
 		}
 	);
+}
+
+frc2::CommandPtr RobotContainer::GetShooterMotorsOnCommand()
+{
+	return frc2::RunCommand
+	(
+		[this]
+		{
+			this->GetShooter()->ShootAtSpeaker();
+		}
+	).ToPtr();
+}
+
+void RobotContainer::PlotAutonomousPath()
+{
+	static std::string auton = "";
+	std::string newAuton = GetAuto();
+	if (auton != newAuton)
+	{
+		if (auton != "" && auton != AutoConstants::kAutoShoot)
+		{
+			auto oldPathGroup = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile(auton);
+			char count = 48;
+			for (auto path = oldPathGroup.begin(); path != oldPathGroup.end(); ++path)
+			{
+				swerve.GetField()->GetObject(std::string({'p', 'a', 't', 'h', count}))->SetPose(frc::Pose2d());
+				count++;
+			}
+		}
+
+		auton = newAuton;
+
+		if (newAuton == AutoConstants::kAutoShoot) return;
+		
+		auto pathGroup = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile(auton);
+		char count = 48;
+		for (auto path = pathGroup.begin(); path != pathGroup.end(); ++path)
+		{
+			swerve.GetField()->GetObject(std::string({'p', 'a', 't', 'h', count}))->SetPoses(path->get()->getPathPoses());
+			count++;
+		}
+	}
 }
 
 void RobotContainer::LogTeleopData()

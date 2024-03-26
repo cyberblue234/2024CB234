@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.8045844863619553,
-        "y": 5.183771595613367
+        "x": 1.7955162226113928,
+        "y": 5.882027904406686
       },
       "isLocked": false,
       "linkedName": "Center Note"
     },
     {
       "anchor": {
-        "x": 2.7114108614182144,
-        "y": 4.1046482092964185
+        "x": 2.6570012789148385,
+        "y": 6.897673444469697
       },
       "prevControl": {
-        "x": 1.904335387618144,
-        "y": 4.267876956806545
+        "x": 2.0857006626293955,
+        "y": 6.797922543213508
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Source Note"
+      "linkedName": "Amp Note"
     }
   ],
   "rotationTargets": [],
@@ -39,7 +39,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -7.666804261814137,
+    "rotation": 35.0,
     "rotateFast": false
   },
   "reversed": false,

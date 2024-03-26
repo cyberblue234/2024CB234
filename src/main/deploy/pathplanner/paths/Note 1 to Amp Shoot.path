@@ -3,50 +3,50 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.240937624732393,
-        "y": 7.359047860952865
+        "x": 7.952867309243391,
+        "y": 7.450837533254014
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.657716172575203,
-        "y": 7.183134366268732
+        "x": 6.039463657874685,
+        "y": 7.441769269503451
       },
       "isLocked": false,
       "linkedName": "Note 1"
     },
     {
       "anchor": {
-        "x": 4.326862368010451,
-        "y": 6.6553938822163365
+        "x": 2.874639608928341,
+        "y": 6.825127334465196
       },
       "prevControl": {
-        "x": 5.103813636198701,
-        "y": 6.860626292681157
+        "x": 5.014749854061112,
+        "y": 7.441769269503451
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Amp Shoot"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 3.5,
+    "maxAcceleration": 3.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": 9.727578551401571,
+    "velocity": 1.5,
+    "rotation": 13.781597235653631,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Amp Paths",
+  "folder": "5 Far Top Notes",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }
