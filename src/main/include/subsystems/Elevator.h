@@ -12,6 +12,7 @@
 #include "subsystems/Limelight.h"
 #include "Constants.h"
 #include <numbers>
+#include <functional>
 
 using namespace ctre::phoenix6;
 
@@ -24,32 +25,29 @@ public:
 
     double CalculateSpeakerAngle();
 
-    void ElevatorControl(double angle);
-
-    void ToIntakeAngle() { ElevatorControl(intakeAngle); };
-    void ToSubwooferAngle() { ElevatorControl(closeAngle); };
-    void ToCalculatedAngle() { ElevatorControl(CalculateSpeakerAngle()); };
-
-    void SetElevatorMotorsPosition(double pos) 
-    { 
-        SetElevator1MotorPosition(pos);
-        SetElevator2MotorPosition(pos);
+    enum ControlMethods
+    {
+        Speed,
+        Position
     };
-    void SetElevator1MotorPosition(double pos) { SetElevator1Motor(ElevatorPIDCalculate(pos)); };
-    void SetElevator2MotorPosition(double pos) { SetElevator2Motor(ElevatorPIDCalculate(pos)); };
+
+    void ElevatorControl(double value, ControlMethods method);
+
+    void ToIntakeAngle() { ElevatorControl(intakeAngle, ControlMethods::Position); };
+    void ToSubwooferAngle() { ElevatorControl(closeAngle, ControlMethods::Position); };
+    void ToCalculatedAngle() { ElevatorControl(CalculateSpeakerAngle(), ControlMethods::Position); };
+
+    void SetElevator1MotorPosition(double pos, double correction) { SetElevator1Motor(ElevatorPIDCalculate(pos) * correction); };
+    void SetElevator2MotorPosition(double pos, double correction) { SetElevator2Motor(ElevatorPIDCalculate(pos) * correction); };
 
     double ElevatorPIDCalculate(double pos) { return elevatorPID.Calculate(GetShooterAngle(), pos); };
 
     bool AtSetpoint() { return elevatorPID.AtSetpoint(); };
 
-    void SetElevatorMotorsWithLimits(double power);
-    void SetElevatorMotors(double power) 
-    { 
-        SetElevator1Motor(power); 
-        SetElevator2Motor(power); 
-    };
     void SetElevator1Motor(double power) { elevator1Motor.Set(power); };
     void SetElevator2Motor(double power) { elevator2Motor.Set(power); };
+
+    void StopMotors() { SetElevator1Motor(0.0); SetElevator2Motor(0.0); };
 
     double GetShooterAngle() { return shooterAngleEncoder.GetDistance() - ElevatorConstants::SHOOTER_ANGLE_OFFSET; };
     double GetShooterAngleRevolutions() { return (double)shooterAngleEncoder.Get() - (ElevatorConstants::SHOOTER_ANGLE_OFFSET / 360); };
@@ -86,6 +84,7 @@ private:
     hardware::TalonFX elevator1Motor{RobotMap::ELEVATOR_MOTOR1_ADDRESS, "rio"};
     hardware::TalonFX elevator2Motor{RobotMap::ELEVATOR_MOTOR2_ADDRESS, "rio"};
     frc::PIDController elevatorPID{ElevatorConstants::kElevatorP, ElevatorConstants::kElevatorI, ElevatorConstants::kElevatorD, 20_ms};
+    frc::PIDController correctionPID{ElevatorConstants::kCorrectionP, ElevatorConstants::kCorrectionI, ElevatorConstants::kCorrectionD, 20_ms};
 
     frc::DutyCycleEncoder shooterAngleEncoder{RobotMap::SHOOTER_ENCODER_ADDRESS};
 

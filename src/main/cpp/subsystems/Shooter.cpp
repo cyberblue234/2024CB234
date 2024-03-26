@@ -36,7 +36,8 @@ void Shooter::Periodic()
 
 void Shooter::ShootAtSpeaker()
 {
-    SetShooterMotorsRPM(speakerRPM);
+    SetShooterMotor1RPM(speakerRPM + 2000);
+    SetShooterMotor2RPM(speakerRPM);
 }
 
 void Shooter::ShootAtAmp()

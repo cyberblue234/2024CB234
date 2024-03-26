@@ -19,6 +19,7 @@ public:
     bool IsNoteSecured() { return GetTopSensorInput() && GetBottomSensorInput(); };
     void Purge() { SetFeedMotor(-1.0); };
     void SetFeedMotor(double power) { feedMotor.Set(power); };
+    void StopMotor() { SetFeedMotor(0.0); };
 
     double GetFeedMotorRPM() { return feedMotorEncoder.GetVelocity(); }
     double GetGroundIntakeSpeed() { return groundIntakeSpeed; };

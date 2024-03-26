@@ -56,7 +56,7 @@ frc2::CommandPtr RobotContainer::GetShootCommand()
 		{
 			this->GetIntake()->SetIntakeMotor(0.0);
 			this->GetSwerve()->AlignToSpeaker();
-			this->GetElevator()->ElevatorControl(this->GetElevator()->CalculateSpeakerAngle());
+			this->GetElevator()->ElevatorControl(this->GetElevator()->CalculateSpeakerAngle(), Elevator::ControlMethods::Position);
 			this->GetShooter()->ShootAtSpeaker();
 		}
 	).Until
@@ -85,9 +85,9 @@ frc2::CommandPtr RobotContainer::GetShootCommand()
 		(
 			[this]
 			{
-				this->GetShooter()->SetShooterMotors(0.0);
-				this->GetElevator()->SetElevatorMotors(0.0);
-				this->GetFeeder()->SetFeedMotor(0.0);
+				this->GetShooter()->StopMotors();
+				this->GetElevator()->StopMotors();
+				this->GetFeeder()->StopMotor();
 			}
 		).ToPtr()
 	);
@@ -99,7 +99,7 @@ frc2::CommandPtr RobotContainer::GetIntakeCommand()
 	(
 		[this]
 		{
-			this->GetElevator()->ElevatorControl(this->GetElevator()->GetIntakeAngle());
+			this->GetElevator()->ElevatorControl(this->GetElevator()->GetIntakeAngle(), Elevator::ControlMethods::Position);
 			this->GetIntake()->IntakeFromGround();
 			this->GetFeeder()->IntakeFromGround();
 		}
