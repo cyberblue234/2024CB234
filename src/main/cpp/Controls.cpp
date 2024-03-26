@@ -56,9 +56,6 @@ void Controls::ShooterControls()
         case ControlBoardConstants::POS_AMP_3:
             shooter->SetAmpRPM(2000);
             break;
-        case ControlBoardConstants::POS_AMP_4:
-            shooter->SetAmpRPM(1900);
-            break;
         default:
             shooter->SetAmpRPM(2100);
             break;
@@ -68,7 +65,6 @@ void Controls::ShooterControls()
         if (GetSelectedRotaryIndex() == ControlBoardConstants::POS_AMP_MAIN
         || GetSelectedRotaryIndex() == ControlBoardConstants::POS_AMP_2
         || GetSelectedRotaryIndex() == ControlBoardConstants::POS_AMP_3
-        || GetSelectedRotaryIndex() == ControlBoardConstants::POS_AMP_4
         || GetSelectedRotaryIndex() == ControlBoardConstants::MANUAL_AMP)
             shooter->ShootAtAmp();
         else
@@ -154,9 +150,6 @@ void Controls::ElevatorControls()
             case ControlBoardConstants::POS_AMP_3:
                 angle = elevator->GetAmpAngle();
                 break;
-            case ControlBoardConstants::POS_AMP_4:
-                angle = elevator->GetAmpAngle();
-                break;
             // Default is the close angle
             default:
                 angle = elevator->GetCloseAngle();
@@ -185,7 +178,6 @@ void Controls::FeederControls()
         if (GetSelectedRotaryIndex() == ControlBoardConstants::POS_AMP_MAIN
         || GetSelectedRotaryIndex() == ControlBoardConstants::POS_AMP_2
         || GetSelectedRotaryIndex() == ControlBoardConstants::POS_AMP_3
-        || GetSelectedRotaryIndex() == ControlBoardConstants::POS_AMP_4
         || GetSelectedRotaryIndex() == ControlBoardConstants::MANUAL_AMP)
             feeder->ShootAtAmp();
         else if (GetSelectedRotaryIndex() != ControlBoardConstants::MANUAL_SCORE)

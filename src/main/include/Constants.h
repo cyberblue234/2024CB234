@@ -72,21 +72,21 @@ namespace RobotMap
 namespace SwerveModuleConstants
 {
     inline constexpr double ENCODER_INCHES_PER_COUNT = 0.00090689;
-    inline constexpr double ENCODER_METERS_PER_COUNT = ENCODER_INCHES_PER_COUNT / 39.37;
-    // 6.54 : 1
+
     inline constexpr double kDriveP = 0.5;                                                                                     
     inline constexpr double kDriveI = 0.0;
     inline constexpr double kDriveD = 0.1;
     inline constexpr double kDriveF = 0.2;
 
-    inline constexpr double kAngleP = 15; // 030;
+    inline constexpr double kAngleP = 15;
     inline constexpr double kAngleI = 0.0;
-    inline constexpr double kAngleD = 0.5; // 0.001;
+    inline constexpr double kAngleD = 0.5;
     inline constexpr double kAngleF = 0.0;
 
-    inline constexpr int kCancoderCountsPerRotation = 16384;
-    inline constexpr double kCancoderFeedbackCoefficient = 0.087890625;
-    inline constexpr double kSwerveModuleGearRatio = 15.4;
+    // Wheel rotations to motor rotations
+    inline constexpr double DRIVE_GEAR_RATIO = 8.75 / 1;
+    // Circumference in meters
+    inline constexpr double WHEEL_CIRCUMFERENCE = 0.32385;
 }
 
 namespace DrivetrainConstants
@@ -179,8 +179,6 @@ namespace ControlBoardConstants
     inline constexpr int POS_AMP_2 = 7;
     // Scoring position for the amp speed 3
     inline constexpr int POS_AMP_3 = 8;
-    // Scoring position for the amp speed 4
-    inline constexpr int POS_AMP_4 = 9;
     // Auto alignment scoring position
     inline constexpr int AUTO_SCORE = 4;
     // Auto alignment with odometry scoring position
