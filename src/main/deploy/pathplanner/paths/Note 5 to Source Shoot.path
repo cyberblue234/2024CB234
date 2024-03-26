@@ -39,11 +39,11 @@
   },
   "goalEndState": {
     "velocity": 1.5,
-    "rotation": -46.80873932249211,
+    "rotation": -50.0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "4 Far Bottom Notes",
+  "folder": "4 Bottom Notes",
   "previewStartingState": {
     "rotation": -23.05130091647303,
     "velocity": 0

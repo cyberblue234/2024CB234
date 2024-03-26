@@ -1,0 +1,157 @@
+{
+  "NetworkTables": {
+    "Persistent Values": {
+      "open": false
+    },
+    "Retained Values": {
+      "open": false
+    },
+    "types": {
+      "/FMSInfo": "FMSInfo",
+      "/SmartDashboard/Auto Chooser": "String Chooser",
+      "/SmartDashboard/Field": "Field2d"
+    },
+    "windows": {
+      "/SmartDashboard/Field": {
+        "Robot": {
+          "arrowColor": [
+            0.8725489974021912,
+            0.8725489974021912,
+            0.8725489974021912,
+            255.0
+          ],
+          "arrowSize": 25,
+          "arrowWeight": 20.0,
+          "color": [
+            0.07223151624202728,
+            0.0,
+            0.8186274766921997,
+            255.0
+          ],
+          "length": 0.9900000095367432,
+          "style": "Box/Image",
+          "weight": 10.0,
+          "width": 0.8899999856948853
+        },
+        "image": "C:\\Users\\Elliott\\Cyber Blue 234\\2024\\2024CB234\\2024-field.png",
+        "path0": {
+          "arrows": false,
+          "color": [
+            0.0,
+            247.50006103515625,
+            255.0,
+            255.0
+          ],
+          "selectable": false,
+          "style": "Line"
+        },
+        "path1": {
+          "arrows": false,
+          "color": [
+            0.7303921580314636,
+            0.7303921580314636,
+            0.7303921580314636,
+            255.0
+          ],
+          "selectable": false,
+          "style": "Line"
+        },
+        "path2": {
+          "arrows": false,
+          "color": [
+            0.0,
+            1.0,
+            1.0,
+            255.0
+          ],
+          "selectable": false,
+          "style": "Line"
+        },
+        "path3": {
+          "arrows": false,
+          "color": [
+            0.729411780834198,
+            0.729411780834198,
+            0.729411780834198,
+            255.0
+          ],
+          "selectable": false,
+          "style": "Line"
+        },
+        "path4": {
+          "arrows": false,
+          "color": [
+            0.0,
+            1.0,
+            1.0,
+            255.0
+          ],
+          "selectable": false,
+          "style": "Line"
+        },
+        "path5": {
+          "arrows": false,
+          "color": [
+            0.729411780834198,
+            0.729411780834198,
+            0.729411780834198,
+            255.0
+          ],
+          "selectable": false,
+          "style": "Line"
+        },
+        "path6": {
+          "arrows": false,
+          "color": [
+            0.0,
+            1.0,
+            1.0,
+            255.0
+          ],
+          "selectable": false,
+          "style": "Line"
+        },
+        "path7": {
+          "arrows": false,
+          "color": [
+            0.729411780834198,
+            0.729411780834198,
+            0.729411780834198,
+            255.0
+          ],
+          "selectable": false,
+          "style": "Line"
+        },
+        "path8": {
+          "arrows": false,
+          "color": [
+            0.0,
+            1.0,
+            1.0,
+            255.0
+          ],
+          "selectable": false,
+          "style": "Line"
+        },
+        "width": 16.5,
+        "window": {
+          "visible": true
+        }
+      }
+    }
+  },
+  "NetworkTables Info": {
+    "Connections": {
+      "open": true
+    },
+    "Server": {
+      "open": true
+    },
+    "visible": true
+  },
+  "NetworkTables Settings": {
+    "mode": "Client (NT4)",
+    "serverTeam": "localhost",
+    "visible": false
+  }
+}

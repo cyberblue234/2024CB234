@@ -73,7 +73,7 @@ namespace AutoConstants
 {
     const std::string kAutoShoot = "Shoot";
 
-    const std::array<std::string, 19> kAutoArray = 
+    const std::array<std::string, 21> kAutoArray = 
     {
         "Center to Center Note",
         "Center to Center Note to Amp Note" ,
@@ -93,7 +93,9 @@ namespace AutoConstants
         "Source to Source Note to Center Note",
         "Source to Source Note to Center Note to Amp Note",
         "Source to Note 5",
-        "Source to Note 5 to Note 4"
+        "Source to Note 5 to Note 4",
+        "Amp to Note 1",
+        "Amp to Note 1 to Note 2"
     };
 }
 
