@@ -118,7 +118,7 @@ namespace DrivetrainConstants
 
     inline constexpr double DRIVE_SLOW_ADJUSTMENT = 0.20;
 
-    inline constexpr double kRotationP = 0.025;
+    inline constexpr double kRotationP = 0.023;
     inline constexpr double kRotationI = 0.00;
     inline constexpr double kRotationD = 0.002;
 }
@@ -138,15 +138,13 @@ namespace ElevatorConstants
     inline constexpr double kElevatorD = 0.0065;
     inline constexpr double kElevatorF = 0.0;
 
-    inline constexpr double kForce = 41;
-    inline constexpr double kKickup = 0.8;
+    inline constexpr double kForce = 41.5;
+    inline constexpr double kKickup = 1.0;
     inline constexpr double kGravity = 9.8;
 
-    inline constexpr double kSpeakerHeight = 1.15; // Speaker height to target in meters
+    inline constexpr double kSpeakerHeight = 1.35; // Speaker height to target in meters
 
-    inline constexpr double SHOOTER_ANGLE_OFFSET = 52.0 / 360;
-
-    inline constexpr double kRotationsPerDegree = 0.0;
+    inline constexpr double SHOOTER_ANGLE_OFFSET = 15;
 }
 
 namespace ControlBoardConstants
@@ -163,8 +161,8 @@ namespace ControlBoardConstants
     inline constexpr int ELEVATOR_UP = 3;
     // Move the elevator down switch
     inline constexpr int ELEVATOR_DOWN = 4;
-    // Turn the anchor on switch
-    inline constexpr int ANCHOR = 6;
+    // Toggle for the elevator to automatically move down
+    inline constexpr int AUTO_ELEVATOR_DOWN = 6;
     // Purge any notes button
     inline constexpr int PURGE = 5;
     // Rotary switches: 0 - 9, easier to deal with than the raw analog inputs 
@@ -186,4 +184,6 @@ namespace ControlBoardConstants
     inline constexpr int AUTO_SCORE = 4;
     // Manual control for angle and elevator
     inline constexpr int MANUAL_SCORE = 5;
+    // Manual control for amp scoring
+    inline constexpr int MANUAL_AMP = 9;
 }

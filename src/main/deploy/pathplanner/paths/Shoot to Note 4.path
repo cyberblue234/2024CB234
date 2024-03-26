@@ -3,40 +3,40 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.4389491636126137,
-        "y": 5.541275082550166
+        "x": 3.242062484124969,
+        "y": 2.374832178235786
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.5389491636126138,
-        "y": 5.541275082550166
+        "x": 4.854602852062849,
+        "y": 1.4659457890344358
       },
       "isLocked": false,
-      "linkedName": "Center Start Begin"
+      "linkedName": "Source Far Shoot"
     },
     {
       "anchor": {
-        "x": 2.7190686223948486,
-        "y": 5.541275082550166
+        "x": 8.182299793171016,
+        "y": 2.374832178235786
       },
       "prevControl": {
-        "x": 2.4782990144729355,
-        "y": 5.541275082550166
+        "x": 7.1268188250662226,
+        "y": 1.583221452157191
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Center Start End"
+      "linkedName": "Note 4"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [
     {
-      "name": "New Constraints Zone",
-      "minWaypointRelativePos": 0.25,
+      "name": "Slow Down",
+      "minWaypointRelativePos": 0.75,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
-        "maxVelocity": 1.5,
-        "maxAcceleration": 1.5,
+        "maxVelocity": 2.0,
+        "maxAcceleration": 3.0,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0
       }
@@ -51,13 +51,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0,
-    "rotateFast": true
+    "rotation": 39.61068824002649,
+    "rotateFast": false
   },
   "reversed": false,
-  "folder": "Center Paths",
+  "folder": "Source Paths",
   "previewStartingState": {
-    "rotation": 0.0,
+    "rotation": 0,
     "velocity": 0
   },
   "useDefaultConstraints": true

@@ -12,9 +12,10 @@ RobotContainer::RobotContainer() : swerve(GetLimelight3()), elevator(GetLimeligh
 	frc::SmartDashboard::PutBoolean("2 Note Center Auto", false);
 	frc::SmartDashboard::PutBoolean("Center and Amp", false);
 	frc::SmartDashboard::PutBoolean("Center and Source", false);
-	frc::SmartDashboard::PutBoolean("Amp Auto", false);
+	frc::SmartDashboard::PutBoolean("2 Note Amp Auto", false);
 	frc::SmartDashboard::PutBoolean("Source Auto", false);
 	frc::SmartDashboard::PutBoolean("4 Note", false);
+	frc::SmartDashboard::PutBoolean("3 Note Amp Auto", false);
 
 	orchestra.AddInstrument(*swerve.GetFrontLeftModule()->GetDriveMotor());
 	orchestra.AddInstrument(*swerve.GetFrontLeftModule()->GetSwerveMotor());
@@ -36,12 +37,14 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
 		return PathPlannerAuto("Center and Amp").ToPtr();
 	if (frc::SmartDashboard::GetBoolean("Center and Source", false))
 		return PathPlannerAuto("Center and Source").ToPtr();
-	if (frc::SmartDashboard::GetBoolean("Amp Auto", false))
-		return PathPlannerAuto("Amp Auto").ToPtr();
+	if (frc::SmartDashboard::GetBoolean("2 Note Amp Auto", false))
+		return PathPlannerAuto("2 Note Amp Auto").ToPtr();
 	if (frc::SmartDashboard::GetBoolean("Source Auto", false))
 		return PathPlannerAuto("Source Auto").ToPtr();
 	if (frc::SmartDashboard::GetBoolean("4 Note", false))
 		return PathPlannerAuto("4 Note").ToPtr();
+	if (frc::SmartDashboard::GetBoolean("3 Note Amp Auto", false))
+		return PathPlannerAuto("3 Note Amp Auto").ToPtr();
 	return PathPlannerAuto("2 Note Center Auto").ToPtr();
 }
 

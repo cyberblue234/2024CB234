@@ -3,12 +3,12 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.83047280380275,
+        "x": 8.035705214267571,
         "y": 0.7622918102979067
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.9069269567110565,
+        "x": 7.112159367175877,
         "y": 0.9235458470916952
       },
       "isLocked": false,
@@ -20,12 +20,12 @@
         "y": 2.374832178235786
       },
       "prevControl": {
-        "x": 3.696505678725644,
+        "x": 3.6965056787256443,
         "y": 2.0083457309771764
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Source Far Shoot"
     }
   ],
   "rotationTargets": [],
@@ -43,7 +43,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Source Paths",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

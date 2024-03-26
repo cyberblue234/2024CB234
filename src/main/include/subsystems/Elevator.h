@@ -41,7 +41,8 @@ public:
     double ElevatorPIDCalculate(double pos) { return elevatorPID.Calculate(GetShooterAngle(), pos); };
 
     bool AtSetpoint() { return elevatorPID.AtSetpoint(); };
-    
+
+    void SetElevatorMotorsWithLimits(double power);
     void SetElevatorMotors(double power) 
     { 
         SetElevator1Motor(power); 
@@ -50,8 +51,8 @@ public:
     void SetElevator1Motor(double power) { elevator1Motor.Set(power); };
     void SetElevator2Motor(double power) { elevator2Motor.Set(power); };
 
-    double GetShooterAngle() { return shooterAngleEncoder.GetDistance() - 15; };
-    double GetShooterAngleRevolutions() { return (double)shooterAngleEncoder.Get() - (15 / 360); };
+    double GetShooterAngle() { return shooterAngleEncoder.GetDistance() - ElevatorConstants::SHOOTER_ANGLE_OFFSET; };
+    double GetShooterAngleRevolutions() { return (double)shooterAngleEncoder.Get() - (ElevatorConstants::SHOOTER_ANGLE_OFFSET / 360); };
     double GetElevatorSpeed() { return elevatorSpeed; };
     double GetAlignmentDifference() { return alignmentDifference; };
     double GetAmpAngle() { return ampAngle; };
@@ -61,9 +62,7 @@ public:
     double GetTrapAngle() { return trapAngle; };
     double GetIntakeAngle() { return intakeAngle; };
 
-    bool GetElevator1TopLimit() { return elevator1TopLimit.Get(); };
     bool GetElevator1BottomLimit() { return elevator1BottomLimit.Get(); };
-    bool GetElevator2TopLimit() { return elevator2TopLimit.Get(); };
     bool GetElevator2BottomLimit() { return elevator2BottomLimit.Get(); };
 
     double GetElevator1MotorRPM() { return elevator1Motor.GetVelocity().GetValueAsDouble(); };
@@ -90,9 +89,7 @@ private:
 
     frc::DutyCycleEncoder shooterAngleEncoder{RobotMap::SHOOTER_ENCODER_ADDRESS};
 
-    frc::DigitalInput elevator1TopLimit{RobotMap::ELEVATOR1_TOP_LIMIT_SWITCH};
     frc::DigitalInput elevator1BottomLimit{RobotMap::ELEVATOR1_BOTTOM_LIMIT_SWITCH};
-    frc::DigitalInput elevator2TopLimit{RobotMap::ELEVATOR2_TOP_LIMIT_SWITCH};
     frc::DigitalInput elevator2BottomLimit{RobotMap::ELEVATOR2_BOTTOM_LIMIT_SWITCH};
 
     Limelight *limelight3;
@@ -100,7 +97,7 @@ private:
     double elevatorSpeed = 1.0;
     double alignmentDifference = 0;
     // Should be a constant eventually
-    double ampAngle = -44;
+    double ampAngle = -54;
     double closeAngle = -52;
     double midAngle = -44;
     double stageAngle = -30;

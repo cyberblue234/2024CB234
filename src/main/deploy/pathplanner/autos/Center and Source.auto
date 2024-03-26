@@ -18,7 +18,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Center to Source"
+                  "pathName": "Center Start"
                 }
               },
               {
@@ -64,6 +64,6 @@
       ]
     }
   },
-  "folder": null,
+  "folder": "Center Autos",
   "choreoAuto": false
 }

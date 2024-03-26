@@ -7,6 +7,11 @@ Feeder::Feeder()
     feedSensorTimer.Start();
 }
 
+void Feeder::Periodic()
+{
+    frc::SmartDashboard::PutBoolean("Is Note Secured", IsNoteSecured());
+}
+
 void Feeder::IntakeFromGround()
 {
     if (IsNoteSecured() == false)

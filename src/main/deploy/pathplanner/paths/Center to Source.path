@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 2.509089589607751,
-        "y": 4.30988061976124
+        "x": 2.597046336949817,
+        "y": 4.2219238724191746
       },
       "prevControl": {
-        "x": 2.039986937116732,
-        "y": 4.119307667186764
+        "x": 2.1279436844587982,
+        "y": 4.031350919844698
       },
       "nextControl": null,
       "isLocked": false,
@@ -55,7 +55,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Center Paths",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

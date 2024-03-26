@@ -37,10 +37,6 @@ void Controls::DriveControls()
 
     if (swerve->IsAlignmentOn())
         swerve->AlignSwerveDrive();
-    else if (controlBoard.GetRawButton(ControlBoardConstants::ANCHOR))
-    {
-        swerve->SetAnchorState();
-    }
     else
     {
         double rot = swerve->RotationControl(gamepad.GetRightX(), 
@@ -55,16 +51,16 @@ void Controls::ShooterControls()
     switch (GetSelectedRotaryIndex())
     {
         case ControlBoardConstants::POS_AMP_2:
-            shooter->SetAmpRPM(2300);
+            shooter->SetAmpRPM(2200);
             break;
         case ControlBoardConstants::POS_AMP_3:
-            shooter->SetAmpRPM(2100);
-            break;
-        case ControlBoardConstants::POS_AMP_4:
             shooter->SetAmpRPM(2000);
             break;
+        case ControlBoardConstants::POS_AMP_4:
+            shooter->SetAmpRPM(1900);
+            break;
         default:
-            shooter->SetAmpRPM(2200);
+            shooter->SetAmpRPM(2100);
             break;
     }
     if (controlBoard.GetRawButton(ControlBoardConstants::SHOOTER_MOTORS))
@@ -72,7 +68,8 @@ void Controls::ShooterControls()
         if (GetSelectedRotaryIndex() == ControlBoardConstants::POS_AMP_MAIN
         || GetSelectedRotaryIndex() == ControlBoardConstants::POS_AMP_2
         || GetSelectedRotaryIndex() == ControlBoardConstants::POS_AMP_3
-        || GetSelectedRotaryIndex() == ControlBoardConstants::POS_AMP_4)
+        || GetSelectedRotaryIndex() == ControlBoardConstants::POS_AMP_4
+        || GetSelectedRotaryIndex() == ControlBoardConstants::MANUAL_AMP)
             shooter->ShootAtAmp();
         else
             shooter->ShootAtSpeaker();
@@ -112,32 +109,13 @@ void Controls::ElevatorControls()
         elevator->SetElevator2Motor(gamepad.GetRightBumper() ? -0.5 : 0.5);
         return;
     }
-
-    
-
-    // Manual up - dpad up
-    if (controlBoard.GetRawButton(ControlBoardConstants::ELEVATOR_UP))
+    else if (controlBoard.GetRawButton(ControlBoardConstants::ELEVATOR_UP))
     {
-        if (elevator->GetElevator1Encoder() < elevator->GetHardEncoderLimit())
-            elevator->SetElevator1Motor(elevator->GetElevatorSpeed());
-        else    
-            elevator->SetElevator1Motor(0.0);
-        if (elevator->GetElevator2Encoder() < elevator->GetHardEncoderLimit())
-            elevator->SetElevator2Motor(elevator->GetElevatorSpeed());
-        else    
-            elevator->SetElevator2Motor(0.0);
+        elevator->SetElevatorMotorsWithLimits(elevator->GetElevatorSpeed());
     }
-    // Manual down - dpad down
     else if (controlBoard.GetRawButton(ControlBoardConstants::ELEVATOR_DOWN))
     {
-        if (elevator->GetElevator1BottomLimit() == false)
-            elevator->SetElevator1Motor(-elevator->GetElevatorSpeed());
-        else    
-            elevator->SetElevator1Motor(0.0);
-        if (elevator->GetElevator2BottomLimit() == false)
-            elevator->SetElevator2Motor(-elevator->GetElevatorSpeed());
-        else    
-            elevator->SetElevator2Motor(0.0);
+        elevator->SetElevatorMotorsWithLimits(-elevator->GetElevatorSpeed());
     }
     else if (controlBoard.GetRawButton(ControlBoardConstants::GROUND_INTAKE))
     {
@@ -147,7 +125,8 @@ void Controls::ElevatorControls()
     {
         elevator->ElevatorControl(elevator->GetIntakeAngle());
     }
-    else if (controlBoard.GetRawButton(ControlBoardConstants::SHOOTER_MOTORS) && GetSelectedRotaryIndex() != ControlBoardConstants::MANUAL_SCORE)
+    else if (controlBoard.GetRawButton(ControlBoardConstants::SHOOTER_MOTORS) 
+    && GetSelectedRotaryIndex() != ControlBoardConstants::MANUAL_SCORE && GetSelectedRotaryIndex() != ControlBoardConstants::MANUAL_AMP)
     {
     
         double angle;
@@ -185,7 +164,17 @@ void Controls::ElevatorControls()
         elevator->ElevatorControl(angle);
     }
     else
-        elevator->SetElevatorMotors(0.0);
+    {
+        if (controlBoard.GetRawButton(ControlBoardConstants::AUTO_ELEVATOR_DOWN) == true)
+        {
+            elevator->SetElevatorMotorsWithLimits(-elevator->GetElevatorSpeed());
+        }
+        else
+        {
+            elevator->SetElevatorMotors(0.0);
+        }
+        
+    }
 }
 
 void Controls::FeederControls()
@@ -195,14 +184,13 @@ void Controls::FeederControls()
         if (GetSelectedRotaryIndex() == ControlBoardConstants::POS_AMP_MAIN
         || GetSelectedRotaryIndex() == ControlBoardConstants::POS_AMP_2
         || GetSelectedRotaryIndex() == ControlBoardConstants::POS_AMP_3
-        || GetSelectedRotaryIndex() == ControlBoardConstants::POS_AMP_4)
+        || GetSelectedRotaryIndex() == ControlBoardConstants::POS_AMP_4
+        || GetSelectedRotaryIndex() == ControlBoardConstants::MANUAL_AMP)
             feeder->ShootAtAmp();
         else if (GetSelectedRotaryIndex() != ControlBoardConstants::MANUAL_SCORE)
         {
             bool swerveAlignment = swerve->AtSetpoint();
             bool elevatorAlignment = elevator->AtSetpoint();
-            frc::SmartDashboard::PutBoolean("Swerve Alignment", swerveAlignment);
-            frc::SmartDashboard::PutBoolean("Elevator Alignment", elevatorAlignment);
             bool atAlignment = swerveAlignment && elevatorAlignment;
             if (shooter->GetShooter1RPM() >= shooter->GetSpeakerRPM() - 100 && atAlignment)
                 feeder->ShootAtSpeaker();

@@ -80,6 +80,20 @@ void Elevator::ElevatorControl(double angle)
     }
 }
 
+void Elevator::SetElevatorMotorsWithLimits(double power)
+{
+    bool elevator1Limit = power > 0 ? GetElevator1Encoder() > GetHardEncoderLimit() : GetElevator1BottomLimit() == true;
+    bool elevator2Limit = power > 0 ? GetElevator2Encoder() > GetHardEncoderLimit() : GetElevator2BottomLimit() == true;
+    if (elevator1Limit == false)
+        SetElevator1Motor(power);
+    else    
+        SetElevator1Motor(0.0);
+    if (elevator2Limit == false)
+        SetElevator2Motor(power);
+    else    
+        SetElevator2Motor(0.0);
+}
+
 void Elevator::UpdateTelemetry()
 {
     frc::SmartDashboard::PutNumber("Shooter Angle Encoder Count", shooterAngleEncoder.GetAbsolutePosition());

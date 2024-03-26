@@ -12,12 +12,6 @@
           }
         },
         {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.5
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
@@ -37,12 +31,6 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "Amp Side End"
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "Shoot"
@@ -51,6 +39,6 @@
       ]
     }
   },
-  "folder": null,
+  "folder": "Amp Autos",
   "choreoAuto": false
 }
