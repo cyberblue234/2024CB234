@@ -128,12 +128,21 @@ void Drivetrain::Drive(const frc::ChassisSpeeds &speeds)
     backRight.SetDesiredState(br, DrivetrainConstants::BR_DRIVE_ADJUSTMENT);
 }
 
-double Drivetrain::RotationControl(double rotInput, bool alignToAprilTag)
+double Drivetrain::RotationControl(double rotInput, bool align, bool useLimelight)
 {
-    if (alignToAprilTag)
+    if (align)
     {
-        limelight3->SetPipelineID(Limelight::kSpeakerDetection);
-        rotInput = -rotationController.Calculate(limelight3->GetAprilTagOffset(), 0);
+        double offset = 0;
+        if (useLimelight)
+        {
+            limelight3->SetPipelineID(Limelight::kSpeakerDetection);
+            offset = limelight3->GetAprilTagOffset();
+        }
+        else
+        {
+            offset = GetOffsetFromSpeaker();
+        }
+        rotInput = -rotationController.Calculate(offset, 0);
         return rotInput;
     }
     else
@@ -145,9 +154,32 @@ double Drivetrain::RotationControl(double rotInput, bool alignToAprilTag)
     }
 }
 
-void Drivetrain::AlignToSpeaker()
+void Drivetrain::AlignToSpeaker(bool useLimelight)
 {
-    DriveWithInput(0.0, 0.0, RotationControl(0, true), false);    
+    DriveWithInput(0.0, 0.0, RotationControl(0, true, useLimelight), false);    
+}
+
+double Drivetrain::GetDistanceFromSpeaker()
+{
+    auto alliance = frc::DriverStation::GetAlliance();
+    frc::Pose2d target = GameConstants::redSpeakerPose;
+    if (alliance)
+    {
+        if (alliance.value() == frc::DriverStation::Alliance::kBlue)
+            target = GameConstants::blueSpeakerPose;
+    }
+    frc::Pose2d pose = odometry.GetEstimatedPosition();
+    return sqrt(pow((double) pose.X() - (double) target.X(), 2) + pow((double) pose.Y() - (double) target.Y(), 2));
+}
+
+double Drivetrain::GetOffsetFromSpeaker()
+{
+    frc::Pose2d pose = odometry.GetEstimatedPosition();
+    if ((double) pose.Y() == 0.0) return 0.0;
+    double offset = atan((double) pose.X() / (double) pose.Y());
+    offset *= 180 / std::numbers::pi;
+    frc::SmartDashboard::PutNumber("Target Rotatation Offset", offset);
+    return offset;
 }
 
 void Drivetrain::SetAnchorState()

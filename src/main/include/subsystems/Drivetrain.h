@@ -61,8 +61,10 @@ public:
     // Returns the current ChassisSpeeds of the robot
     frc::ChassisSpeeds GetCurrentSpeeds() { return chassisSpeeds; };
 
-    double RotationControl(double rotInput, bool alignToAprilTag);
-    void AlignToSpeaker();
+    double RotationControl(double rotInput, bool align, bool useLimelight);
+    void AlignToSpeaker(bool useLimelight);
+    double GetDistanceFromSpeaker();
+    double GetOffsetFromSpeaker();
     void SetAnchorState();
 
     void UpdateTelemetry();

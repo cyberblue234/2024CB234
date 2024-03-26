@@ -40,8 +40,8 @@ void Controls::DriveControls()
     else
     {
         double rot = swerve->RotationControl(gamepad.GetRightX(), 
-                                controlBoard.GetRawButton(ControlBoardConstants::SHOOT) 
-                                && GetSelectedRotaryIndex() != ControlBoardConstants::MANUAL_SCORE);
+                                controlBoard.GetRawButton(ControlBoardConstants::SHOOT) && GetSelectedRotaryIndex() != ControlBoardConstants::MANUAL_SCORE,
+                                limelight3->GetTargetValid() == 1);
         swerve->DriveWithInput(gamepad.GetLeftY(), gamepad.GetLeftX(), rot, gamepad.GetRightTriggerAxis() > 0.2);
     }
 }
@@ -133,10 +133,11 @@ void Controls::ElevatorControls()
         switch (GetSelectedRotaryIndex())
         {
             case ControlBoardConstants::AUTO_SCORE:
-                if (limelight3->GetTargetValid() == 1)
-                    angle = elevator->CalculateSpeakerAngle();
-                else
-                    angle = elevator->GetIntakeAngle();
+                // Uses the limelight if it can see it, otherwise uses odometry
+                angle = elevator->CalculateSpeakerAngle(limelight3->GetTargetValid() == 1);
+                break;
+            case ControlBoardConstants::AUTO_ODOM_SCORE:
+                angle = elevator->CalculateSpeakerAngle(false);
                 break;
             case ControlBoardConstants::POS_MID:
                 angle = elevator->GetMidAngle();

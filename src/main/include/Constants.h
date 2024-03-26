@@ -1,6 +1,7 @@
 #pragma once
 
 #include <frc/geometry/Translation2d.h>
+#include <frc/geometry/Pose2d.h>
 #include <units/velocity.h>
 #include <units/angular_velocity.h>
 #include <pathplanner/lib/util/HolonomicPathFollowerConfig.h>
@@ -175,15 +176,23 @@ namespace ControlBoardConstants
     // Scoring position for the amp main
     inline constexpr int POS_AMP_MAIN = 3;
     // Scoring position for the amp speed 2
-    inline constexpr int POS_AMP_2 = 6;
+    inline constexpr int POS_AMP_2 = 7;
     // Scoring position for the amp speed 3
-    inline constexpr int POS_AMP_3 = 7;
+    inline constexpr int POS_AMP_3 = 8;
     // Scoring position for the amp speed 4
-    inline constexpr int POS_AMP_4 = 8;
+    inline constexpr int POS_AMP_4 = 9;
     // Auto alignment scoring position
     inline constexpr int AUTO_SCORE = 4;
+    // Auto alignment with odometry scoring position
+    inline constexpr int AUTO_ODOM_SCORE = 6;
     // Manual control for angle and elevator
     inline constexpr int MANUAL_SCORE = 5;
     // Manual control for amp scoring
     inline constexpr int MANUAL_AMP = 9;
+}
+
+namespace GameConstants
+{
+    inline constexpr frc::Pose2d blueSpeakerPose{0.50_m, 5.55_m, frc::Rotation2d(units::angle::degree_t(0.0))};
+    inline constexpr frc::Pose2d redSpeakerPose{16.05_m, 5.55_m, frc::Rotation2d(units::angle::degree_t(180.0))};
 }
