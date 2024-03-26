@@ -1,9 +1,6 @@
 #include "Robot.h"
 
-void Robot::RobotInit()
-{
-	container.OdometryInit();
-}
+void Robot::RobotInit() {}
 
 void Robot::RobotPeriodic()
 {
@@ -14,32 +11,14 @@ void Robot::DisabledInit() {}
 
 void Robot::DisabledPeriodic() {}
 
-void Robot::AutonomousInit()
-{
-	container.OdometryInit();
-
-	autonomousCommand = container.GetAutonomousCommand();
-
-	if (autonomousCommand)
-	{
-		autonomousCommand->Schedule();
-	}
-}
+void Robot::AutonomousInit() {}
 
 void Robot::AutonomousPeriodic() 
 {
 	container.LogAutoData();
 }
 
-void Robot::TeleopInit()
-{
-	container.OdometryInit();
-
-	if (autonomousCommand)
-	{
-		autonomousCommand->Cancel();
-	}
-}
+void Robot::TeleopInit() {}
 
 void Robot::TeleopPeriodic()
 {

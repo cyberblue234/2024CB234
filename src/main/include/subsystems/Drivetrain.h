@@ -34,15 +34,12 @@
 #include "AHRS.h"
 
 #include "subsystems/SwerveModule.h"
-#include "subsystems/Limelight.h"
 #include "Constants.h"
-
-extern frc::PIDController rotationController;
 
 class Drivetrain : frc2::SubsystemBase
 {
 public:
-    Drivetrain(Limelight *);
+    Drivetrain();
 
     void Periodic() override;
 
@@ -60,9 +57,6 @@ public:
     void ResetPose(frc::Pose2d pose) { odometry.ResetPosition(gyro.GetRotation2d(), {frontLeft.GetModulePosition(), frontRight.GetModulePosition(), backLeft.GetModulePosition(), backRight.GetModulePosition()}, pose); };
     // Returns the current ChassisSpeeds of the robot
     frc::ChassisSpeeds GetCurrentSpeeds() { return chassisSpeeds; };
-
-    double RotationControl(double rotInput, bool alignToAprilTag);
-    void AlignToSpeaker();
     void SetAnchorState();
 
     void UpdateTelemetry();
@@ -139,15 +133,11 @@ public:
 
     bool IsAlignmentOn() { return alignmentOn; };
 
-    bool AtSetpoint() { return rotationController.AtSetpoint(); };
-
 private:
     SwerveModule frontLeft;
     SwerveModule frontRight;
     SwerveModule backLeft;
     SwerveModule backRight;
-
-    Limelight *limelight3;
 
     AHRS gyro;
     double lastGyroPitch = 0;
@@ -168,8 +158,6 @@ private:
     frc::SwerveDrivePoseEstimator<4> odometry;
 
     int cycle = 0;
-
-    frc::PIDController rotationController{DrivetrainConstants::kRotationP, DrivetrainConstants::kRotationI, DrivetrainConstants::kRotationD, 20_ms};
 };
 
 #endif
