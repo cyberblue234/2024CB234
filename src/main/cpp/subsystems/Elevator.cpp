@@ -1,5 +1,8 @@
 #include "subsystems/Elevator.h"
 
+bool elevator1Registered = false;
+bool elevator2Registered = false;
+
 Elevator::Elevator(Limelight *limelight3)
 {
     this->limelight3 = limelight3;
@@ -33,9 +36,15 @@ Elevator::Elevator(Limelight *limelight3)
 void Elevator::Periodic()
 {
     if (GetElevator1BottomLimit() && (GetElevator1Encoder() > 0.025 || GetElevator1Encoder() < -0.025))
+    {
         ResetElevator1Encoder();
+        elevator1Registered = true;
+    }
     if (GetElevator2BottomLimit() && (GetElevator2Encoder() > 0.025 || GetElevator2Encoder() < -0.025))
+    {
         ResetElevator2Encoder();
+        elevator2Registered = true;
+    }
     UpdateTelemetry();
 }
 
@@ -63,8 +72,8 @@ void Elevator::ElevatorControl(double value, ControlMethods method)
     else if (method == ControlMethods::Position) directionTest = value > GetShooterAngle();
     else directionTest = false;
 
-    bool elevator1Limit = directionTest ? GetElevator1Encoder() > GetHardEncoderLimit() : GetElevator1BottomLimit() == true || GetElevator1Encoder() < -2.0;
-    bool elevator2Limit = directionTest ? GetElevator2Encoder() > GetHardEncoderLimit() : GetElevator2BottomLimit() == true || GetElevator2Encoder() < -2.0;
+    bool elevator1Limit = directionTest ? GetElevator1Encoder() > GetHardEncoderLimit() : GetElevator1BottomLimit() == true || (GetElevator1Encoder() < -2.0 && elevator1Registered == true);
+    bool elevator2Limit = directionTest ? GetElevator2Encoder() > GetHardEncoderLimit() : GetElevator2BottomLimit() == true || (GetElevator2Encoder() < -2.0 && elevator2Registered == true);
 
     double correction = 1 - abs(correctionPID.Calculate(abs(GetElevator1Encoder() - GetElevator2Encoder())));
     double motor1Correction;

@@ -93,7 +93,7 @@ private:
 
     Limelight *limelight3;
 
-    double elevatorSpeed = 1.0;
+    double elevatorSpeed = 0.75;
     double speedLimit = 0.6;
     double alignmentDifference = 0;
     // Should be a constant eventually
