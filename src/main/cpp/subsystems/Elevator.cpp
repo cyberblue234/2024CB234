@@ -63,10 +63,10 @@ void Elevator::ElevatorControl(double value, ControlMethods method)
     else if (method == ControlMethods::Position) directionTest = value > GetShooterAngle();
     else directionTest = false;
 
-    bool elevator1Limit = directionTest ? GetElevator1Encoder() > GetHardEncoderLimit() : GetElevator1BottomLimit() == true;
-    bool elevator2Limit = directionTest ? GetElevator2Encoder() > GetHardEncoderLimit() : GetElevator2BottomLimit() == true;
+    bool elevator1Limit = directionTest ? GetElevator1Encoder() > GetHardEncoderLimit() : GetElevator1BottomLimit() == true || GetElevator1Encoder() < -2.0;
+    bool elevator2Limit = directionTest ? GetElevator2Encoder() > GetHardEncoderLimit() : GetElevator2BottomLimit() == true || GetElevator2Encoder() < -2.0;
 
-    double correction = correctionPID.Calculate(abs(GetElevator1Encoder() - GetElevator2Encoder()));
+    double correction = 1 - abs(correctionPID.Calculate(abs(GetElevator1Encoder() - GetElevator2Encoder())));
     double motor1Correction;
     double motor2Correction;
 
@@ -76,11 +76,11 @@ void Elevator::ElevatorControl(double value, ControlMethods method)
         if (GetElevator1Encoder() > GetElevator2Encoder())
         {
             motor1Correction = correction;
-            motor2Correction = 0.0;
+            motor2Correction = 1.0;
         }
         else
         {
-            motor1Correction = 0.0;
+            motor1Correction = 1.0;
             motor2Correction = correction;
         }
     }
@@ -88,27 +88,34 @@ void Elevator::ElevatorControl(double value, ControlMethods method)
     {
         if (GetElevator1Encoder() > GetElevator2Encoder())
         {
-            motor1Correction = 0.0;
+            motor1Correction = 1.0;
             motor2Correction = correction;
         }
         else
         {
             motor1Correction = correction;
-            motor2Correction = 0.0;
+            motor2Correction = 1.0;
         }
     }
 
+    frc::SmartDashboard::PutNumber("Motor 1 Correction", motor1Correction);
+    frc::SmartDashboard::PutNumber("Motor 2 Correction", motor2Correction);
+
+    // Slow down when the elevator gets close to the bottom
+    if (GetElevator1Encoder() < 5) motor1Correction *= speedLimit;
+    if (GetElevator2Encoder() < 5) motor2Correction *= speedLimit;
+
     if (elevator1Limit == false)
     {
-        if (method == ControlMethods::Speed) SetElevator1Motor(value * (1 - motor1Correction));
-        else if (method == ControlMethods::Position) SetElevator1MotorPosition(value, 1 - motor1Correction);
+        if (method == ControlMethods::Speed) SetElevator1Motor(value * motor1Correction);
+        else if (method == ControlMethods::Position) SetElevator1MotorPosition(value, motor1Correction);
     }
     else
         SetElevator1Motor(0.0);
     if (elevator2Limit == false)
     {
-        if (method == ControlMethods::Speed) SetElevator2Motor(value * (1 - motor2Correction));
-        else if (method == ControlMethods::Position) SetElevator2MotorPosition(value, 1 - motor2Correction);
+        if (method == ControlMethods::Speed) SetElevator2Motor(value * motor2Correction);
+        else if (method == ControlMethods::Position) SetElevator2MotorPosition(value, motor2Correction);
     }
     else
         SetElevator2Motor(0.0);

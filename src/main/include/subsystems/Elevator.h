@@ -60,8 +60,8 @@ public:
     double GetTrapAngle() { return trapAngle; };
     double GetIntakeAngle() { return intakeAngle; };
 
-    bool GetElevator1BottomLimit() { return elevator1BottomLimit.Get(); };
-    bool GetElevator2BottomLimit() { return elevator2BottomLimit.Get(); };
+    bool GetElevator1BottomLimit() { return !elevator1BottomLimit.Get(); };
+    bool GetElevator2BottomLimit() { return !elevator2BottomLimit.Get(); };
 
     double GetElevator1MotorRPM() { return elevator1Motor.GetVelocity().GetValueAsDouble(); };
     double GetElevator2MotorRPM() { return elevator2Motor.GetVelocity().GetValueAsDouble(); };
@@ -94,6 +94,7 @@ private:
     Limelight *limelight3;
 
     double elevatorSpeed = 1.0;
+    double speedLimit = 0.6;
     double alignmentDifference = 0;
     // Should be a constant eventually
     double ampAngle = -54;
@@ -103,5 +104,5 @@ private:
     double trapAngle = -30;
     double intakeAngle = -44;
 
-    double hardEncoderLimit = 200;
+    double hardEncoderLimit = 190;
 };
