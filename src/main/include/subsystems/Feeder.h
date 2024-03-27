@@ -19,6 +19,7 @@ public:
     bool IsNoteSecured() { return GetTopSensorInput() && GetBottomSensorInput(); };
     void Purge() { SetFeedMotor(-1.0); };
     void SetFeedMotor(double power) { feedMotor.Set(power); };
+    void StopMotor() { SetFeedMotor(0.0); };
 
     double GetFeedMotorRPM() { return feedMotorEncoder.GetVelocity(); }
     double GetGroundIntakeSpeed() { return groundIntakeSpeed; };
@@ -38,7 +39,7 @@ private:
     frc::Timer feedSensorTimer{};
 
     // Speeds should be from 0.0 - 1.0
-    double groundIntakeSpeed = 0.35;
+    double groundIntakeSpeed = 0.25;
     double sourceIntakeSpeed = 0.35;
     double speakerShooterSpeed = 0.5;
     double ampShooterSpeed = 0.5;

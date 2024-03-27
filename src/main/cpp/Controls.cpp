@@ -79,7 +79,7 @@ void Controls::ShooterControls()
     else if (controlBoard.GetRawButton(ControlBoardConstants::PURGE))
         shooter->Purge();
     else
-        shooter->SetShooterMotors(0.0);
+        shooter->StopMotors();
 }
 
 void Controls::IntakeControls()
@@ -94,7 +94,7 @@ void Controls::IntakeControls()
     else if (controlBoard.GetRawButton(ControlBoardConstants::PURGE))
         intake->Purge();
     else
-        intake->SetIntakeMotor(0.0);
+        intake->StopMotor();
 }
 
 void Controls::ElevatorControls()
@@ -111,19 +111,15 @@ void Controls::ElevatorControls()
     }
     else if (controlBoard.GetRawButton(ControlBoardConstants::ELEVATOR_UP))
     {
-        elevator->SetElevatorMotorsWithLimits(elevator->GetElevatorSpeed());
+        elevator->ElevatorControl(elevator->GetElevatorSpeed(), Elevator::ControlMethods::Speed);
     }
     else if (controlBoard.GetRawButton(ControlBoardConstants::ELEVATOR_DOWN))
     {
-        elevator->SetElevatorMotorsWithLimits(-elevator->GetElevatorSpeed());
+        elevator->ElevatorControl(-elevator->GetElevatorSpeed(), Elevator::ControlMethods::Speed);
     }
-    else if (controlBoard.GetRawButton(ControlBoardConstants::GROUND_INTAKE))
+    else if (controlBoard.GetRawButton(ControlBoardConstants::GROUND_INTAKE) || controlBoard.GetRawButton(ControlBoardConstants::SOURCE_INTAKE))
     {
-        elevator->ElevatorControl(elevator->GetIntakeAngle());
-    }
-    else if (controlBoard.GetRawButton(ControlBoardConstants::SOURCE_INTAKE))
-    {
-        elevator->ElevatorControl(elevator->GetIntakeAngle());
+        elevator->ElevatorControl(elevator->GetIntakeAngle(), Elevator::ControlMethods::Position);
     }
     else if (controlBoard.GetRawButton(ControlBoardConstants::SHOOTER_MOTORS) 
     && GetSelectedRotaryIndex() != ControlBoardConstants::MANUAL_SCORE && GetSelectedRotaryIndex() != ControlBoardConstants::MANUAL_AMP)
@@ -161,17 +157,17 @@ void Controls::ElevatorControls()
                 angle = elevator->GetCloseAngle();
         }
         frc::SmartDashboard::PutNumber("Desired Elevator Angle", angle);
-        elevator->ElevatorControl(angle);
+        elevator->ElevatorControl(angle, Elevator::ControlMethods::Position);
     }
     else
     {
         if (controlBoard.GetRawButton(ControlBoardConstants::AUTO_ELEVATOR_DOWN) == true)
         {
-            elevator->SetElevatorMotorsWithLimits(-elevator->GetElevatorSpeed());
+            elevator->ElevatorControl(-elevator->GetElevatorSpeed(), Elevator::ControlMethods::Speed);
         }
         else
         {
-            elevator->SetElevatorMotors(0.0);
+            elevator->StopMotors();
         }
         
     }
@@ -214,7 +210,7 @@ void Controls::FeederControls()
         feeder->Purge();
     else
     {
-        feeder->SetFeedMotor(0.0);
+        feeder->StopMotor();
         StopRumble();
     }
 }

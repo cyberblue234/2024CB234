@@ -1,5 +1,8 @@
 #include "subsystems/Elevator.h"
 
+bool elevator1Registered = false;
+bool elevator2Registered = false;
+
 Elevator::Elevator(Limelight *limelight3)
 {
     this->limelight3 = limelight3;
@@ -26,14 +29,22 @@ Elevator::Elevator(Limelight *limelight3)
     shooterAngleEncoder.SetDistancePerRotation(-360);
 
     elevatorPID.SetTolerance(0.5);
+
+    correctionPID.SetSetpoint(0.0);
 }
 
 void Elevator::Periodic()
 {
     if (GetElevator1BottomLimit() && (GetElevator1Encoder() > 0.025 || GetElevator1Encoder() < -0.025))
+    {
         ResetElevator1Encoder();
+        elevator1Registered = true;
+    }
     if (GetElevator2BottomLimit() && (GetElevator2Encoder() > 0.025 || GetElevator2Encoder() < -0.025))
+    {
         ResetElevator2Encoder();
+        elevator2Registered = true;
+    }
     UpdateTelemetry();
 }
 
@@ -54,44 +65,70 @@ double Elevator::CalculateSpeakerAngle()
     return -(targetAngle - ElevatorConstants::kKickup);
 }
 
-void Elevator::ElevatorControl(double angle)
+void Elevator::ElevatorControl(double value, ControlMethods method)
 {
-    if (angle > GetShooterAngle()) 
-    {
-        if (GetElevator1Encoder() < GetHardEncoderLimit())
-            SetElevator1MotorPosition(angle);
-        else
-            SetElevator1Motor(0.0);
-        if (GetElevator2Encoder() < GetHardEncoderLimit())
-            SetElevator2MotorPosition(angle);
-        else
-            SetElevator2Motor(0.0);
-    }
-    if (angle < GetShooterAngle()) 
-    {
-        if (GetElevator1BottomLimit() == false)
-            SetElevator1MotorPosition(angle);
-        else
-            SetElevator1Motor(0.0);
-        if (GetElevator2BottomLimit() == false)
-            SetElevator2MotorPosition(angle);
-        else
-            SetElevator2Motor(0.0);
-    }
-}
+    bool directionTest;
+    if (method == ControlMethods::Speed) directionTest = value > 0;
+    else if (method == ControlMethods::Position) directionTest = value > GetShooterAngle();
+    else directionTest = false;
 
-void Elevator::SetElevatorMotorsWithLimits(double power)
-{
-    bool elevator1Limit = power > 0 ? GetElevator1Encoder() > GetHardEncoderLimit() : GetElevator1BottomLimit() == true;
-    bool elevator2Limit = power > 0 ? GetElevator2Encoder() > GetHardEncoderLimit() : GetElevator2BottomLimit() == true;
+    bool elevator1Limit = directionTest ? GetElevator1Encoder() > GetHardEncoderLimit() : GetElevator1BottomLimit() == true || (GetElevator1Encoder() < -2.0 && elevator1Registered == true);
+    bool elevator2Limit = directionTest ? GetElevator2Encoder() > GetHardEncoderLimit() : GetElevator2BottomLimit() == true || (GetElevator2Encoder() < -2.0 && elevator2Registered == true);
+
+    double correction = 1 - abs(correctionPID.Calculate(abs(GetElevator1Encoder() - GetElevator2Encoder())));
+    double motor1Correction;
+    double motor2Correction;
+
+    // directionTest is true when going up
+    if (directionTest == true) 
+    {
+        if (GetElevator1Encoder() > GetElevator2Encoder())
+        {
+            motor1Correction = correction;
+            motor2Correction = 1.0;
+        }
+        else
+        {
+            motor1Correction = 1.0;
+            motor2Correction = correction;
+        }
+    }
+    else
+    {
+        if (GetElevator1Encoder() > GetElevator2Encoder())
+        {
+            motor1Correction = 1.0;
+            motor2Correction = correction;
+        }
+        else
+        {
+            motor1Correction = correction;
+            motor2Correction = 1.0;
+        }
+    }
+
+    frc::SmartDashboard::PutNumber("Motor 1 Correction", motor1Correction);
+    frc::SmartDashboard::PutNumber("Motor 2 Correction", motor2Correction);
+
+    // Slow down when the elevator gets close to the bottom
+    if (GetElevator1Encoder() < 5) motor1Correction *= speedLimit;
+    if (GetElevator2Encoder() < 5) motor2Correction *= speedLimit;
+
     if (elevator1Limit == false)
-        SetElevator1Motor(power);
-    else    
+    {
+        if (method == ControlMethods::Speed) SetElevator1Motor(value * motor1Correction);
+        else if (method == ControlMethods::Position) SetElevator1MotorPosition(value, motor1Correction);
+    }
+    else
         SetElevator1Motor(0.0);
     if (elevator2Limit == false)
-        SetElevator2Motor(power);
-    else    
+    {
+        if (method == ControlMethods::Speed) SetElevator2Motor(value * motor2Correction);
+        else if (method == ControlMethods::Position) SetElevator2MotorPosition(value, motor2Correction);
+    }
+    else
         SetElevator2Motor(0.0);
+
 }
 
 void Elevator::UpdateTelemetry()

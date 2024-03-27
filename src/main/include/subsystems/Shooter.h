@@ -31,13 +31,10 @@ public:
     };
     void SetShooterMotor1(double power) { shooter1Motor.Set(power); };
     void SetShooterMotor2(double power) { shooter2Motor.Set(power); };
-    void SetShooterMotorsRPM(double rpm)
-    {
-        SetShooterMotor1RPM(rpm + 2000);
-        SetShooterMotor2RPM(rpm);
-    };
+
     void SetShooterMotor1RPM(double rpm) { shooter1PID.SetReference(rpm, rev::CANSparkLowLevel::ControlType::kVelocity); };
     void SetShooterMotor2RPM(double rpm) { shooter2PID.SetReference(rpm, rev::CANSparkLowLevel::ControlType::kVelocity); };
+    void StopMotors() { SetShooterMotor1(0.0); SetShooterMotor2(0.0); };
 
     void SetSpeakerRPM(double rpm) { speakerRPM = rpm; };
     void SetAmpRPM(double rpm) { ampRPM = rpm; };
