@@ -58,13 +58,9 @@ namespace RobotMap
     // TalonFX
     constexpr int ELEVATOR_MOTOR2_ADDRESS = 13;
     // DIO
-    constexpr int ELEVATOR1_TOP_LIMIT_SWITCH = 3;
+    constexpr int ELEVATOR1_BOTTOM_LIMIT_SWITCH = 3;
     // DIO
-    constexpr int ELEVATOR1_BOTTOM_LIMIT_SWITCH = 4;
-    // DIO
-    constexpr int ELEVATOR2_TOP_LIMIT_SWITCH = 5;
-    // DIO
-    constexpr int ELEVATOR2_BOTTOM_LIMIT_SWITCH = 6;
+    constexpr int ELEVATOR2_BOTTOM_LIMIT_SWITCH = 4;
 
 }
 
