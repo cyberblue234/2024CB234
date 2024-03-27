@@ -41,33 +41,21 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
 
 frc2::CommandPtr RobotContainer::GetShootCommand()
 {
-	return frc2::InstantCommand
+	return frc2::RunCommand
 	(
 		[this]
 		{
-			if (this->shooterMotorsOnCommand->IsScheduled() == false)
-			{
-				this->shooterMotorsOnCommand->Schedule();
-			}
-			this->GetIntake()->SetIntakeMotor(0.0);
+			this->GetShooter()->ShootAtSpeaker();
+			this->GetSwerve()->AlignToSpeaker();
+			this->GetElevator()->ElevatorControl(this->GetElevator()->CalculateSpeakerAngle(), Elevator::ControlMethods::Position);
 		}
-	).ToPtr().AndThen
+	).Until
 	(
-		frc2::RunCommand
-		(
-			[this]
-			{
-				this->GetSwerve()->AlignToSpeaker();
-				this->GetElevator()->ElevatorControl(this->GetElevator()->CalculateSpeakerAngle(), Elevator::ControlMethods::Position);
-			}
-		).Until
-		(
-			[this]
-			{
-				bool atAlignment = this->GetSwerve()->AtSetpoint() && this->GetElevator()->AtSetpoint();
-				return this->GetShooter()->GetShooter1RPM() >= this->GetShooter()->GetSpeakerRPM() - 100 && atAlignment;
-			}
-		)
+		[this]
+		{
+			bool atAlignment = this->GetSwerve()->AtSetpoint() && this->GetElevator()->AtSetpoint();
+			return this->GetShooter()->GetAverageRPM() >= this->GetShooter()->GetSpeakerRPM() - 100 && atAlignment;
+		}
 	).AndThen
 	(
 		frc2::RunCommand

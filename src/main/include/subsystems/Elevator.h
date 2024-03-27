@@ -104,5 +104,5 @@ private:
     double trapAngle = -30;
     double intakeAngle = -44;
 
-    double hardEncoderLimit = 190;
+    double hardEncoderLimit = 110;
 };

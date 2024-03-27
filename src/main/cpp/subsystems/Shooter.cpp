@@ -7,10 +7,8 @@ Shooter::Shooter()
     shooter1Motor.RestoreFactoryDefaults();
     shooter2Motor.RestoreFactoryDefaults();
 
-    frc::SmartDashboard::PutNumber("Shooter P", ShooterConstants::kShooterP);
-    frc::SmartDashboard::PutNumber("Shooter I", ShooterConstants::kShooterI);
-    frc::SmartDashboard::PutNumber("Shooter D", ShooterConstants::kShooterD);
-    frc::SmartDashboard::PutNumber("Shooter F", ShooterConstants::kShooterF);
+    shooter1Motor.SetIdleMode(rev::CANSparkBase::IdleMode::kCoast);
+    shooter2Motor.SetIdleMode(rev::CANSparkBase::IdleMode::kCoast);
 
     shooter1Motor.SetInverted(true);
 
