@@ -46,7 +46,7 @@ public:
     // Returns the encoder position of the drive motor
     double GetDriveEncoder() { return driveMotor.GetPosition().GetValueAsDouble(); };
     // Returns the current SwerveModulePosition
-    frc::SwerveModulePosition GetModulePosition() { return frc::SwerveModulePosition{units::length::meter_t(GetDriveEncoder() / 6.54 * 0.3085), GetAngle()}; };
+    frc::SwerveModulePosition GetModulePosition() { return frc::SwerveModulePosition{units::length::meter_t(GetDriveEncoder() / SwerveModuleConstants::DRIVE_GEAR_RATIO * SwerveModuleConstants::WHEEL_CIRCUMFERENCE), GetAngle()}; };
     // Returns the RPM of the drive motor
     double GetDriveRPM() { return driveMotor.GetRotorVelocity().GetValueAsDouble() * 600.0 / 2048.0; };
     // Returns the current being pulled by the drive motor
