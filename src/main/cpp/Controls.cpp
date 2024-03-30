@@ -84,7 +84,7 @@ void Controls::ShooterControls()
 
 void Controls::IntakeControls()
 {
-    if (controlBoard.GetRawButton(ControlBoardConstants::GROUND_INTAKE) && elevator->AtSetpoint())
+    if (controlBoard.GetRawButton(ControlBoardConstants::GROUND_INTAKE) && (elevator->AtSetpoint() && !controlBoard.GetRawButton(ControlBoardConstants::MANUAL_SCORE)))
     {
         if (feeder->IsNoteSecured() == false)
             intake->IntakeFromGround();
