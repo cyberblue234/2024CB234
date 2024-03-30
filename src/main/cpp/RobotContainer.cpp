@@ -153,7 +153,7 @@ void RobotContainer::LogTeleopData()
 	static long count = 0;
 
 	double time = (double)logTimer.Get();
-	double volts = 0.0; //pdp.GetVoltage();
+	double volts = pdp.GetVoltage();
 
 	double shooter1RPM = shooter.GetShooter1RPM();
 	double shooter2RPM = shooter.GetShooter2RPM();
@@ -200,7 +200,7 @@ void RobotContainer::LogAutoData()
 	static long count = 0;
 
 	double time = (double)logTimer.Get();
-	double volts = 0.0; //pdp.GetVoltage();
+	double volts = pdp.GetVoltage();
 
 	double shooter1RPM = shooter.GetShooter1RPM();
 	double shooter2RPM = shooter.GetShooter2RPM();
