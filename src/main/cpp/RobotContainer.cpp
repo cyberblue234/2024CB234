@@ -34,9 +34,7 @@ RobotContainer::RobotContainer() : swerve(GetLimelight3()), elevator(GetLimeligh
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand()
 {
-	std::string auton = GetAuto();
-	if (auton == AutoConstants::kAutoShoot) return GetShootCommand();
-	return PathPlannerAuto(auton).ToPtr();
+	return PathPlannerAuto("Source to Note 5 to Note 4").ToPtr();
 }
 
 frc2::CommandPtr RobotContainer::GetShootCommand()

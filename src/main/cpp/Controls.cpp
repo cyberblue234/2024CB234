@@ -40,8 +40,10 @@ void Controls::DriveControls()
     else
     {
         double rot = swerve->RotationControl(gamepad.GetRightX(), 
-                                controlBoard.GetRawButton(ControlBoardConstants::SHOOT) 
-                                && GetSelectedRotaryIndex() != ControlBoardConstants::MANUAL_SCORE);
+                                controlBoard.GetRawButton(ControlBoardConstants::SHOOT)
+                                && GetSelectedRotaryIndex() != ControlBoardConstants::MANUAL_SCORE
+                                && GetSelectedRotaryIndex() != ControlBoardConstants::POS_CLOSE
+                                && GetSelectedRotaryIndex() != ControlBoardConstants::POS_MID);
         swerve->DriveWithInput(gamepad.GetLeftY(), gamepad.GetLeftX(), rot, gamepad.GetRightTriggerAxis() > 0.2);
     }
 }
@@ -183,7 +185,9 @@ void Controls::FeederControls()
         || GetSelectedRotaryIndex() == ControlBoardConstants::POS_AMP_4
         || GetSelectedRotaryIndex() == ControlBoardConstants::MANUAL_AMP)
             feeder->ShootAtAmp();
-        else if (GetSelectedRotaryIndex() != ControlBoardConstants::MANUAL_SCORE)
+        else if (GetSelectedRotaryIndex() != ControlBoardConstants::MANUAL_SCORE 
+        || GetSelectedRotaryIndex() != ControlBoardConstants::POS_CLOSE 
+        || GetSelectedRotaryIndex() != ControlBoardConstants::POS_MID)
         {
             bool swerveAlignment = swerve->AtSetpoint();
             bool elevatorAlignment = elevator->AtSetpoint();
