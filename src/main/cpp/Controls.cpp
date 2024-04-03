@@ -1,6 +1,6 @@
 #include "Controls.h"
 
-Controls::Controls(Drivetrain *swerve, Shooter *shooter, Intake *intake, Elevator *elevator, Feeder *feeder, Limelight *limelight3, ctre::phoenix6::Orchestra *orchestra)
+Controls::Controls(Drivetrain *swerve, Shooter *shooter, Intake *intake, Elevator *elevator, Feeder *feeder, Limelight *limelight3, LED *candle, ctre::phoenix6::Orchestra *orchestra)
 {
     this->swerve = swerve;
     this->shooter = shooter;
@@ -8,6 +8,7 @@ Controls::Controls(Drivetrain *swerve, Shooter *shooter, Intake *intake, Elevato
     this->feeder = feeder;
     this->elevator = elevator;
     this->limelight3 = limelight3;
+    this->candle = candle;
     this->orchestra = orchestra;
 }
 
@@ -86,12 +87,25 @@ void Controls::ShooterControls()
 
 void Controls::IntakeControls()
 {
-    if (controlBoard.GetRawButton(ControlBoardConstants::GROUND_INTAKE) && elevator->AtSetpoint())
+    if (controlBoard.GetRawButton(ControlBoardConstants::GROUND_INTAKE))
     {
-        if (feeder->IsNoteSecured() == false)
-            intake->IntakeFromGround();
+        if (elevator->AtSetpoint())
+        {
+            if (feeder->IsNoteSecured() == false)
+            {
+                intake->IntakeFromGround();
+                candle->LEDControls(LED::ControlMethods::kIntaking);
+            }
+            else
+            {
+                intake->SetIntakeMotor(-0.1);
+                candle->LEDControls(LED::ControlMethods::kNoteSecured);
+            }
+        }
         else
-            intake->SetIntakeMotor(-0.1);
+        {
+            candle->LEDControls(LED::ControlMethods::kIntaking);
+        }
     }
     else if (controlBoard.GetRawButton(ControlBoardConstants::PURGE))
         intake->Purge();
@@ -171,7 +185,18 @@ void Controls::ElevatorControls()
         {
             elevator->StopMotors();
         }
-        
+    }
+
+    if (controlBoard.GetRawButton(ControlBoardConstants::GROUND_INTAKE) == false)
+    {
+        if (elevator->GetElevator1BottomLimit() && elevator->GetElevator2BottomLimit())
+        {
+            candle->LEDControls(LED::ControlMethods::kElevatorDown);
+        }
+        else
+        {
+            candle->LEDControls(LED::ControlMethods::kElevatorUp);
+        }
     }
 }
 

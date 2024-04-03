@@ -9,12 +9,13 @@
 #include "subsystems/Feeder.h"
 #include "subsystems/Elevator.h"
 #include "subsystems/Limelight.h"
+#include "subsystems/LED.h"
 #include <ctre/phoenix6/Orchestra.hpp>
 
 class Controls : frc2::SubsystemBase
 {
 public:
-    Controls(Drivetrain *, Shooter *, Intake *, Elevator *, Feeder *, Limelight *, ctre::phoenix6::Orchestra *);
+    Controls(Drivetrain *, Shooter *, Intake *, Elevator *, Feeder *, Limelight *, LED *, ctre::phoenix6::Orchestra *);
     void Periodic() override;
     void DriveControls();
     void ShooterControls();
@@ -52,6 +53,7 @@ private:
     Feeder *feeder;
     Elevator *elevator;
     Limelight *limelight3;
+    LED *candle;
     ctre::phoenix6::Orchestra *orchestra;
 
     int selectedRotaryIndex = 0;

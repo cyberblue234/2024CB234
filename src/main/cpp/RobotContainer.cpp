@@ -4,7 +4,7 @@ using namespace pathplanner;
 
 RobotContainer::RobotContainer() : swerve(GetLimelight3()), elevator(GetLimelight3()), limelight3("limelight"), limelight2("limelight-intake"),
 								   pdp(1, frc::PowerDistribution::ModuleType::kRev),
-								   controls(GetSwerve(), GetShooter(), GetIntake(), GetElevator(), GetFeeder(), GetLimelight3(), GetOrchestra())
+								   controls(GetSwerve(), GetShooter(), GetIntake(), GetElevator(), GetFeeder(), GetLimelight3(), GetCANdle(), GetOrchestra())
 {
 	NamedCommands::registerCommand("Shoot", GetShootCommand());
 	NamedCommands::registerCommand("Intake", GetIntakeCommand());
@@ -34,7 +34,9 @@ RobotContainer::RobotContainer() : swerve(GetLimelight3()), elevator(GetLimeligh
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand()
 {
-	return PathPlannerAuto("Source to Note 5 to Note 4").ToPtr();
+	std::string auton = GetAuto();
+	if (auton == AutoConstants::kAutoShoot) return GetShootCommand();
+	return PathPlannerAuto(auton).ToPtr();
 }
 
 frc2::CommandPtr RobotContainer::GetShootCommand()

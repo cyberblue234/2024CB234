@@ -26,6 +26,7 @@
 #include "subsystems/Feeder.h"
 #include "subsystems/Elevator.h"
 #include "subsystems/Limelight.h"
+#include "subsystems/LED.h"
 #include "Controls.h"
 
 class RobotContainer
@@ -52,6 +53,7 @@ public:
 	Feeder *GetFeeder() { return &feeder; };
 	Limelight *GetLimelight3() { return &limelight3; };
 	Limelight *GetLimelight2() { return &limelight2; };
+	LED *GetCANdle() { return &candle; };
 	ctre::phoenix6::Orchestra *GetOrchestra() { return &orchestra; };
 
 	std::string GetAuto() { return autoChooser.GetSelected(); };
@@ -71,6 +73,8 @@ private:
 	Feeder feeder;
 	Limelight limelight3;
 	Limelight limelight2;
+
+	LED candle;
 
 	ctre::phoenix6::Orchestra orchestra;
 

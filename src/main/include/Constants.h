@@ -4,6 +4,8 @@
 #include <units/velocity.h>
 #include <units/angular_velocity.h>
 #include <pathplanner/lib/util/HolonomicPathFollowerConfig.h>
+#include <ctre/phoenix/led/CANdle.h>
+#include <ctre/phoenix/led/ColorFlowAnimation.h>
 #include <numbers>
 #include <string>
 #include <array>
@@ -63,6 +65,9 @@ namespace RobotMap
     constexpr int ELEVATOR1_BOTTOM_LIMIT_SWITCH = 3;
     // DIO
     constexpr int ELEVATOR2_BOTTOM_LIMIT_SWITCH = 4;
+    
+    // CANdle
+    constexpr int CANDLE_ADDRESS = 0;
 }
 
 namespace AutoConstants
@@ -174,6 +179,37 @@ namespace ElevatorConstants
     inline constexpr double kSpeakerHeight = 1.35; // Speaker height to target in meters
 
     inline constexpr double SHOOTER_ANGLE_OFFSET = 15;
+}
+
+namespace LEDConstants
+{
+    using namespace ctre::phoenix::led;
+    
+    class SetLEDs
+    {
+        public:
+            int r;
+            int g;
+            int b;
+            int w;
+            int startIndex;
+            int count;
+            SetLEDs(int r, int g, int b, int w, int startIndex, int count)
+            {
+                this->r = r;
+                this->g = g;
+                this->b = b;
+                this->w = w;
+                this->startIndex = startIndex;
+                this->count = count;
+            }
+    };
+
+    const SetLEDs kOff{0, 0, 0, 0, 0, 520};
+    const SetLEDs kIntaking{200, 200, 200, 200, 0, 520};
+    const SetLEDs kNoteSecured{0, 255, 0, 0, 0, 520};
+    const SetLEDs kElevatorDown{0, 0, 255, 0, 0, 520};
+    const SetLEDs kElevatorUp{255, 0, 0, 0, 0, 520};
 }
 
 namespace ControlBoardConstants

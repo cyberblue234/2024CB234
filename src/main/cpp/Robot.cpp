@@ -19,14 +19,12 @@ void Robot::DisabledInit() {}
 
 void Robot::DisabledPeriodic() 
 {
-	container.PlotAutonomousPath();
+	autonomousCommand = container.GetAutonomousCommand();
 }
 
 void Robot::AutonomousInit()
 {
 	container.OdometryInit();
-
-	autonomousCommand = container.GetAutonomousCommand();
 
 	if (autonomousCommand)
 	{
