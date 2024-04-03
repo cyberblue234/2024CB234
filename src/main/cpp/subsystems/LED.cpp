@@ -3,9 +3,6 @@
 
 void LED::LEDControls(LED::ControlMethods method)
 {
-    frc::SmartDashboard::PutNumber("Current Method", currentMethod);
-    frc::SmartDashboard::PutNumber("New Method", method);
-    // if (method == currentMethod) return;
     currentMethod = method;
     switch (method)
     {
