@@ -1,6 +1,6 @@
 #include "Controls.h"
 
-Controls::Controls(Drivetrain *swerve, Shooter *shooter, Intake *intake, Elevator *elevator, Feeder *feeder, Limelight *limelight3, LED *candle, ctre::phoenix6::Orchestra *orchestra)
+Controls::Controls(Drivetrain *swerve, Shooter *shooter, Intake *intake, Elevator *elevator, Feeder *feeder, Limelight *limelight3, LED *candle)//, ctre::phoenix6::Orchestra *orchestra)
 {
     this->swerve = swerve;
     this->shooter = shooter;
@@ -9,7 +9,7 @@ Controls::Controls(Drivetrain *swerve, Shooter *shooter, Intake *intake, Elevato
     this->elevator = elevator;
     this->limelight3 = limelight3;
     this->candle = candle;
-    this->orchestra = orchestra;
+    //this->orchestra = orchestra;
 }
 
 void Controls::Periodic()
