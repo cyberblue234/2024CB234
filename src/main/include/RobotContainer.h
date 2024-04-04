@@ -54,7 +54,7 @@ public:
 	Limelight *GetLimelight3() { return &limelight3; };
 	Limelight *GetLimelight2() { return &limelight2; };
 	LED *GetCANdle() { return &candle; };
-	ctre::phoenix6::Orchestra *GetOrchestra() { return &orchestra; };
+	//ctre::phoenix6::Orchestra *GetOrchestra() { return &orchestra; };
 
 	std::string GetAuto() { return autoChooser.GetSelected(); };
 
@@ -75,8 +75,6 @@ private:
 	Limelight limelight2;
 
 	LED candle;
-
-	ctre::phoenix6::Orchestra orchestra;
 
 	frc::PowerDistribution pdp;
 
