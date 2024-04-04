@@ -76,8 +76,6 @@ private:
 
 	LED candle;
 
-	//ctre::phoenix6::Orchestra orchestra;
-
 	frc::PowerDistribution pdp;
 
 	Controls controls;

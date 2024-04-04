@@ -14,7 +14,7 @@
 class Controls : frc2::SubsystemBase
 {
 public:
-    Controls(Drivetrain *, Shooter *, Intake *, Elevator *, Feeder *, Limelight *, LED *);//, ctre::phoenix6::Orchestra *);
+    Controls(Drivetrain *, Shooter *, Intake *, Elevator *, Feeder *, Limelight *, LED *);
     void Periodic() override;
     void DriveControls();
     void ShooterControls();
@@ -53,7 +53,6 @@ private:
     Elevator *elevator;
     Limelight *limelight3;
     LED *candle;
-    //ctre::phoenix6::Orchestra *orchestra;
 
     int selectedRotaryIndex = 0;
 };
