@@ -101,7 +101,7 @@ private:
     double closeAngle = -52;
     double midAngle = -44;
     double stageAngle = -30;
-    double trapAngle = -22;
+    double trapAngle = -47;
     double intakeAngle = -44;
 
     double hardEncoderLimit = 150;
