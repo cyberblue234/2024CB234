@@ -42,7 +42,6 @@ void Controls::DriveControls()
         double rot = swerve->RotationControl(gamepad.GetRightX(), 
                                 controlBoard.GetRawButton(ControlBoardConstants::SHOOT)
                                 && GetSelectedRotaryIndex() != ControlBoardConstants::MANUAL_SCORE
-                                && GetSelectedRotaryIndex() != ControlBoardConstants::POS_CLOSE
                                 && GetSelectedRotaryIndex() != ControlBoardConstants::POS_MID);
         swerve->DriveWithInput(gamepad.GetLeftY(), gamepad.GetLeftX(), rot, gamepad.GetRightTriggerAxis() > 0.2);
     }
