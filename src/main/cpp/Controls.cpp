@@ -73,6 +73,8 @@ void Controls::ShooterControls()
         || GetSelectedRotaryIndex() == ControlBoardConstants::POS_AMP_4
         || GetSelectedRotaryIndex() == ControlBoardConstants::MANUAL_AMP)
             shooter->ShootAtAmp();
+        else if (GetSelectedRotaryIndex() == ControlBoardConstants::POS_TRAP)
+            shooter->ShootAtTrap();
         else
             shooter->ShootAtSpeaker();
     }
@@ -137,9 +139,9 @@ void Controls::ElevatorControls()
         elevator->ElevatorControl(elevator->GetIntakeAngle(), Elevator::ControlMethods::Position);
     }
     else if (controlBoard.GetRawButton(ControlBoardConstants::SHOOTER_MOTORS) 
-    && GetSelectedRotaryIndex() != ControlBoardConstants::MANUAL_SCORE && GetSelectedRotaryIndex() != ControlBoardConstants::MANUAL_AMP)
+    && GetSelectedRotaryIndex() != ControlBoardConstants::MANUAL_SCORE
+    && GetSelectedRotaryIndex() != ControlBoardConstants::MANUAL_AMP)
     {
-    
         double angle;
         switch (GetSelectedRotaryIndex())
         {
@@ -166,6 +168,9 @@ void Controls::ElevatorControls()
                 break;
             case ControlBoardConstants::POS_AMP_4:
                 angle = elevator->GetAmpAngle();
+                break;
+            case ControlBoardConstants::POS_TRAP:
+                angle = elevator->GetTrapAngle();
                 break;
             // Default is the close angle
             default:
@@ -209,14 +214,19 @@ void Controls::FeederControls()
         || GetSelectedRotaryIndex() == ControlBoardConstants::POS_AMP_4
         || GetSelectedRotaryIndex() == ControlBoardConstants::MANUAL_AMP)
             feeder->ShootAtAmp();
-        else if (GetSelectedRotaryIndex() != ControlBoardConstants::MANUAL_SCORE 
-        || GetSelectedRotaryIndex() != ControlBoardConstants::POS_CLOSE 
+        else if (GetSelectedRotaryIndex() != ControlBoardConstants::MANUAL_SCORE
         || GetSelectedRotaryIndex() != ControlBoardConstants::POS_MID)
         {
             bool swerveAlignment = swerve->AtSetpoint();
             bool elevatorAlignment = elevator->AtSetpoint();
             bool atAlignment = swerveAlignment && elevatorAlignment;
-            if (shooter->GetShooter1RPM() >= shooter->GetSpeakerRPM() - 100 && atAlignment)
+            bool rpmSet;
+            if (GetSelectedRotaryIndex() == ControlBoardConstants::POS_TRAP)
+                rpmSet = shooter->GetAverageRPM() >= shooter->GetTrapRPM() - 50;
+            else
+                rpmSet = shooter->GetShooter1RPM() >= shooter->GetSpeakerRPM() - 100;
+            
+            if (rpmSet && atAlignment)
                 feeder->ShootAtSpeaker();
         }
         else

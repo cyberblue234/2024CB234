@@ -38,6 +38,12 @@ void Shooter::ShootAtSpeaker()
     SetShooterMotor2RPM(speakerRPM);
 }
 
+void Shooter::ShootAtTrap()
+{
+    SetShooterMotor1RPM(trapRPM + 2000);
+    SetShooterMotor2RPM(trapRPM);
+}
+
 void Shooter::ShootAtAmp()
 {
     SetShooterMotor1RPM(ampRPM);

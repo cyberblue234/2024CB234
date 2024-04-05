@@ -232,7 +232,7 @@ namespace ControlBoardConstants
     inline constexpr int PURGE = 5;
     // Rotary switches: 0 - 9, easier to deal with than the raw analog inputs 
     // Scoring position at the subwoofer
-    inline constexpr int POS_CLOSE = 0;
+    inline constexpr int POS_TRAP = 0;
     // Scoring position directly back from the subwoofer
     inline constexpr int POS_MID = 1;
     // Scoring position with the bot touching the stage
