@@ -19,7 +19,7 @@
     "5 Source to Note 5",
     "6 Amp to Note 1"
   ],
-  "defaultMaxVel": 1.75,
+  "defaultMaxVel": 2.0,
   "defaultMaxAccel": 1.75,
   "defaultMaxAngVel": 540.0,
   "defaultMaxAngAccel": 720.0,

@@ -82,22 +82,15 @@
           }
         },
         {
-          "type": "deadline",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Shoot"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Note 1 to Amp Shoot"
-                }
-              }
-            ]
+            "pathName": "Note 1 to Amp Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
           }
         }
       ]

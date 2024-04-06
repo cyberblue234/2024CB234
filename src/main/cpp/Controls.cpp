@@ -104,6 +104,7 @@ void Controls::IntakeControls()
         }
         else
         {
+            intake->SetIntakeMotor(0.0);
             candle->LEDControls(LED::ControlMethods::kIntaking);
         }
     }
@@ -213,8 +214,9 @@ void Controls::FeederControls()
         || GetSelectedRotaryIndex() == ControlBoardConstants::POS_AMP_4
         || GetSelectedRotaryIndex() == ControlBoardConstants::MANUAL_AMP)
             feeder->ShootAtAmp();
-        else if (GetSelectedRotaryIndex() != ControlBoardConstants::MANUAL_SCORE
-        || GetSelectedRotaryIndex() != ControlBoardConstants::POS_MID)
+        else if (GetSelectedRotaryIndex() == ControlBoardConstants::AUTO_SCORE
+        || GetSelectedRotaryIndex() == ControlBoardConstants::POS_STAGE
+        || GetSelectedRotaryIndex() == ControlBoardConstants::POS_TRAP)
         {
             bool swerveAlignment = swerve->AtSetpoint();
             bool elevatorAlignment = elevator->AtSetpoint();
@@ -228,7 +230,8 @@ void Controls::FeederControls()
             if (rpmSet && atAlignment)
                 feeder->ShootAtSpeaker();
         }
-        else
+        else if (GetSelectedRotaryIndex() == ControlBoardConstants::MANUAL_SCORE
+        || GetSelectedRotaryIndex() == ControlBoardConstants::POS_MID)
             feeder->ShootAtSpeaker();
     }
     else if (controlBoard.GetRawButton(ControlBoardConstants::SOURCE_INTAKE))
