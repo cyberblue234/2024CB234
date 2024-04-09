@@ -37,7 +37,6 @@ public:
 	frc2::CommandPtr GetAutonomousCommand();
 	frc2::CommandPtr GetShootCommand();
 	frc2::CommandPtr GetIntakeCommand();
-	frc2::CommandPtr GetShooterMotorsOnCommand();
 
 	void OdometryInit()
 	{
@@ -54,7 +53,6 @@ public:
 	Limelight *GetLimelight3() { return &limelight3; };
 	Limelight *GetLimelight2() { return &limelight2; };
 	LED *GetCANdle() { return &candle; };
-	//ctre::phoenix6::Orchestra *GetOrchestra() { return &orchestra; };
 
 	std::string GetAuto() { return autoChooser.GetSelected(); };
 
@@ -62,8 +60,6 @@ public:
 
 	void LogTeleopData();
 	void LogAutoData();
-
-	std::optional<frc2::CommandPtr> shooterMotorsOnCommand;
 
 private:
 	Drivetrain swerve;

@@ -93,17 +93,6 @@ frc2::CommandPtr RobotContainer::GetIntakeCommand()
 	);
 }
 
-frc2::CommandPtr RobotContainer::GetShooterMotorsOnCommand()
-{
-	return frc2::RunCommand
-	(
-		[this]
-		{
-			this->GetShooter()->ShootAtSpeaker();
-		}
-	).ToPtr();
-}
-
 void RobotContainer::PlotAutonomousPath()
 {
 	static std::string auton = "";

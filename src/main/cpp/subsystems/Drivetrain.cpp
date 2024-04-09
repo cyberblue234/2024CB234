@@ -48,16 +48,16 @@ Drivetrain::Drivetrain(Limelight *limelight3) : frontLeft(RobotMap::FL_DRIVE_ADD
 void Drivetrain::Periodic()
 {
     odometry.Update(gyro.GetRotation2d(), {frontLeft.GetModulePosition(), frontRight.GetModulePosition(), backLeft.GetModulePosition(), backRight.GetModulePosition()});
+    limelight3->UpdateLimelightTracking();
     if (cycle % 5 == 0)
     {
-        limelight3->UpdateLimelightTracking();
+        
         limelight3->UpdateTelemetry();
         if (limelight3->GetTargetValid() == 1 && abs((double)limelight3->GetRobotPose().X() - (double)odometry.GetEstimatedPosition().X()) < 1)
             odometry.AddVisionMeasurement(limelight3->GetRobotPose(), frc::Timer::GetFPGATimestamp());
     }
     if (cycle < 10)
     {
-        limelight3->UpdateLimelightTracking();
         ResetPose(limelight3->GetRobotPose());
     }
     cycle++;
