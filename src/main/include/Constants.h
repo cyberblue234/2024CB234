@@ -4,6 +4,8 @@
 #include <units/velocity.h>
 #include <units/angular_velocity.h>
 #include <pathplanner/lib/util/HolonomicPathFollowerConfig.h>
+#include <ctre/phoenix/led/CANdle.h>
+#include <ctre/phoenix/led/ColorFlowAnimation.h>
 #include <numbers>
 #include <string>
 #include <array>
@@ -63,6 +65,9 @@ namespace RobotMap
     constexpr int ELEVATOR1_BOTTOM_LIMIT_SWITCH = 3;
     // DIO
     constexpr int ELEVATOR2_BOTTOM_LIMIT_SWITCH = 4;
+    
+    // CANdle
+    constexpr int CANDLE_ADDRESS = 0;
 }
 
 namespace AutoConstants
@@ -99,9 +104,9 @@ namespace SwerveModuleConstants
 {
     inline constexpr double ENCODER_INCHES_PER_COUNT = 0.00090689;
 
-    inline constexpr double kDriveP = 0.5;                                                                                     
+    inline constexpr double kDriveP = 0.54;                                                                                     
     inline constexpr double kDriveI = 0.0;
-    inline constexpr double kDriveD = 0.08;
+    inline constexpr double kDriveD = 0.09;
     inline constexpr double kDriveF = 0.2;
 
     inline constexpr double kAngleP = 15;
@@ -146,7 +151,7 @@ namespace DrivetrainConstants
 
     inline constexpr double kRotationP = 0.023;
     inline constexpr double kRotationI = 0.00;
-    inline constexpr double kRotationD = 0.0025;
+    inline constexpr double kRotationD = 0.00375;
 }
 
 namespace ShooterConstants
@@ -167,13 +172,44 @@ namespace ElevatorConstants
     inline constexpr double kCorrectionI = 0.0;
     inline constexpr double kCorrectionD = 0.0001;
     
-    inline constexpr double kForce = 41.5;
+    inline constexpr double kForce = 42;
     inline constexpr double kKickup = 1.0;
     inline constexpr double kGravity = 9.8;
 
     inline constexpr double kSpeakerHeight = 1.35; // Speaker height to target in meters
 
     inline constexpr double SHOOTER_ANGLE_OFFSET = 15;
+}
+
+namespace LEDConstants
+{
+    using namespace ctre::phoenix::led;
+    
+    class SetLEDs
+    {
+        public:
+            int r;
+            int g;
+            int b;
+            int w;
+            int startIndex;
+            int count;
+            SetLEDs(int r, int g, int b, int w, int startIndex, int count)
+            {
+                this->r = r;
+                this->g = g;
+                this->b = b;
+                this->w = w;
+                this->startIndex = startIndex;
+                this->count = count;
+            }
+    };
+
+    const SetLEDs kOff{0, 0, 0, 0, 0, 520};
+    const SetLEDs kIntaking{200, 200, 200, 200, 0, 520};
+    const SetLEDs kNoteSecured{0, 255, 0, 0, 0, 520};
+    const SetLEDs kElevatorDown{0, 0, 255, 0, 0, 520};
+    const SetLEDs kElevatorUp{255, 0, 0, 0, 0, 520};
 }
 
 namespace ControlBoardConstants
@@ -196,7 +232,7 @@ namespace ControlBoardConstants
     inline constexpr int PURGE = 5;
     // Rotary switches: 0 - 9, easier to deal with than the raw analog inputs 
     // Scoring position at the subwoofer
-    inline constexpr int POS_CLOSE = 0;
+    inline constexpr int POS_TRAP = 0;
     // Scoring position directly back from the subwoofer
     inline constexpr int POS_MID = 1;
     // Scoring position with the bot touching the stage

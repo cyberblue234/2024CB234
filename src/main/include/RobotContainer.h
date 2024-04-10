@@ -26,6 +26,7 @@
 #include "subsystems/Feeder.h"
 #include "subsystems/Elevator.h"
 #include "subsystems/Limelight.h"
+#include "subsystems/LED.h"
 #include "Controls.h"
 
 class RobotContainer
@@ -34,9 +35,9 @@ public:
 	RobotContainer();
 
 	frc2::CommandPtr GetAutonomousCommand();
+	frc2::CommandPtr GetFirstShootCommand();
 	frc2::CommandPtr GetShootCommand();
 	frc2::CommandPtr GetIntakeCommand();
-	frc2::CommandPtr GetShooterMotorsOnCommand();
 
 	void OdometryInit()
 	{
@@ -52,7 +53,7 @@ public:
 	Feeder *GetFeeder() { return &feeder; };
 	Limelight *GetLimelight3() { return &limelight3; };
 	Limelight *GetLimelight2() { return &limelight2; };
-	ctre::phoenix6::Orchestra *GetOrchestra() { return &orchestra; };
+	LED *GetCANdle() { return &candle; };
 
 	std::string GetAuto() { return autoChooser.GetSelected(); };
 
@@ -60,8 +61,6 @@ public:
 
 	void LogTeleopData();
 	void LogAutoData();
-
-	std::optional<frc2::CommandPtr> shooterMotorsOnCommand;
 
 private:
 	Drivetrain swerve;
@@ -72,7 +71,7 @@ private:
 	Limelight limelight3;
 	Limelight limelight2;
 
-	ctre::phoenix6::Orchestra orchestra;
+	LED candle;
 
 	frc::PowerDistribution pdp;
 

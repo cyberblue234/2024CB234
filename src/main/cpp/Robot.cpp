@@ -19,7 +19,7 @@ void Robot::DisabledInit() {}
 
 void Robot::DisabledPeriodic() 
 {
-	container.PlotAutonomousPath();
+	
 }
 
 void Robot::AutonomousInit()

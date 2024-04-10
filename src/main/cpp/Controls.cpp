@@ -1,6 +1,6 @@
 #include "Controls.h"
 
-Controls::Controls(Drivetrain *swerve, Shooter *shooter, Intake *intake, Elevator *elevator, Feeder *feeder, Limelight *limelight3, ctre::phoenix6::Orchestra *orchestra)
+Controls::Controls(Drivetrain *swerve, Shooter *shooter, Intake *intake, Elevator *elevator, Feeder *feeder, Limelight *limelight3, LED *candle)
 {
     this->swerve = swerve;
     this->shooter = shooter;
@@ -8,7 +8,7 @@ Controls::Controls(Drivetrain *swerve, Shooter *shooter, Intake *intake, Elevato
     this->feeder = feeder;
     this->elevator = elevator;
     this->limelight3 = limelight3;
-    this->orchestra = orchestra;
+    this->candle = candle;
 }
 
 void Controls::Periodic()
@@ -42,7 +42,6 @@ void Controls::DriveControls()
         double rot = swerve->RotationControl(gamepad.GetRightX(), 
                                 controlBoard.GetRawButton(ControlBoardConstants::SHOOT)
                                 && GetSelectedRotaryIndex() != ControlBoardConstants::MANUAL_SCORE
-                                && GetSelectedRotaryIndex() != ControlBoardConstants::POS_CLOSE
                                 && GetSelectedRotaryIndex() != ControlBoardConstants::POS_MID);
         swerve->DriveWithInput(gamepad.GetLeftY(), gamepad.GetLeftX(), rot, gamepad.GetRightTriggerAxis() > 0.2);
     }
@@ -73,6 +72,8 @@ void Controls::ShooterControls()
         || GetSelectedRotaryIndex() == ControlBoardConstants::POS_AMP_4
         || GetSelectedRotaryIndex() == ControlBoardConstants::MANUAL_AMP)
             shooter->ShootAtAmp();
+        else if (GetSelectedRotaryIndex() == ControlBoardConstants::POS_TRAP)
+            shooter->ShootAtTrap();
         else
             shooter->ShootAtSpeaker();
     }
@@ -86,12 +87,26 @@ void Controls::ShooterControls()
 
 void Controls::IntakeControls()
 {
-    if (controlBoard.GetRawButton(ControlBoardConstants::GROUND_INTAKE) && elevator->AtSetpoint())
+    if (controlBoard.GetRawButton(ControlBoardConstants::GROUND_INTAKE))
     {
-        if (feeder->IsNoteSecured() == false)
-            intake->IntakeFromGround();
+        if (elevator->AtSetpoint())
+        {
+            if (feeder->IsNoteSecured() == false)
+            {
+                intake->IntakeFromGround();
+                candle->LEDControls(LED::ControlMethods::kIntaking);
+            }
+            else
+            {
+                intake->SetIntakeMotor(-0.1);
+                candle->LEDControls(LED::ControlMethods::kNoteSecured);
+            }
+        }
         else
-            intake->SetIntakeMotor(-0.1);
+        {
+            intake->SetIntakeMotor(0.0);
+            candle->LEDControls(LED::ControlMethods::kIntaking);
+        }
     }
     else if (controlBoard.GetRawButton(ControlBoardConstants::PURGE))
         intake->Purge();
@@ -124,9 +139,9 @@ void Controls::ElevatorControls()
         elevator->ElevatorControl(elevator->GetIntakeAngle(), Elevator::ControlMethods::Position);
     }
     else if (controlBoard.GetRawButton(ControlBoardConstants::SHOOTER_MOTORS) 
-    && GetSelectedRotaryIndex() != ControlBoardConstants::MANUAL_SCORE && GetSelectedRotaryIndex() != ControlBoardConstants::MANUAL_AMP)
+    && GetSelectedRotaryIndex() != ControlBoardConstants::MANUAL_SCORE
+    && GetSelectedRotaryIndex() != ControlBoardConstants::MANUAL_AMP)
     {
-    
         double angle;
         switch (GetSelectedRotaryIndex())
         {
@@ -154,6 +169,9 @@ void Controls::ElevatorControls()
             case ControlBoardConstants::POS_AMP_4:
                 angle = elevator->GetAmpAngle();
                 break;
+            case ControlBoardConstants::POS_TRAP:
+                angle = elevator->GetTrapAngle();
+                break;
             // Default is the close angle
             default:
                 angle = elevator->GetCloseAngle();
@@ -171,7 +189,18 @@ void Controls::ElevatorControls()
         {
             elevator->StopMotors();
         }
-        
+    }
+
+    if (controlBoard.GetRawButton(ControlBoardConstants::GROUND_INTAKE) == false)
+    {
+        if (elevator->GetElevator1BottomLimit() && elevator->GetElevator2BottomLimit())
+        {
+            candle->LEDControls(LED::ControlMethods::kElevatorDown);
+        }
+        else
+        {
+            candle->LEDControls(LED::ControlMethods::kElevatorUp);
+        }
     }
 }
 
@@ -185,17 +214,24 @@ void Controls::FeederControls()
         || GetSelectedRotaryIndex() == ControlBoardConstants::POS_AMP_4
         || GetSelectedRotaryIndex() == ControlBoardConstants::MANUAL_AMP)
             feeder->ShootAtAmp();
-        else if (GetSelectedRotaryIndex() != ControlBoardConstants::MANUAL_SCORE 
-        || GetSelectedRotaryIndex() != ControlBoardConstants::POS_CLOSE 
-        || GetSelectedRotaryIndex() != ControlBoardConstants::POS_MID)
+        else if (GetSelectedRotaryIndex() == ControlBoardConstants::AUTO_SCORE
+        || GetSelectedRotaryIndex() == ControlBoardConstants::POS_STAGE
+        || GetSelectedRotaryIndex() == ControlBoardConstants::POS_TRAP)
         {
             bool swerveAlignment = swerve->AtSetpoint();
             bool elevatorAlignment = elevator->AtSetpoint();
             bool atAlignment = swerveAlignment && elevatorAlignment;
-            if (shooter->GetShooter1RPM() >= shooter->GetSpeakerRPM() - 100 && atAlignment)
+            bool rpmSet;
+            if (GetSelectedRotaryIndex() == ControlBoardConstants::POS_TRAP)
+                rpmSet = shooter->GetAverageRPM() >= shooter->GetTrapRPM() - 50;
+            else
+                rpmSet = shooter->GetShooter1RPM() >= shooter->GetSpeakerRPM() - 100;
+            
+            if (rpmSet && atAlignment)
                 feeder->ShootAtSpeaker();
         }
-        else
+        else if (GetSelectedRotaryIndex() == ControlBoardConstants::MANUAL_SCORE
+        || GetSelectedRotaryIndex() == ControlBoardConstants::POS_MID)
             feeder->ShootAtSpeaker();
     }
     else if (controlBoard.GetRawButton(ControlBoardConstants::SOURCE_INTAKE))

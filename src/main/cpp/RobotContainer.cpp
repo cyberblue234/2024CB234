@@ -4,11 +4,11 @@ using namespace pathplanner;
 
 RobotContainer::RobotContainer() : swerve(GetLimelight3()), elevator(GetLimelight3()), limelight3("limelight"), limelight2("limelight-intake"),
 								   pdp(1, frc::PowerDistribution::ModuleType::kRev),
-								   controls(GetSwerve(), GetShooter(), GetIntake(), GetElevator(), GetFeeder(), GetLimelight3(), GetOrchestra())
+								   controls(GetSwerve(), GetShooter(), GetIntake(), GetElevator(), GetFeeder(), GetLimelight3(), GetCANdle())
 {
 	NamedCommands::registerCommand("Shoot", GetShootCommand());
+	NamedCommands::registerCommand("FirstShoot", GetFirstShootCommand());
 	NamedCommands::registerCommand("Intake", GetIntakeCommand());
-	NamedCommands::registerCommand("ShooterMotorsOn", GetShooterMotorsOnCommand());
 
 	autoChooser.SetDefaultOption(AutoConstants::kAutoShoot, AutoConstants::kAutoShoot);
 	for (auto i = AutoConstants::kAutoArray.begin(); i != AutoConstants::kAutoArray.end(); ++i)
@@ -19,22 +19,57 @@ RobotContainer::RobotContainer() : swerve(GetLimelight3()), elevator(GetLimeligh
 	frc::SmartDashboard::PutData("Auto Chooser", &autoChooser);
 
 	shooterMotorsOnCommand = GetShooterMotorsOnCommand();
-
-	orchestra.AddInstrument(*swerve.GetFrontLeftModule()->GetDriveMotor());
-	orchestra.AddInstrument(*swerve.GetFrontLeftModule()->GetSwerveMotor());
-	orchestra.AddInstrument(*swerve.GetFrontRightModule()->GetDriveMotor());
-	orchestra.AddInstrument(*swerve.GetFrontRightModule()->GetSwerveMotor());
-	orchestra.AddInstrument(*swerve.GetBackLeftModule()->GetDriveMotor());
-	orchestra.AddInstrument(*swerve.GetBackLeftModule()->GetSwerveMotor());
-	orchestra.AddInstrument(*swerve.GetBackRightModule()->GetDriveMotor());
-	orchestra.AddInstrument(*swerve.GetBackRightModule()->GetSwerveMotor());
-	orchestra.AddInstrument(*elevator.GetElevator1Motor());
-	orchestra.AddInstrument(*elevator.GetElevator2Motor());
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand()
 {
-	return PathPlannerAuto("Source to Note 5 to Note 4").ToPtr();
+	std::string auton = GetAuto();
+	if (auton == AutoConstants::kAutoShoot) return GetFirstShootCommand();
+	return PathPlannerAuto(auton).ToPtr();
+}
+
+
+frc2::CommandPtr RobotContainer::GetFirstShootCommand()
+{
+	return frc2::RunCommand
+	(
+		[this]
+		{
+			this->GetShooter()->ShootAtSpeaker();
+		}
+	).Until
+	(
+		[this]
+		{
+			return this->GetShooter()->GetAverageRPM() >= this->GetShooter()->GetSpeakerRPM() - 100;
+		}
+	).AndThen
+	(
+		frc2::RunCommand
+		(
+			[this]
+			{
+				this->GetFeeder()->ShootAtSpeaker();
+			}
+		).Until
+		(
+			[this]
+			{
+				return this->GetFeeder()->GetTopSensorInput() == false;
+			}
+		)
+	).AndThen
+	(
+		frc2::InstantCommand
+		(
+			[this]
+			{
+				this->GetShooter()->StopMotors();
+				this->GetElevator()->StopMotors();
+				this->GetFeeder()->StopMotor();
+			}
+		).ToPtr()
+	);
 }
 
 frc2::CommandPtr RobotContainer::GetShootCommand()
@@ -100,17 +135,6 @@ frc2::CommandPtr RobotContainer::GetIntakeCommand()
 			return this->GetFeeder()->IsNoteSecured();
 		}
 	);
-}
-
-frc2::CommandPtr RobotContainer::GetShooterMotorsOnCommand()
-{
-	return frc2::RunCommand
-	(
-		[this]
-		{
-			this->GetShooter()->ShootAtSpeaker();
-		}
-	).ToPtr();
 }
 
 void RobotContainer::PlotAutonomousPath()

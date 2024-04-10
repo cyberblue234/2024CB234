@@ -139,4 +139,5 @@ void Elevator::UpdateTelemetry()
     frc::SmartDashboard::PutNumber("Elevator 2 Encoder Pos", GetElevator2Encoder());
     frc::SmartDashboard::PutBoolean("Limit Switch 1", GetElevator1BottomLimit());
     frc::SmartDashboard::PutBoolean("Limit Switch 2", GetElevator2BottomLimit());
+    frc::SmartDashboard::PutBoolean("Safe", GetElevator1BottomLimit() && GetElevator2BottomLimit());
 }
