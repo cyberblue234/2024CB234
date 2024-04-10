@@ -17,8 +17,6 @@ RobotContainer::RobotContainer() : swerve(GetLimelight3()), elevator(GetLimeligh
 	}
 
 	frc::SmartDashboard::PutData("Auto Chooser", &autoChooser);
-
-	shooterMotorsOnCommand = GetShooterMotorsOnCommand();
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand()
@@ -27,7 +25,6 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
 	if (auton == AutoConstants::kAutoShoot) return GetFirstShootCommand();
 	return PathPlannerAuto(auton).ToPtr();
 }
-
 
 frc2::CommandPtr RobotContainer::GetFirstShootCommand()
 {
@@ -137,35 +134,15 @@ frc2::CommandPtr RobotContainer::GetIntakeCommand()
 	);
 }
 
-void RobotContainer::PlotAutonomousPath()
+void RobotContainer::TeleopPeriodic()
 {
-	static std::string auton = "";
-	std::string newAuton = GetAuto();
-	if (auton != newAuton)
-	{
-		if (auton != "" && auton != AutoConstants::kAutoShoot)
-		{
-			auto oldPathGroup = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile(auton);
-			char count = 48;
-			for (auto path = oldPathGroup.begin(); path != oldPathGroup.end(); ++path)
-			{
-				swerve.GetField()->GetObject(std::string({'p', 'a', 't', 'h', count}))->SetPose(frc::Pose2d());
-				count++;
-			}
-		}
+	swerve.DriveControls();
+	shooter.ShooterControls();
+	elevator.ElevatorControls();
+	intake.IntakeControls(elevator.AtSetpoint(), feeder.IsNoteSecured());
+	feeder.FeederControls(swerve.AtSetpoint(), elevator.AtSetpoint(), shooter.GetAverageRPM());
 
-		auton = newAuton;
-
-		if (newAuton == AutoConstants::kAutoShoot) return;
-		
-		auto pathGroup = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile(auton);
-		char count = 48;
-		for (auto path = pathGroup.begin(); path != pathGroup.end(); ++path)
-		{
-			swerve.GetField()->GetObject(std::string({'p', 'a', 't', 'h', count}))->SetPoses(path->get()->getPathPoses());
-			count++;
-		}
-	}
+	LogTeleopData();
 }
 
 void RobotContainer::LogTeleopData()

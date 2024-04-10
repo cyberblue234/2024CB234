@@ -12,6 +12,7 @@ class Feeder : frc2::SubsystemBase
 public:
     Feeder();
     void Periodic() override;
+    void FeederControls(bool, bool, double);
     void IntakeFromGround();
     void IntakeFromSource();
     void ShootAtSpeaker();

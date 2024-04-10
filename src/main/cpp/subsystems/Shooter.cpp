@@ -32,6 +32,54 @@ void Shooter::Periodic()
     UpdateTelemetry();
 }
 
+void Shooter::ShooterControls()
+{
+    if (Controls::MainAmp() == true)
+    {
+        SetAmpRPM(2100);
+    }
+    if (Controls::Amp2() == true) 
+    {
+        SetAmpRPM(2200);
+    }
+    else if (Controls::Amp3() == true) 
+    {
+        SetAmpRPM(2000);
+    }
+    else if (Controls::Amp4() == true)
+    {
+        SetAmpRPM(1900);
+    }
+
+    if (Controls::ShooterMotors() == true)
+    {
+        if (Controls::AmpShot() == true)
+        {
+            ShootAtAmp();
+        }
+        else if (Controls::TrapShot() == true)
+        {
+            ShootAtTrap();
+        }
+        else
+        {
+            ShootAtSpeaker();
+        }
+    }
+    else if (Controls::SourceIntake() == true)
+    {
+        IntakeFromSource();
+    }
+    else if (Controls::Purge() == true)
+    {
+        Purge();
+    }
+    else
+    {
+        StopMotors();
+    }
+}
+
 void Shooter::ShootAtSpeaker()
 {
     SetShooterMotor1RPM(speakerRPM + 2000);

@@ -57,7 +57,7 @@ public:
 
 	std::string GetAuto() { return autoChooser.GetSelected(); };
 
-	void PlotAutonomousPath();
+	void TeleopPeriodic();
 
 	void LogTeleopData();
 	void LogAutoData();

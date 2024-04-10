@@ -13,6 +13,7 @@ class Intake : frc2::SubsystemBase
 public:
     Intake();
     void Periodic() override;
+    void IntakeControls(bool, bool);
     void IntakeFromGround();
     void Purge() { SetIntakeMotor(-1.0); };
     void SetIntakeMotor(double power) { intake.Set(power); };

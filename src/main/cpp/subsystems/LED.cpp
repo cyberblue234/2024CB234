@@ -1,9 +1,8 @@
 #include "subsystems/LED.h"
 #include <frc/smartdashboard/SmartDashboard.h>
 
-void LED::LEDControls(LED::ControlMethods method)
+static void LED::LEDControls(LED::ControlMethods method)
 {
-    currentMethod = method;
     switch (method)
     {
         case LED::ControlMethods::kOff:

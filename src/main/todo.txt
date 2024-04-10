@@ -1,0 +1,3 @@
+- Compile check
+- Overall cleanup (make vars for function outputs, consistent formatting, etc.)
+- Check speeds, especially max angular speed

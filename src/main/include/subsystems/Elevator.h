@@ -22,6 +22,7 @@ class Elevator : frc2::SubsystemBase
 public:
     Elevator(Limelight *);
     void Periodic() override;
+    void ElevatorControls();
 
     double CalculateSpeakerAngle();
 
@@ -31,7 +32,7 @@ public:
         Position
     };
 
-    void ElevatorControl(double value, ControlMethods method);
+    void ElevatorControl(double, ControlMethods);
 
     void ToIntakeAngle() { ElevatorControl(intakeAngle, ControlMethods::Position); };
     void ToSubwooferAngle() { ElevatorControl(closeAngle, ControlMethods::Position); };
