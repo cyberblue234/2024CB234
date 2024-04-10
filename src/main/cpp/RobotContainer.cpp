@@ -9,7 +9,6 @@ RobotContainer::RobotContainer() : swerve(GetLimelight3()), elevator(GetLimeligh
 	NamedCommands::registerCommand("Shoot", GetShootCommand());
 	NamedCommands::registerCommand("FirstShoot", GetFirstShootCommand());
 	NamedCommands::registerCommand("Intake", GetIntakeCommand());
-	NamedCommands::registerCommand("ShooterMotorsOn", GetShooterMotorsOnCommand());
 
 	autoChooser.SetDefaultOption(AutoConstants::kAutoShoot, AutoConstants::kAutoShoot);
 	for (auto i = AutoConstants::kAutoArray.begin(); i != AutoConstants::kAutoArray.end(); ++i)
