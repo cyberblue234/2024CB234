@@ -151,7 +151,7 @@ namespace DrivetrainConstants
 
     inline constexpr double kRotationP = 0.023;
     inline constexpr double kRotationI = 0.00;
-    inline constexpr double kRotationD = 0.003;
+    inline constexpr double kRotationD = 0.00375;
 }
 
 namespace ShooterConstants
@@ -172,7 +172,7 @@ namespace ElevatorConstants
     inline constexpr double kCorrectionI = 0.0;
     inline constexpr double kCorrectionD = 0.0001;
     
-    inline constexpr double kForce = 41.5;
+    inline constexpr double kForce = 42;
     inline constexpr double kKickup = 1.0;
     inline constexpr double kGravity = 9.8;
 
