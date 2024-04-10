@@ -17,8 +17,6 @@ RobotContainer::RobotContainer() : swerve(GetLimelight3()), elevator(GetLimeligh
 	}
 
 	frc::SmartDashboard::PutData("Auto Chooser", &autoChooser);
-
-	shooterMotorsOnCommand = GetShooterMotorsOnCommand();
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand()
