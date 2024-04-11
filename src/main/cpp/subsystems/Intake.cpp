@@ -1,8 +1,10 @@
 #include "subsystems/Intake.h"
 
-Intake::Intake()
+Intake::Intake(LED *candle)
 {
     intake.RestoreFactoryDefaults();
+    
+    this->candle = candle;
 }
 
 void Intake::Periodic()
@@ -10,27 +12,27 @@ void Intake::Periodic()
     UpdateTelemetry();
 }
 
-void Controls::IntakeControls(bool elevatorAlignment, bool isNoteSecured)
+void Intake::IntakeControls(bool elevatorAlignment, bool isNoteSecured)
 {
-    if (Controls::Intake() == true)
+    if (Controls::GroundIntake() == true)
     {
         if (elevatorAlignment == true)
         {
             if (isNoteSecured == false)
             {
                 IntakeFromGround();
-                LED::LEDControls(LED::ControlMethods::kIntaking);
+                candle->LEDControls(LED::ControlMethods::kIntaking);
             }
             else
             {
                 SetIntakeMotor(-0.1);
-                LED::LEDControls(LED::ControlMethods::kNoteSecured);
+                candle->LEDControls(LED::ControlMethods::kNoteSecured);
             }
         }
         else
         {
             SetIntakeMotor(0.0);
-            LED::LEDControls(LED::ControlMethods::kIntaking);
+            candle->LEDControls(LED::ControlMethods::kIntaking);
         }
     }
     else if (Controls::Purge())

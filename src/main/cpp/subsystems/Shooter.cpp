@@ -25,6 +25,10 @@ Shooter::Shooter()
     shooter2PID.SetI(ShooterConstants::kShooterI);
     shooter2PID.SetD(ShooterConstants::kShooterD);
     shooter2PID.SetFF(ShooterConstants::kShooterF);
+
+    SetSpeakerRPM(4500);
+    SetTrapRPM(3000);
+    SetAmpRPM(2000);
 }
 
 void Shooter::Periodic()
@@ -34,7 +38,7 @@ void Shooter::Periodic()
 
 void Shooter::ShooterControls()
 {
-    if (Controls::MainAmp() == true)
+    if (Controls::AmpMain() == true)
     {
         SetAmpRPM(2100);
     }

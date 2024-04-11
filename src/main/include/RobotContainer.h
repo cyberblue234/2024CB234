@@ -75,8 +75,6 @@ private:
 
 	frc::PowerDistribution pdp;
 
-	Controls controls;
-
 	frc::SendableChooser<std::string> autoChooser;
 
 	FILE *t_output;

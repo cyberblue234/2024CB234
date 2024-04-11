@@ -92,7 +92,7 @@ void Drivetrain::DriveControls()
     {
         double rot;
         // Shoot is pressed, manual and mid score are not selected
-        if (Controls::Shoot() == true && Controls::ManualScore() == false && Controls::MidScore() == false)
+        if (Controls::Shoot() == true && Controls::ManualScore() == false && Controls::Mid() == false)
         {
             // Align to april tag
             rot = RotationControl();
@@ -100,12 +100,12 @@ void Drivetrain::DriveControls()
         else 
         {
             // Driver control
-            double rightStickX = gamepad.GetRightX();
+            double rightStickX = Controls::gamepad.GetRightX();
             rot = RotationControl(rightStickX);
         }
-        double leftStickY = gamepad.GetLeftY();
-        double leftStickX = gamepad.GetLeftX();
-        bool limitSpeed = gamepad.GetRightTriggerAxis() > 0.2;
+        double leftStickY = Controls::gamepad.GetLeftY();
+        double leftStickX = Controls::gamepad.GetLeftX();
+        bool limitSpeed = Controls::gamepad.GetRightTriggerAxis() > 0.2;
         DriveWithInput(leftStickY, leftStickX, rot, limitSpeed);
     }
 }
@@ -190,13 +190,13 @@ double Drivetrain::RotationControl()
 {
     limelight3->SetPipelineID(Limelight::kSpeakerDetection);
     double aprilTagOffset = limelight3->GetAprilTagOffset();
-    rotInput = -rotationController.Calculate(aprilTagOffset, 0);
+    double rotInput = -rotationController.Calculate(aprilTagOffset, 0);
     return rotInput;
 }
 
 void Drivetrain::AlignToSpeaker()
 {
-    DriveWithInput(0.0, 0.0, RotationControl(0, true), false);    
+    DriveWithInput(0.0, 0.0, RotationControl(), false);    
 }
 
 void Drivetrain::SetAnchorState()

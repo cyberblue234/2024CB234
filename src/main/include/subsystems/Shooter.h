@@ -11,6 +11,7 @@
 #include <frc/DigitalInput.h>
 #include "rev/CANSparkFlex.h"
 #include "Constants.h"
+#include "Controls.h"
 
 class Shooter : frc2::SubsystemBase
 {
@@ -50,7 +51,7 @@ public:
     static double GetSpeakerRPM() { return speakerRPM; };
     static double GetAmpRPM() { return ampRPM; };
     static double GetTrapRPM() { return trapRPM; };
-    static double GetIntakeSpeed() { return intakeSpeed; };
+    double GetIntakeSpeed() { return intakeSpeed; };
 
 private:
     rev::CANSparkFlex shooter1Motor{RobotMap::SHOOTER_MOTOR1_ADDRESS, rev::CANSparkFlex::MotorType::kBrushless};
@@ -60,8 +61,8 @@ private:
     rev::SparkPIDController shooter1PID = shooter1Motor.GetPIDController();
     rev::SparkPIDController shooter2PID = shooter2Motor.GetPIDController();
 
-    static double speakerRPM = 4500;
-    static double trapRPM = 3000;
-    static double ampRPM = 2200;
-    static double intakeSpeed = 0.225;
+    static double speakerRPM;
+    static double trapRPM;
+    static double ampRPM;
+    double intakeSpeed = 0.225;
 };

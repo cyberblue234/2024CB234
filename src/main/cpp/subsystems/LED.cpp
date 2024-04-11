@@ -1,7 +1,7 @@
 #include "subsystems/LED.h"
 #include <frc/smartdashboard/SmartDashboard.h>
 
-static void LED::LEDControls(LED::ControlMethods method)
+void LED::LEDControls(LED::ControlMethods method)
 {
     switch (method)
     {

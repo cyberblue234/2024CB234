@@ -3,9 +3,10 @@
 bool elevator1Registered = false;
 bool elevator2Registered = false;
 
-Elevator::Elevator(Limelight *limelight3)
+Elevator::Elevator(Limelight *limelight3, LED *candle)
 {
     this->limelight3 = limelight3;
+    this->candle = candle;
 
     elevator1Motor.GetConfigurator().Apply(configs::TalonFXConfiguration{});
     configs::TalonFXConfiguration elevator1Config{};
@@ -131,11 +132,11 @@ void Elevator::ElevatorControls()
     {
         if (GetElevator1BottomLimit() == true && GetElevator2BottomLimit() == true)
         {
-            LED::LEDControls(LED::ControlMethods::kElevatorDown);
+            candle->LEDControls(LED::ControlMethods::kElevatorDown);
         }
         else
         {
-            LED::LEDControls(LED::ControlMethods::kElevatorUp);
+            candle->LEDControls(LED::ControlMethods::kElevatorUp);
         }
     }
 }
@@ -159,7 +160,7 @@ double Elevator::CalculateSpeakerAngle()
 
 void Elevator::ElevatorControl(double value, ControlMethods method)
 {
-    bool directionTest;
+    bool directionTest = false;
     if (method == ControlMethods::Speed) directionTest = value > 0;
     else if (method == ControlMethods::Position) directionTest = value > GetShooterAngle();
 

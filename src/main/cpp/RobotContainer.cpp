@@ -2,9 +2,8 @@
 
 using namespace pathplanner;
 
-RobotContainer::RobotContainer() : swerve(GetLimelight3()), elevator(GetLimelight3()), limelight3("limelight"), limelight2("limelight-intake"),
-								   pdp(1, frc::PowerDistribution::ModuleType::kRev),
-								   controls(GetSwerve(), GetShooter(), GetIntake(), GetElevator(), GetFeeder(), GetLimelight3(), GetCANdle())
+RobotContainer::RobotContainer() : swerve(GetLimelight3()), intake(GetCANdle()), elevator(GetLimelight3(), GetCANdle()), limelight3("limelight"), limelight2("limelight-intake"),
+								   pdp(1, frc::PowerDistribution::ModuleType::kRev)
 {
 	NamedCommands::registerCommand("Shoot", GetShootCommand());
 	NamedCommands::registerCommand("FirstShoot", GetFirstShootCommand());

@@ -2,16 +2,23 @@
 
 #include <frc/XboxController.h>
 #include <frc/Joystick.h>
+#include "Constants.h"
 
 class Controls
 {
 public:
+    Controls()
+    {
+        gamepad = frc::XboxController(0);
+        controlBoard = frc::Joystick(1);
+    }
+
     static int GetSelectedRotaryIndex() { return AnalogToRotaryIndex(controlBoard.GetX()); }
 
     static bool Shoot() { return controlBoard.GetRawButton(ControlBoardConstants::SHOOT); };
     static bool ShooterMotors() { return controlBoard.GetRawButton(ControlBoardConstants::SHOOTER_MOTORS); };
     static bool SourceIntake() { return controlBoard.GetRawButton(ControlBoardConstants::SOURCE_INTAKE); };
-    static bool GroundIntake() { return controlBoard.GetRawButton(ControlBoardConstants::GroundIntake); };
+    static bool GroundIntake() { return controlBoard.GetRawButton(ControlBoardConstants::GROUND_INTAKE); };
     static bool ElevatorUp() { return controlBoard.GetRawButton(ControlBoardConstants::ELEVATOR_UP); };
     static bool ElevatorDown() { return controlBoard.GetRawButton(ControlBoardConstants::ELEVATOR_DOWN); };
     static bool AutoElevatorDown() { return controlBoard.GetRawButton(ControlBoardConstants::AUTO_ELEVATOR_DOWN); };
@@ -35,8 +42,8 @@ public:
     static void RumbleGamepad() { gamepad.SetRumble(gamepad.kBothRumble, 1.0); };
     static void StopRumble() { gamepad.SetRumble(gamepad.kBothRumble, 0.0); };
 
-    static frc::XboxController gamepad{0};
-    static frc::Joystick controlBoard{1};
+    static frc::XboxController gamepad;
+    static frc::Joystick controlBoard;
 
 private:
     static int AnalogToRotaryIndex(double analogInput) 

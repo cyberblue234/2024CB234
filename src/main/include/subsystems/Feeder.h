@@ -6,6 +6,8 @@
 #include <frc/DigitalInput.h>
 #include "rev/CANSparkMax.h"
 #include "Constants.h"
+#include "Controls.h"
+#include "subsystems/Shooter.h"
 
 class Feeder : frc2::SubsystemBase
 {

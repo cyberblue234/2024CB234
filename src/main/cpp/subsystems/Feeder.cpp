@@ -12,16 +12,15 @@ void Feeder::Periodic()
     frc::SmartDashboard::PutBoolean("Is Note Secured", IsNoteSecured());
 }
 
-
 void Feeder::FeederControls(bool swerveAlignment, bool elevatorAlignment, double averageShooterRPM)
 {
     if (Controls::Shoot())
     {
-        if (Controls::ShootAtAmp() == true)
+        if (Controls::AmpShot() == true)
         {
             ShootAtAmp();
         }
-        else if (Controls::AutoScore() == true || Controls::Speaker() == true || Controls::Trap() == true)
+        else if (Controls::AutoScore() == true || Controls::Stage() == true || Controls::Trap() == true)
         {
             bool atAlignment = swerveAlignment && elevatorAlignment;
             bool rpmAtSpeed;
@@ -34,7 +33,7 @@ void Feeder::FeederControls(bool swerveAlignment, bool elevatorAlignment, double
                 rpmAtSpeed = averageShooterRPM >= Shooter::GetSpeakerRPM() - 100;
             }
             
-            if (rpmAtSpeed == true && atAlignment) == true
+            if (rpmAtSpeed == true && atAlignment == true)
             {
                 ShootAtSpeaker();
             }
