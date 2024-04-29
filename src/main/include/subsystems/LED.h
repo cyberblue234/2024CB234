@@ -19,7 +19,6 @@ class LED
         void SetLEDs(LEDConstants::SetLEDs set) { candle.SetLEDs(set.r, set.g, set.b, set.w, set.startIndex, set.count); };
     private:
         ctre::phoenix::led::CANdle candle{RobotMap::CANDLE_ADDRESS};
-        ControlMethods currentMethod = ControlMethods::kOff;
 
         void LEDsOff() { SetLEDs(LEDConstants::kOff); };
         void Intaking() { SetLEDs(LEDConstants::kIntaking); };

@@ -51,7 +51,7 @@ void Robot::TeleopInit()
 
 void Robot::TeleopPeriodic()
 {
-	container.LogTeleopData();
+	container.TeleopPeriodic();
 }
 
 void Robot::TestPeriodic() {}

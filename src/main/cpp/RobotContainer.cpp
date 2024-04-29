@@ -2,9 +2,8 @@
 
 using namespace pathplanner;
 
-RobotContainer::RobotContainer() : swerve(GetLimelight3()), elevator(GetLimelight3()), limelight3("limelight"), limelight2("limelight-intake"),
-								   pdp(1, frc::PowerDistribution::ModuleType::kRev),
-								   controls(GetSwerve(), GetShooter(), GetIntake(), GetElevator(), GetFeeder(), GetLimelight3(), GetCANdle())
+RobotContainer::RobotContainer() : swerve(GetLimelight3()), intake(GetCANdle()), elevator(GetLimelight3(), GetCANdle()), limelight3("limelight"), limelight2("limelight-intake"),
+								   pdp(1, frc::PowerDistribution::ModuleType::kRev)
 {
 	NamedCommands::registerCommand("Shoot", GetShootCommand());
 	NamedCommands::registerCommand("FirstShoot", GetFirstShootCommand());
@@ -25,7 +24,6 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand()
 	if (auton == AutoConstants::kAutoShoot) return GetFirstShootCommand();
 	return PathPlannerAuto(auton).ToPtr();
 }
-
 
 frc2::CommandPtr RobotContainer::GetFirstShootCommand()
 {
@@ -135,35 +133,15 @@ frc2::CommandPtr RobotContainer::GetIntakeCommand()
 	);
 }
 
-void RobotContainer::PlotAutonomousPath()
+void RobotContainer::TeleopPeriodic()
 {
-	static std::string auton = "";
-	std::string newAuton = GetAuto();
-	if (auton != newAuton)
-	{
-		if (auton != "" && auton != AutoConstants::kAutoShoot)
-		{
-			auto oldPathGroup = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile(auton);
-			char count = 48;
-			for (auto path = oldPathGroup.begin(); path != oldPathGroup.end(); ++path)
-			{
-				swerve.GetField()->GetObject(std::string({'p', 'a', 't', 'h', count}))->SetPose(frc::Pose2d());
-				count++;
-			}
-		}
+	swerve.DriveControls();
+	shooter.ShooterControls();
+	elevator.ElevatorControls();
+	intake.IntakeControls(elevator.AtSetpoint(), feeder.IsNoteSecured());
+	feeder.FeederControls(swerve.AtSetpoint(), elevator.AtSetpoint(), shooter.GetAverageRPM());
 
-		auton = newAuton;
-
-		if (newAuton == AutoConstants::kAutoShoot) return;
-		
-		auto pathGroup = pathplanner::PathPlannerAuto::getPathGroupFromAutoFile(auton);
-		char count = 48;
-		for (auto path = pathGroup.begin(); path != pathGroup.end(); ++path)
-		{
-			swerve.GetField()->GetObject(std::string({'p', 'a', 't', 'h', count}))->SetPoses(path->get()->getPathPoses());
-			count++;
-		}
-	}
+	LogTeleopData();
 }
 
 void RobotContainer::LogTeleopData()

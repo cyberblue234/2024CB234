@@ -11,12 +11,15 @@
 #include <frc/DigitalInput.h>
 #include "rev/CANSparkFlex.h"
 #include "Constants.h"
+#include "Controls.h"
 
 class Shooter : frc2::SubsystemBase
 {
 public:
     Shooter();
     void Periodic() override;
+    void ShooterControls();
+
     void ShootAtSpeaker();
     void ShootAtTrap();
     void ShootAtAmp();
@@ -37,17 +40,17 @@ public:
     void SetShooterMotor2RPM(double rpm) { shooter2PID.SetReference(rpm, rev::CANSparkLowLevel::ControlType::kVelocity); };
     void StopMotors() { SetShooterMotor1(0.0); SetShooterMotor2(0.0); };
 
-    void SetSpeakerRPM(double rpm) { speakerRPM = rpm; };
-    void SetAmpRPM(double rpm) { ampRPM = rpm; };
-    void SetTrapRPM(double rpm) { trapRPM = rpm; };
+    static void SetSpeakerRPM(double rpm) { speakerRPM = rpm; };
+    static void SetAmpRPM(double rpm) { ampRPM = rpm; };
+    static void SetTrapRPM(double rpm) { trapRPM = rpm; };
 
     double GetAverageRPM() { return (GetShooter1RPM() + GetShooter2RPM()) / 2.0; };
     double GetShooter1RPM() { return shooter1Encoder.GetVelocity(); };
     double GetShooter2RPM() { return shooter2Encoder.GetVelocity(); };
-    double GetSpeakerRPM() { return speakerRPM; };
-    double GetAmpRPM() { return ampRPM; };
-    double GetTrapRPM() { return trapRPM; };
 
+    static double GetSpeakerRPM() { return speakerRPM; };
+    static double GetAmpRPM() { return ampRPM; };
+    static double GetTrapRPM() { return trapRPM; };
     double GetIntakeSpeed() { return intakeSpeed; };
 
 private:
@@ -58,8 +61,8 @@ private:
     rev::SparkPIDController shooter1PID = shooter1Motor.GetPIDController();
     rev::SparkPIDController shooter2PID = shooter2Motor.GetPIDController();
 
-    double speakerRPM = 4500;
-    double trapRPM = 3000;
-    double ampRPM = 2200;
+    static double speakerRPM;
+    static double trapRPM;
+    static double ampRPM;
     double intakeSpeed = 0.225;
 };

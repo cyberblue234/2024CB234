@@ -57,7 +57,7 @@ public:
 
 	std::string GetAuto() { return autoChooser.GetSelected(); };
 
-	void PlotAutonomousPath();
+	void TeleopPeriodic();
 
 	void LogTeleopData();
 	void LogAutoData();
@@ -74,8 +74,6 @@ private:
 	LED candle;
 
 	frc::PowerDistribution pdp;
-
-	Controls controls;
 
 	frc::SendableChooser<std::string> autoChooser;
 
