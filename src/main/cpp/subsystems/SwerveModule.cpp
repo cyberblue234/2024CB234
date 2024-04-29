@@ -104,7 +104,13 @@ void SwerveModule::SetDesiredState(const frc::SwerveModuleState desiredState, do
     deltaAngle = optimizedState.angle.operator-(currentAngle);
 
     // Find how much to turn the module in CANCoder ticks
-    deltaCount = ((double) deltaAngle.Degrees() / 360.0);
+    // deltaCount = ((double)deltaAngle.Degrees() / 360.0) * SwerveModuleConstants::kCancoderCountsPerRotation;
+    deltaCount = ((double)deltaAngle.Degrees() / 360.0); // * SwerveModuleConstants::kSwerveModuleGearRatio;  // * SwerveModuleConstants::kCancoderCountsPerRotation;
+
+    // Get the current position of the module in CANCoder ticks
+    // Divide by the feedback coefficient to convert from degrees to ticks
+    // GetPosition defaults to return degrees.
+    // currentCount = canCoder.GetPosition().GetValueAsDouble();//ef / SwerveModuleConstants::kCancoderFeedbackCoefficient;
 
     // Get the current position of the module in CANCoder revolutions
     // GetPosition returns revolutions
@@ -112,9 +118,12 @@ void SwerveModule::SetDesiredState(const frc::SwerveModuleState desiredState, do
 
     // The new module position will be the the current ticks plus the change in ticks
     desiredCount = currentCount + deltaCount;
+    // swerveMotor.Set(desiredCount);
 
     // Get the number of a rotations we need to turn - motor rotations time gear ration
-    auto rotations = (units::angle::turn_t) desiredCount;
+    // auto rotations = (units::angle::turn_t) desiredCount / SwerveModuleConstants::kCancoderFeedbackCoefficient;
+    auto rotations = (units::angle::turn_t)desiredCount; // * SwerveModuleConstants::kSwerveModuleGearRatio;
+
     swerveMotor.SetControl(swervePositionOut.WithPosition(rotations));
 
     // Set the drive motor to the optimized state speed

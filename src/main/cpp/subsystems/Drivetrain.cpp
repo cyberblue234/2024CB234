@@ -49,11 +49,13 @@ void Drivetrain::Periodic()
 {
     odometry.Update(gyro.GetRotation2d(), {frontLeft.GetModulePosition(), frontRight.GetModulePosition(), backLeft.GetModulePosition(), backRight.GetModulePosition()});
     limelight3->UpdateLimelightTracking();
-    limelight3->UpdateTelemetry();
-    
-    if (limelight3->IsTargetValid())
-        odometry.AddVisionMeasurement(limelight3->GetRobotPose(), frc::Timer::GetFPGATimestamp());
-
+    if (cycle % 5 == 0)
+    {
+        
+        limelight3->UpdateTelemetry();
+        if (limelight3->GetTargetValid() == 1 && abs((double)limelight3->GetRobotPose().X() - (double)odometry.GetEstimatedPosition().X()) < 1)
+            odometry.AddVisionMeasurement(limelight3->GetRobotPose(), frc::Timer::GetFPGATimestamp());
+    }
     if (cycle < 10)
     {
         ResetPose(limelight3->GetRobotPose());
@@ -63,51 +65,6 @@ void Drivetrain::Periodic()
     field.SetRobotPose(GetPose());
 
     UpdateTelemetry();
-}
-
-void Drivetrain::DriveControls()
-{
-    if (Controls::gamepad.GetXButton() == true)
-    {
-        SetFieldRelative(true);
-    }
-    if (Controls::gamepad.GetBButton() == true)
-    {
-        SetFieldRelative(false);
-    }
-    if (Controls::gamepad.GetYButton() == true)
-    {
-        ResetGyroAngle();
-        if (limelight3->IsTargetValid() == true)
-        {
-            ResetPose(limelight3->GetRobotPose());
-        }
-    }
-
-    if (IsAlignmentOn() == true)
-    {
-        AlignSwerveDrive();
-    }
-    else
-    {
-        double rot;
-        // Shoot is pressed, manual and mid score are not selected
-        if (Controls::Shoot() == true && Controls::ManualScore() == false && Controls::Mid() == false)
-        {
-            // Align to april tag
-            rot = RotationControl();
-        }
-        else 
-        {
-            // Driver control
-            double rightStickX = Controls::gamepad.GetRightX();
-            rot = RotationControl(rightStickX);
-        }
-        double leftStickY = Controls::gamepad.GetLeftY();
-        double leftStickX = Controls::gamepad.GetLeftX();
-        bool limitSpeed = Controls::gamepad.GetRightTriggerAxis() > 0.2;
-        DriveWithInput(leftStickY, leftStickX, rot, limitSpeed);
-    }
 }
 
 void Drivetrain::DriveWithInput(double fwd, double stf, double rot, bool limitSpeed)
@@ -150,7 +107,7 @@ void Drivetrain::DriveWithInput(double fwd, double stf, double rot, bool limitSp
     // Get the rate of angular rotation. Needs to be inverted. Remember CCW is positive in mathematics.
     auto rotation = units::radians_per_second_t(-rot * DrivetrainConstants::MAX_ANGULAR_SPEED);
 
-    frc::Rotation2d heading = gyro.GetRotation2d();
+    frc::Rotation2d heading = gyro.GetRotation2d(); //odometry.GetEstimatedPosition().Rotation().RotateBy(frc::Rotation2d(units::angle::degree_t(180)));
     auto speeds = fieldRelative ? frc::ChassisSpeeds::FromFieldRelativeSpeeds(ySpeed, xSpeed, rotation, heading)
                                 : frc::ChassisSpeeds{ySpeed, xSpeed, rotation};
 
@@ -158,7 +115,7 @@ void Drivetrain::DriveWithInput(double fwd, double stf, double rot, bool limitSp
 
     frc::SmartDashboard::PutNumber("Y Speed", (double)ySpeed);
     frc::SmartDashboard::PutNumber("X Speed", (double)xSpeed);
-    frc::SmartDashboard::PutNumber("Rot", (double)rotation);
+    frc::SmartDashboard::PutNumber("Rot", (double)rot);
 }
 
 void Drivetrain::Drive(const frc::ChassisSpeeds &speeds)
@@ -179,24 +136,26 @@ void Drivetrain::Drive(const frc::ChassisSpeeds &speeds)
     backRight.SetDesiredState(br, DrivetrainConstants::BR_DRIVE_ADJUSTMENT);
 }
 
-double Drivetrain::RotationControl(double rotInput)
+double Drivetrain::RotationControl(double rotInput, bool alignToAprilTag)
 {
-    limelight3->SetPipelineID(Limelight::kAprilTag);
-    rotInput = rotInput * rotInput * rotInput;
-    return rotInput;
-}
-
-double Drivetrain::RotationControl()
-{
-    limelight3->SetPipelineID(Limelight::kSpeakerDetection);
-    double aprilTagOffset = limelight3->GetAprilTagOffset();
-    double rotInput = -rotationController.Calculate(aprilTagOffset, 0);
-    return rotInput;
+    if (alignToAprilTag)
+    {
+        limelight3->SetPipelineID(Limelight::kSpeakerDetection);
+        rotInput = -rotationController.Calculate(limelight3->GetAprilTagOffset(), 0);
+        return rotInput;
+    }
+    else
+    {
+        limelight3->SetPipelineID(Limelight::kAprilTag);
+        rotInput = rotInput * rotInput * rotInput;
+        lastGyroYaw = (double)gyro.GetRotation2d().Degrees();
+        return rotInput;
+    }
 }
 
 void Drivetrain::AlignToSpeaker()
 {
-    DriveWithInput(0.0, 0.0, RotationControl(), false);    
+    DriveWithInput(0.0, 0.0, RotationControl(0, true), false);    
 }
 
 void Drivetrain::SetAnchorState()
@@ -220,7 +179,6 @@ void Drivetrain::UpdateTelemetry()
 
     frc::SmartDashboard::PutNumber("FL Drive Rotations", frontLeft.GetDriveEncoder());
 
-    frc::SmartDashboard::PutNumber("FL Percent Speed", frontLeft.GetPercentSpeed());
 }
 
 void Drivetrain::ResetCancoders()
@@ -229,6 +187,15 @@ void Drivetrain::ResetCancoders()
     frontRight.ResetCanCoder();
     backLeft.ResetCanCoder();
     backRight.ResetCanCoder();
+}
+
+double Drivetrain::GetDriveDistance()
+{
+    double lcount = abs(frontLeft.GetDriveEncoder());
+    double rcount = abs(backRight.GetDriveEncoder());
+
+    double distance = ((lcount + rcount) / 2.0) * SwerveModuleConstants::ENCODER_INCHES_PER_COUNT;
+    return distance;
 }
 
 void Drivetrain::ResetDriveEncoders()

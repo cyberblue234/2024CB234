@@ -6,15 +6,12 @@
 #include <frc/DigitalInput.h>
 #include "rev/CANSparkMax.h"
 #include "Constants.h"
-#include "Controls.h"
-#include "subsystems/Shooter.h"
 
 class Feeder : frc2::SubsystemBase
 {
 public:
     Feeder();
     void Periodic() override;
-    void FeederControls(bool, bool, double);
     void IntakeFromGround();
     void IntakeFromSource();
     void ShootAtSpeaker();

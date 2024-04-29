@@ -232,19 +232,19 @@ namespace ControlBoardConstants
     inline constexpr int PURGE = 5;
     // Rotary switches: 0 - 9, easier to deal with than the raw analog inputs 
     // Scoring position at the subwoofer
-    inline constexpr int TRAP = 0;
+    inline constexpr int POS_TRAP = 0;
     // Scoring position directly back from the subwoofer
-    inline constexpr int MID = 1;
+    inline constexpr int POS_MID = 1;
     // Scoring position with the bot touching the stage
-    inline constexpr int STAGE = 2;
+    inline constexpr int POS_STAGE = 2;
     // Scoring position for the amp main
-    inline constexpr int AMP_MAIN = 3;
+    inline constexpr int POS_AMP_MAIN = 3;
     // Scoring position for the amp speed 2
-    inline constexpr int AMP_2 = 6;
+    inline constexpr int POS_AMP_2 = 6;
     // Scoring position for the amp speed 3
-    inline constexpr int AMP_3 = 7;
+    inline constexpr int POS_AMP_3 = 7;
     // Scoring position for the amp speed 4
-    inline constexpr int AMP_4 = 8;
+    inline constexpr int POS_AMP_4 = 8;
     // Auto alignment scoring position
     inline constexpr int AUTO_SCORE = 4;
     // Manual control for angle and elevator

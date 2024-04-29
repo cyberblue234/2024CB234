@@ -47,7 +47,6 @@ public:
     double GetTargetValid() { return target_valid; };   // 0 for no, 1 for yes
     double GetActivePipeline() { return active_pipe; }; // Returns the active pipeline id
     double GetTotalLatency() { return pipeline_latency + capture_latency; }
-    bool IsTargetValid() { return GetTargetValid() == 1; };
     void SetLEDMode(LEDMode);
     void SetCamMode(CamMode);
     void SetPipelineID(PipelineID);

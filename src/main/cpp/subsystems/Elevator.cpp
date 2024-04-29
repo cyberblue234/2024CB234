@@ -3,10 +3,9 @@
 bool elevator1Registered = false;
 bool elevator2Registered = false;
 
-Elevator::Elevator(Limelight *limelight3, LED *candle)
+Elevator::Elevator(Limelight *limelight3)
 {
     this->limelight3 = limelight3;
-    this->candle = candle;
 
     elevator1Motor.GetConfigurator().Apply(configs::TalonFXConfiguration{});
     configs::TalonFXConfiguration elevator1Config{};
@@ -49,98 +48,6 @@ void Elevator::Periodic()
     UpdateTelemetry();
 }
 
-
-void Elevator::ElevatorControls()
-{
-    if (Controls::gamepad.GetPOV() == 270) 
-    {
-        double power = Controls::gamepad.GetRightBumper() ? -0.5 : 0.5;
-        SetElevator1Motor(power);
-    }
-    else if (Controls::gamepad.GetPOV() == 90) 
-    {
-        double power = Controls::gamepad.GetRightBumper() ? -0.5 : 0.5;
-        SetElevator2Motor(power);
-    }
-    else if (Controls::ElevatorUp() == true)
-    {
-        double power = GetElevatorSpeed();
-        ElevatorControl(power, ControlMethods::Speed);
-    }
-    else if (Controls::ElevatorDown() == true)
-    {
-        double power = -GetElevatorSpeed();
-        ElevatorControl(power, ControlMethods::Speed);
-    }
-    else if (Controls::GroundIntake() == true || Controls::SourceIntake() == true)
-    {
-        double angle = GetIntakeAngle();
-        ElevatorControl(angle, ControlMethods::Position);
-    }
-    else if (Controls::ShooterMotors() == true && Controls::ManualScore() == false && Controls::ManualAmp() == false)
-    {
-        double angle;
-        if (Controls::AutoScore() == true)
-        {
-            if (limelight3->IsTargetValid())
-            {
-                angle = CalculateSpeakerAngle();
-            }
-            else
-            {
-                angle = GetIntakeAngle();
-            }
-        }
-        else if (Controls::Mid() == true) 
-        {
-            angle = GetMidAngle();
-        }
-        else if (Controls::Stage() == true) 
-        {
-            angle = GetStageAngle();
-        }
-        else if (Controls::AmpShot() == true) 
-        {
-            angle = GetAmpAngle();
-        }
-        else if (Controls::Trap() == true) 
-        {
-            angle = GetTrapAngle();
-        }
-        else 
-        {
-            angle = GetCloseAngle();
-        }
-
-        frc::SmartDashboard::PutNumber("Desired Elevator Angle", angle);
-        ElevatorControl(angle, ControlMethods::Position);
-    }
-    else
-    {
-        if (Controls::AutoElevatorDown() == false)
-        {
-            double power = -GetElevatorSpeed();
-            ElevatorControl(power, ControlMethods::Speed);
-        }
-        else
-        {
-            StopMotors();
-        }
-    }
-
-    if (Controls::GroundIntake() == false)
-    {
-        if (GetElevator1BottomLimit() == true && GetElevator2BottomLimit() == true)
-        {
-            candle->LEDControls(LED::ControlMethods::kElevatorDown);
-        }
-        else
-        {
-            candle->LEDControls(LED::ControlMethods::kElevatorUp);
-        }
-    }
-}
-
 // Returns the Angle from parallel to floor in degrees using limelight
 double Elevator::CalculateSpeakerAngle()
 {
@@ -160,50 +67,52 @@ double Elevator::CalculateSpeakerAngle()
 
 void Elevator::ElevatorControl(double value, ControlMethods method)
 {
-    bool directionTest = false;
+    bool directionTest;
     if (method == ControlMethods::Speed) directionTest = value > 0;
     else if (method == ControlMethods::Position) directionTest = value > GetShooterAngle();
+    else directionTest = false;
 
     bool elevator1Limit = directionTest ? GetElevator1Encoder() > GetHardEncoderLimit() : GetElevator1BottomLimit() == true || (GetElevator1Encoder() < -2.0 && elevator1Registered == true);
     bool elevator2Limit = directionTest ? GetElevator2Encoder() > GetHardEncoderLimit() : GetElevator2BottomLimit() == true || (GetElevator2Encoder() < -2.0 && elevator2Registered == true);
 
-    double absDifference = abs(GetElevator1Encoder() - GetElevator2Encoder());
-    double correction = 1 - abs(correctionPID.Calculate(absDifference));
-    double motor1Correction = 1.0;
-    double motor2Correction = 1.0;
+    double correction = 1 - abs(correctionPID.Calculate(abs(GetElevator1Encoder() - GetElevator2Encoder())));
+    double motor1Correction;
+    double motor2Correction;
 
     // directionTest is true when going up
     if (directionTest == true) 
     {
-        // Going up, if one encoder is greater than the other it should be slown down
         if (GetElevator1Encoder() > GetElevator2Encoder())
         {
             motor1Correction = correction;
+            motor2Correction = 1.0;
         }
         else
         {
+            motor1Correction = 1.0;
             motor2Correction = correction;
         }
     }
     else
     {
-        // Going down, if one encoder is less than the other it should be slown down
         if (GetElevator1Encoder() > GetElevator2Encoder())
         {
+            motor1Correction = 1.0;
             motor2Correction = correction;
         }
         else
         {
             motor1Correction = correction;
+            motor2Correction = 1.0;
         }
     }
+
+    frc::SmartDashboard::PutNumber("Motor 1 Correction", motor1Correction);
+    frc::SmartDashboard::PutNumber("Motor 2 Correction", motor2Correction);
 
     // Slow down when the elevator gets close to the bottom
     if (GetElevator1Encoder() < 5) motor1Correction *= speedLimit;
     if (GetElevator2Encoder() < 5) motor2Correction *= speedLimit;
-
-    frc::SmartDashboard::PutNumber("Motor 1 Correction", motor1Correction);
-    frc::SmartDashboard::PutNumber("Motor 2 Correction", motor2Correction);
 
     if (elevator1Limit == false)
     {
@@ -218,9 +127,8 @@ void Elevator::ElevatorControl(double value, ControlMethods method)
         else if (method == ControlMethods::Position) SetElevator2MotorPosition(value, motor2Correction);
     }
     else
-    {
         SetElevator2Motor(0.0);
-    }
+
 }
 
 void Elevator::UpdateTelemetry()

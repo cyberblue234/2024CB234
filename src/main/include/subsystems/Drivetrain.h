@@ -37,7 +37,6 @@
 #include "subsystems/SwerveModule.h"
 #include "subsystems/Limelight.h"
 #include "Constants.h"
-#include "Controls.h"
 
 extern frc::PIDController rotationController;
 
@@ -48,29 +47,23 @@ public:
 
     void Periodic() override;
 
-    void DriveControls();
-
     // Gets all of the joystick values and does calculations, then runs Drive(). Provided bool slows down the speed if true
-    void DriveWithInput(double, double, double, bool);
+    void DriveWithInput(double fwd, double stf, double rot, bool limitSpeed);
     // Sets all of the motors using kinematics calulcations. Uses the provided ChassisSpeeds for calculations
-    void Drive(const frc::ChassisSpeeds &);
+    void Drive(const frc::ChassisSpeeds &speeds);
     // Updates the odometry. Must be ran every cycle.
     frc::Pose2d UpdateOdometry();
     // Adds Vision data to odometry and returns the newest pose estimation. Also sets the pipeline ID to Apriltags
-    frc::Pose2d UpdateOdometryWithVision(bool);
+    frc::Pose2d UpdateOdometryWithVision(bool poseOverride);
     // Returns the Pose2d of the robot
     frc::Pose2d GetPose() { return odometry.GetEstimatedPosition(); };
     // Resets the Pose2d of the robot
     void ResetPose(frc::Pose2d pose) { odometry.ResetPosition(gyro.GetRotation2d(), {frontLeft.GetModulePosition(), frontRight.GetModulePosition(), backLeft.GetModulePosition(), backRight.GetModulePosition()}, pose); };
     // Returns the current ChassisSpeeds of the robot
     frc::ChassisSpeeds GetCurrentSpeeds() { return chassisSpeeds; };
-    // Returns a the input cubed
-    double RotationControl(double);
-    // Returns the output to align
-    double RotationControl();
-    // Only rotates bot to april tag
+
+    double RotationControl(double rotInput, bool alignToAprilTag);
     void AlignToSpeaker();
-    // Turns all wheels to an X orientation, preventing most movement
     void SetAnchorState();
 
     void UpdateTelemetry();
@@ -93,6 +86,43 @@ public:
     void ResetGyroPitch() { lastGyroRoll = gyro.GetRoll(); };
     // Resets the gyro's roll
     void ResetGyroRoll() { lastGyroPitch = gyro.GetPitch(); };
+    // Returns the front left drive motor's RPM
+    double GetDriveRPM() { return abs(frontLeft.GetDriveRPM()); };
+    // Returns the front left drive motor's RPM
+    double GetLeftDriveRPM() { return abs(frontLeft.GetDriveRPM()); };
+    // Returns the front right drive motor's RPM
+    double GetRightDriveRPM() { return abs(frontRight.GetDriveRPM()); };
+    // Returns the back left drive motor's RPM
+    double GetBackLeftDriveRPM() { return abs(backLeft.GetDriveRPM()); };
+    // Returns the back right drive motor's RPM
+    double GetBackRightDriveRPM() { return abs(backRight.GetDriveRPM()); };
+    // Returns the front left swerve cancoder's value
+    double GetFrontLeftAngle() { return frontLeft.GetCurrentAngle(); };
+    // Returns the front right swerve cancoder's value
+    double GetFrontRightAngle() { return frontRight.GetCurrentAngle(); };
+    // Returns the back left swerve cancoder's value
+    double GetBackLeftAngle() { return backLeft.GetCurrentAngle(); };
+    // Returns the back right swerve cancoder's value
+    double GetBackRightAngle() { return backRight.GetCurrentAngle(); };
+    // Returns the average of the front left and back right distance
+    double GetDriveDistance();
+
+    // Returns the current being pulled by the front left drive motor
+    double GetFLDriveCurrent() { return frontLeft.GetDriveCurrent(); };
+    // Returns the current being pulled by the front right drive motor
+    double GetFRDriveCurrent() { return frontRight.GetDriveCurrent(); };
+    // Returns the current being pulled by the back left drive motor
+    double GetBLDriveCurrent() { return backLeft.GetDriveCurrent(); };
+    // Returns the current being pulled by the back right drive motor
+    double GetBRDriveCurrent() { return backRight.GetDriveCurrent(); };
+    // Returns the current being pulled by the front left swerve motor
+    double GetFLSwerveCurrent() { return frontLeft.GetSwerveCurrent(); };
+    // Returns the current being pulled by the front right swerve motor
+    double GetFRSwerveCurrent() { return frontRight.GetSwerveCurrent(); };
+    // Returns the current being pulled by the back left swerve motor
+    double GetBLSwerveCurrent() { return backLeft.GetSwerveCurrent(); };
+    // Returns the current being pulled by the back right swerve motor
+    double GetBRSwerveCurrent() { return backRight.GetSwerveCurrent(); };
 
     // Returns a pointer to the front left module
     SwerveModule *GetFrontLeftModule() { return &frontLeft; };
@@ -102,16 +132,16 @@ public:
     SwerveModule *GetBackLeftModule() { return &backLeft; };
     // Returns a pointer to the back right module
     SwerveModule *GetBackRightModule() { return &backRight; };
-    // Returns a pointer to the Field2d object
+
     frc::Field2d *GetField() { return &field; };
 
     // Resets all drive motor encoders
     void ResetDriveEncoders();
     // Sets all motors to a speed of zero
     void AlignSwerveDrive();
-    // Returns alignmentOn bool
+
     bool IsAlignmentOn() { return alignmentOn; };
-    // Returns true if the robot is angled correctly within a setpoint (5.0 by default)
+
     bool AtSetpoint() { return rotationController.AtSetpoint(); };
 
 private:
@@ -125,7 +155,9 @@ private:
     AHRS gyro;
     double lastGyroPitch = 0;
     double lastGyroRoll = 0;
+    double lastGyroYaw = 0;
     bool alignmentOn = false;
+    bool gyro_reset_reversed = false;
     bool fieldRelative = true;
 
     frc::ChassisSpeeds chassisSpeeds;

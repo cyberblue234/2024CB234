@@ -3,6 +3,7 @@
 
 void LED::LEDControls(LED::ControlMethods method)
 {
+    currentMethod = method;
     switch (method)
     {
         case LED::ControlMethods::kOff:

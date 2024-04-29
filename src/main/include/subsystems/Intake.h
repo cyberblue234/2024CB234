@@ -7,15 +7,12 @@
 #include <frc/DigitalInput.h>
 #include "rev/CANSparkMax.h"
 #include "Constants.h"
-#include "Controls.h"
-#include "subsystems/LED.h"
 
 class Intake : frc2::SubsystemBase
 {
 public:
-    Intake(LED *);
+    Intake();
     void Periodic() override;
-    void IntakeControls(bool, bool);
     void IntakeFromGround();
     void Purge() { SetIntakeMotor(-1.0); };
     void SetIntakeMotor(double power) { intake.Set(power); };
@@ -27,8 +24,6 @@ public:
 private:
     rev::CANSparkMax intake{RobotMap::INTAKE_MOTOR_ADDRESS, rev::CANSparkMax::MotorType::kBrushless};
     rev::SparkRelativeEncoder intakeEncoder = intake.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor);
-
-    LED *candle;
 
     double groundSpeed = 0.5;
 };
