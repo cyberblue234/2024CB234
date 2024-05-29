@@ -15,12 +15,6 @@ void LED::LEDControls(LED::ControlMethods method)
         case LED::ControlMethods::kNoteSecured:
             NoteSecured();
             break;
-        case LED::ControlMethods::kElevatorDown:
-            ElevatorDown();
-            break;
-        case LED::ControlMethods::kElevatorUp:
-            ElevatorUp();
-            break;
         default:
             LEDsOff();
             break;

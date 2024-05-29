@@ -10,9 +10,7 @@ class LED
         {
             kOff,
             kIntaking,
-            kNoteSecured,
-            kElevatorDown,
-            kElevatorUp
+            kNoteSecured
         };
 
         void LEDControls(ControlMethods);
@@ -24,6 +22,4 @@ class LED
         void LEDsOff() { SetLEDs(LEDConstants::kOff); };
         void Intaking() { SetLEDs(LEDConstants::kIntaking); };
         void NoteSecured() { SetLEDs(LEDConstants::kNoteSecured); };
-        void ElevatorDown() { SetLEDs(LEDConstants::kElevatorDown); };
-        void ElevatorUp() { SetLEDs(LEDConstants::kElevatorUp); };
 };
