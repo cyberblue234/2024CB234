@@ -78,13 +78,12 @@ frc2::CommandPtr RobotContainer::GetShootCommand()
 		{
 			this->GetShooter()->ShootAtSpeaker();
 			this->GetSwerve()->AlignToSpeaker();
-			this->GetElevator()->ElevatorControl(this->GetElevator()->CalculateSpeakerAngle(), Elevator::ControlMethods::Position);
 		}
 	).Until
 	(
 		[this]
 		{
-			bool atAlignment = this->GetSwerve()->AtSetpoint() && this->GetElevator()->AtSetpoint();
+			bool atAlignment = this->GetSwerve()->AtSetpoint();
 			return this->GetShooter()->GetAverageRPM() >= this->GetShooter()->GetSpeakerRPM() - 100 && atAlignment;
 		}
 	).AndThen
@@ -122,7 +121,6 @@ frc2::CommandPtr RobotContainer::GetIntakeCommand()
 	(
 		[this]
 		{
-			this->GetElevator()->ElevatorControl(this->GetElevator()->GetIntakeAngle(), Elevator::ControlMethods::Position);
 			this->GetIntake()->IntakeFromGround();
 			this->GetFeeder()->IntakeFromGround();
 		}
@@ -181,7 +179,6 @@ void RobotContainer::LogTeleopData()
 	double intakeRPM = intake.GetIntakeMotorRPM();
 	double elevator1RPM = elevator.GetElevator1MotorRPM();
 	double elevator2RPM = elevator.GetElevator2MotorRPM();
-	double shooterAngle = elevator.GetShooterAngle();
 	frc::Pose2d robotPose = swerve.GetPose();
 	double odometryX = (double) robotPose.X();
 	double odometryY = (double) robotPose.Y();
@@ -200,9 +197,9 @@ void RobotContainer::LogTeleopData()
 		{
 			if (count == 0)
 			{
-				fprintf(t_output, "Time,Volts,Shooter1RPM,Shooter2RPM,FeedRPM,IntakeRPM,Elevator1RPM,Elevator2RPM,ShooterAngle,OdomX,OdomY,OdomRot\r\n");
+				fprintf(t_output, "Time,Volts,Shooter1RPM,Shooter2RPM,FeedRPM,IntakeRPM,Elevator1RPM,Elevator2RPM,OdomX,OdomY,OdomRot\r\n");
 			}
-			fprintf(t_output, "%10.5f,%7.3f,%7.0f,%7.0f,%7.0f,%7.0f,%7.0f,%7.0f,%3.3f,%3.3f,%3.3f,%3.3f\r\n", time, volts, shooter1RPM, shooter2RPM, feedRPM, intakeRPM, elevator1RPM, elevator2RPM, shooterAngle, odometryX, odometryY, odometryRot);
+			fprintf(t_output, "%10.5f,%7.3f,%7.0f,%7.0f,%7.0f,%7.0f,%7.0f,%7.0f,%3.3f,%3.3f,%3.3f\r\n", time, volts, shooter1RPM, shooter2RPM, feedRPM, intakeRPM, elevator1RPM, elevator2RPM, odometryX, odometryY, odometryRot);
 		}
 	}
 	if (t_output != NULL && count == MAX_COUNT)
@@ -228,7 +225,6 @@ void RobotContainer::LogAutoData()
 	double intakeRPM = intake.GetIntakeMotorRPM();
 	double elevator1RPM = elevator.GetElevator1MotorRPM();
 	double elevator2RPM = elevator.GetElevator2MotorRPM();
-	double shooterAngle = elevator.GetShooterAngle();
 	frc::Pose2d robotPose = swerve.GetPose();
 	double odometryX = (double) robotPose.X();
 	double odometryY = (double) robotPose.Y();
@@ -246,9 +242,9 @@ void RobotContainer::LogAutoData()
 		{
 			if (count == 0)
 			{
-				fprintf(t_output, "Time,Volts,Shooter1RPM,Shooter2RPM,FeedRPM,IntakeRPM,Elevator1RPM,Elevator2RPM,ShooterAngle,OdomX,OdomY,OdomRot\r\n");
+				fprintf(t_output, "Time,Volts,Shooter1RPM,Shooter2RPM,FeedRPM,IntakeRPM,Elevator1RPM,Elevator2RPM,OdomX,OdomY,OdomRot\r\n");
 			}
-			fprintf(t_output, "%10.5f,%7.3f,%7.0f,%7.0f,%7.0f,%7.0f,%7.0f,%7.0f,%3.3f,%3.3f,%3.3f,%3.3f\r\n", time, volts, shooter1RPM, shooter2RPM, feedRPM, intakeRPM, elevator1RPM, elevator2RPM, shooterAngle, odometryX, odometryY, odometryRot);
+			fprintf(t_output, "%10.5f,%7.3f,%7.0f,%7.0f,%7.0f,%7.0f,%7.0f,%7.0f,%3.3f,%3.3f,%3.3f\r\n", time, volts, shooter1RPM, shooter2RPM, feedRPM, intakeRPM, elevator1RPM, elevator2RPM, odometryX, odometryY, odometryRot);
 		}
 	}
 	if (t_output != NULL && count == MAX_COUNT)
