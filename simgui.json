@@ -61,8 +61,10 @@
           "arrowSize": 44,
           "style": "Box/Image"
         },
-        "height": 8.013679504394531,
+        "bottom": 1476,
+        "height": 8.210550308227539,
         "image": "C:\\Users\\Elliott\\Cyber Blue 234\\2024\\2024CB234\\2024-field.png",
+        "left": 150,
         "path": {
           "arrows": false,
           "style": "Line"
@@ -136,6 +138,8 @@
           "style": "Line",
           "weight": 3.0
         },
+        "right": 2961,
+        "top": 79,
         "width": 16.541748046875,
         "window": {
           "visible": true
@@ -147,14 +151,18 @@
     "Persistent Values": {
       "open": false
     },
+    "retained": {
+      "SmartDashboard": {
+        "Auto Chooser": {
+          "open": true
+        }
+      }
+    },
     "transitory": {
       "FMSInfo": {
         "open": true
       },
       "LiveWindow": {
-        "open": true
-      },
-      "SmartDashboard": {
         "open": true
       }
     }
