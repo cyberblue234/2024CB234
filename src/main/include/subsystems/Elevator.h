@@ -32,8 +32,8 @@ public:
     
     double GetElevatorSpeed() { return elevatorSpeed; };
 
-    bool GetElevator1BottomLimit() { return !elevator1BottomLimit.Get(); };
-    bool GetElevator2BottomLimit() { return !elevator2BottomLimit.Get(); };
+    bool GetElevator1BottomLimit() { return elevator1BottomLimit.Get(); };
+    bool GetElevator2BottomLimit() { return elevator2BottomLimit.Get(); };
 
     double GetElevator1MotorRPM() { return elevator1Motor.GetVelocity().GetValueAsDouble(); };
     double GetElevator2MotorRPM() { return elevator2Motor.GetVelocity().GetValueAsDouble(); };
@@ -59,5 +59,5 @@ private:
 
     double elevatorSpeed = 0.75;
 
-    double hardEncoderLimit = 150;
+    double hardEncoderLimit = 170;
 };
