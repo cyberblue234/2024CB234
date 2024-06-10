@@ -23,6 +23,8 @@ Elevator::Elevator()
     elevator2Config.WithMotorOutput(elevator2MotorOutput);
 
     elevator2Motor.GetConfigurator().Apply(elevator2Config);
+
+    shooterAngleEncoder.SetDistancePerRotation(-360);
 }
 
 void Elevator::Periodic()
@@ -60,6 +62,8 @@ void Elevator::ElevatorControl(double value)
 
 void Elevator::UpdateTelemetry()
 { 
+    frc::SmartDashboard::PutNumber("Shooter Angle Encoder Count", shooterAngleEncoder.GetAbsolutePosition());
+    frc::SmartDashboard::PutNumber("Shooter Angle Degrees", GetShooterAngle()); 
     frc::SmartDashboard::PutNumber("Elevator 1 Encoder Pos", GetElevator1Encoder());
     frc::SmartDashboard::PutNumber("Elevator 2 Encoder Pos", GetElevator2Encoder());
     frc::SmartDashboard::PutBoolean("Limit Switch 1", GetElevator1BottomLimit());
