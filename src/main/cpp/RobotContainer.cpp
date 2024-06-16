@@ -7,7 +7,6 @@ RobotContainer::RobotContainer() : swerve(GetLimelight3()), elevator(), limeligh
 								   controls(GetSwerve(), GetShooter(), GetIntake(), GetElevator(), GetFeeder(), GetLimelight3(), GetCANdle())
 {
 	NamedCommands::registerCommand("Shoot", GetShootCommand());
-	NamedCommands::registerCommand("FirstShoot", GetFirstShootCommand());
 	NamedCommands::registerCommand("Intake", GetIntakeCommand());
 
 	autoChooser.SetDefaultOption(AutoConstants::kAutoShoot, AutoConstants::kAutoShoot);
@@ -22,52 +21,8 @@ RobotContainer::RobotContainer() : swerve(GetLimelight3()), elevator(), limeligh
 frc2::CommandPtr RobotContainer::GetAutonomousCommand()
 {
 	std::string auton = GetAuto();
-	if (auton == AutoConstants::kAutoShoot) return GetFirstShootCommand();
+	if (auton == AutoConstants::kAutoShoot) return GetShootCommand();
 	return PathPlannerAuto(auton).ToPtr();
-}
-
-
-frc2::CommandPtr RobotContainer::GetFirstShootCommand()
-{
-	return frc2::RunCommand
-	(
-		[this]
-		{
-			this->GetShooter()->ShootAtSpeaker();
-		}
-	).Until
-	(
-		[this]
-		{
-			return this->GetShooter()->GetAverageRPM() >= this->GetShooter()->GetSpeakerRPM() - 100;
-		}
-	).AndThen
-	(
-		frc2::RunCommand
-		(
-			[this]
-			{
-				this->GetFeeder()->ShootAtSpeaker();
-			}
-		).Until
-		(
-			[this]
-			{
-				return this->GetFeeder()->GetTopSensorInput() == false;
-			}
-		)
-	).AndThen
-	(
-		frc2::InstantCommand
-		(
-			[this]
-			{
-				this->GetShooter()->StopMotors();
-				this->GetElevator()->StopMotors();
-				this->GetFeeder()->StopMotor();
-			}
-		).ToPtr()
-	);
 }
 
 frc2::CommandPtr RobotContainer::GetShootCommand()
@@ -83,8 +38,7 @@ frc2::CommandPtr RobotContainer::GetShootCommand()
 	(
 		[this]
 		{
-			bool atAlignment = this->GetSwerve()->AtSetpoint();
-			return this->GetShooter()->GetAverageRPM() >= this->GetShooter()->GetSpeakerRPM() - 100 && atAlignment;
+			return this->GetShooter()->GetAverageRPM() >= this->GetShooter()->GetSpeakerRPM() - 100;
 		}
 	).AndThen
 	(

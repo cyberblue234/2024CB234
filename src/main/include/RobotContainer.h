@@ -35,7 +35,6 @@ public:
 	RobotContainer();
 
 	frc2::CommandPtr GetAutonomousCommand();
-	frc2::CommandPtr GetFirstShootCommand();
 	frc2::CommandPtr GetShootCommand();
 	frc2::CommandPtr GetIntakeCommand();
 
