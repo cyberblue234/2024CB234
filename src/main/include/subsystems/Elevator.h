@@ -32,8 +32,10 @@ public:
     
     double GetElevatorSpeed() { return elevatorSpeed; };
 
-    bool GetElevator1BottomLimit() { return !elevator1BottomLimit.Get(); };
-    bool GetElevator2BottomLimit() { return !elevator2BottomLimit.Get(); };
+    bool GetElevator1BottomLimit() { return elevator1BottomLimit.Get(); };
+    bool GetElevator2BottomLimit() { return elevator2BottomLimit.Get(); };
+
+    double GetShooterAngle() { return shooterAngleEncoder.GetDistance() - ElevatorConstants::SHOOTER_ANGLE_OFFSET; };
 
     double GetElevator1MotorRPM() { return elevator1Motor.GetVelocity().GetValueAsDouble(); };
     double GetElevator2MotorRPM() { return elevator2Motor.GetVelocity().GetValueAsDouble(); };
@@ -54,10 +56,12 @@ private:
     hardware::TalonFX elevator1Motor{RobotMap::ELEVATOR_MOTOR1_ADDRESS, "rio"};
     hardware::TalonFX elevator2Motor{RobotMap::ELEVATOR_MOTOR2_ADDRESS, "rio"};
 
+    frc::DutyCycleEncoder shooterAngleEncoder{RobotMap::SHOOTER_ENCODER_ADDRESS};
+
     frc::DigitalInput elevator1BottomLimit{RobotMap::ELEVATOR1_BOTTOM_LIMIT_SWITCH};
     frc::DigitalInput elevator2BottomLimit{RobotMap::ELEVATOR2_BOTTOM_LIMIT_SWITCH};
 
     double elevatorSpeed = 0.75;
 
-    double hardEncoderLimit = 150;
+    double hardEncoderLimit = 170;
 };
