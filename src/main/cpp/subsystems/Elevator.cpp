@@ -3,10 +3,8 @@
 bool elevator1Registered = false;
 bool elevator2Registered = false;
 
-Elevator::Elevator(Limelight *limelight3)
+Elevator::Elevator()
 {
-    this->limelight3 = limelight3;
-
     elevator1Motor.GetConfigurator().Apply(configs::TalonFXConfiguration{});
     configs::TalonFXConfiguration elevator1Config{};
 
@@ -56,7 +54,6 @@ void Elevator::ElevatorControl(double value)
         SetElevator1Motor(0.0);
     if (elevator2Limit == false)
         SetElevator2Motor(value);
-
     else
         SetElevator2Motor(0.0);
 }

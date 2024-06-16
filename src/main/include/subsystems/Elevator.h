@@ -20,7 +20,7 @@ class Elevator : frc2::SubsystemBase
 {
 
 public:
-    Elevator(Limelight *);
+    Elevator();
     void Periodic() override;
 
     void ElevatorControl(double value);
@@ -56,8 +56,6 @@ private:
 
     frc::DigitalInput elevator1BottomLimit{RobotMap::ELEVATOR1_BOTTOM_LIMIT_SWITCH};
     frc::DigitalInput elevator2BottomLimit{RobotMap::ELEVATOR2_BOTTOM_LIMIT_SWITCH};
-
-    Limelight *limelight3;
 
     double elevatorSpeed = 0.75;
 
