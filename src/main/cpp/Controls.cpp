@@ -55,13 +55,13 @@ void Controls::ShooterControls()
             shooter->SetAmpRPM(2200);
             break;
         case ControlBoardConstants::POS_AMP_3:
-            shooter->SetAmpRPM(1800);
+            shooter->SetAmpRPM(2000);
             break;
         case ControlBoardConstants::POS_AMP_4:
-            shooter->SetAmpRPM(1700);
+            shooter->SetAmpRPM(1900);
             break;
         default:
-            shooter->SetAmpRPM(2000);
+            shooter->SetAmpRPM(2100);
             break;
     }
     if (controlBoard.GetRawButton(ControlBoardConstants::SHOOTER_MOTORS))

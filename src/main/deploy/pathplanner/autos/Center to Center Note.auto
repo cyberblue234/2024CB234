@@ -44,9 +44,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "sequential",
           "data": {
-            "name": "Shoot"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Center note to center"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Shoot"
+                }
+              }
+            ]
           }
         }
       ]
