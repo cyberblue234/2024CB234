@@ -135,8 +135,8 @@ public:
 
     frc::Field2d *GetField() { return &field; };
 
-    double GetXAcceleration() { gyro.GetWorldLinearAccelX(); };
-    double GetYAcceleration() { gyro.GetWorldLinearAccelY(); };
+    double GetXAcceleration() { return gyro.GetWorldLinearAccelX(); };
+    double GetYAcceleration() { return gyro.GetWorldLinearAccelY(); };
     frc::Pose2d UpdateAccelOdom();
 
 

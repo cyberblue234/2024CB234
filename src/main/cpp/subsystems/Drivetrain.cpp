@@ -43,15 +43,15 @@ Drivetrain::Drivetrain(Limelight *limelight3) : frontLeft(RobotMap::FL_DRIVE_ADD
     });
 
     frc::SmartDashboard::PutData("Field", &field);
-
+    // odometry.SetVisionMeasurementStdDevs()
     accelTimer.Start();
 }
 
 void Drivetrain::Periodic()
 {
     odometry.Update(gyro.GetRotation2d(), {frontLeft.GetModulePosition(), frontRight.GetModulePosition(), backLeft.GetModulePosition(), backRight.GetModulePosition()});
-    // odometry.AddVisionMeasurement()
-
+    // odometry.AddVisionMeasurement(UpdateAccelOdom(), frc::Timer::GetFPGATimestamp());
+    ResetPose(UpdateAccelOdom());
     limelight3->UpdateLimelightTracking();
     if (cycle % 5 == 0)
     {
