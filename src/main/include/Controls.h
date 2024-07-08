@@ -21,6 +21,7 @@ public:
     void IntakeControls();
     void ElevatorControls();
     void FeederControls();
+    void LEDControls();
 
     void SetSelectedRotaryIndex(int newIndex) { selectedRotaryIndex = newIndex; };
     int GetSelectedRotaryIndex() { return selectedRotaryIndex; };
