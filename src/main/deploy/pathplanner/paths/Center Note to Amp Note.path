@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.963532784208426,
-        "y": 5.467977793098444
+        "x": 2.6556841685111943,
+        "y": 5.55593454044051
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.2304739496697046,
-        "y": 5.795722501280924
+        "x": 1.9226253339724728,
+        "y": 5.88367924862299
       },
       "isLocked": false,
       "linkedName": "Center Note"
@@ -30,7 +30,25 @@
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 0.3,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Shoot"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 2.0,
     "maxAcceleration": 1.75,

@@ -20,6 +20,7 @@ void Controls::Periodic()
     IntakeControls();
     ElevatorControls();
     FeederControls();
+    LEDControls();
 }
 
 void Controls::DriveControls()
