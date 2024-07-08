@@ -10,11 +10,14 @@ class LED
         {
             kOff,
             kIntaking,
-            kNoteSecured
+            kNoteSecured,
+            kElevatorDown,
+            kElevatorUp
         };
 
         void LEDControls(ControlMethods);
         void SetLEDs(LEDConstants::SetLEDs set) { candle.SetLEDs(set.r, set.g, set.b, set.w, set.startIndex, set.count); };
+        ControlMethods GetCurrentMethod() { return currentMethod; };
     private:
         ctre::phoenix::led::CANdle candle{RobotMap::CANDLE_ADDRESS};
         ControlMethods currentMethod = ControlMethods::kOff;
@@ -22,4 +25,6 @@ class LED
         void LEDsOff() { SetLEDs(LEDConstants::kOff); };
         void Intaking() { SetLEDs(LEDConstants::kIntaking); };
         void NoteSecured() { SetLEDs(LEDConstants::kNoteSecured); };
+        void ElevatorDown() { SetLEDs(LEDConstants::kElevatorDown); };
+        void ElevatorUp() { SetLEDs(LEDConstants::kElevatorUp); };
 };

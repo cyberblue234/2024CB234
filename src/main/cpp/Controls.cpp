@@ -92,12 +92,16 @@ void Controls::IntakeControls()
         if (feeder->IsNoteSecured() == false)
         {
             intake->IntakeFromGround();
-            candle->LEDControls(LED::ControlMethods::kIntaking);
+            // if (candle->GetCurrentMethod() != candle->kElevatorUp) {
+            //     candle->LEDControls(LED::ControlMethods::kIntaking);
+            // }
         }
         else
         {
             intake->SetIntakeMotor(-0.1);
-            candle->LEDControls(LED::ControlMethods::kNoteSecured);
+            // if (candle->GetCurrentMethod() != candle->kElevatorUp) {
+            //     candle->LEDControls(LED::ControlMethods::kNoteSecured);
+            // }
         }
     }
     else if (controlBoard.GetRawButton(ControlBoardConstants::PURGE))
@@ -179,5 +183,25 @@ void Controls::FeederControls()
     {
         feeder->StopMotor();
         StopRumble();
+    }
+}
+
+void Controls::LEDControls() {
+    if (!elevator->GetElevator1BottomLimit() || !elevator->GetElevator2BottomLimit()) {
+        candle->LEDControls(LED::ControlMethods::kElevatorUp);
+    }
+    else if (controlBoard.GetRawButton(ControlBoardConstants::GROUND_INTAKE))
+    {
+        if (feeder->IsNoteSecured() == false)
+        {
+            candle->LEDControls(LED::ControlMethods::kIntaking);
+        }
+        else
+        {
+            candle->LEDControls(LED::ControlMethods::kNoteSecured);
+        }
+    }
+    else {
+        candle->LEDControls(LED::ControlMethods::kElevatorDown);
     }
 }
