@@ -135,6 +135,11 @@ public:
 
     frc::Field2d *GetField() { return &field; };
 
+    double GetXAcceleration() { return gyro.GetWorldLinearAccelX() * 9.80665; };
+    double GetYAcceleration() { return gyro.GetWorldLinearAccelY() * 9.80665; };
+    frc::Pose2d UpdateAccelOdom();
+
+
     // Resets all drive motor encoders
     void ResetDriveEncoders();
     // Sets all motors to a speed of zero
@@ -159,6 +164,9 @@ private:
     bool alignmentOn = false;
     bool gyro_reset_reversed = false;
     bool fieldRelative = true;
+
+    frc::Timer accelTimer;
+    frc::Pose2d accelOdom;
 
     frc::ChassisSpeeds chassisSpeeds;
 

@@ -43,18 +43,20 @@ Drivetrain::Drivetrain(Limelight *limelight3) : frontLeft(RobotMap::FL_DRIVE_ADD
     });
 
     frc::SmartDashboard::PutData("Field", &field);
+    // odometry.SetVisionMeasurementStdDevs()
+    accelTimer.Start();
 }
 
 void Drivetrain::Periodic()
 {
     odometry.Update(gyro.GetRotation2d(), {frontLeft.GetModulePosition(), frontRight.GetModulePosition(), backLeft.GetModulePosition(), backRight.GetModulePosition()});
+    // odometry.AddVisionMeasurement(UpdateAccelOdom(), frc::Timer::GetFPGATimestamp());
+    // For testing purposes only
+    ResetPose(UpdateAccelOdom());
     limelight3->UpdateLimelightTracking();
     if (cycle % 5 == 0)
     {
-        
         limelight3->UpdateTelemetry();
-        if (limelight3->GetTargetValid() == 1 && abs((double)limelight3->GetRobotPose().X() - (double)odometry.GetEstimatedPosition().X()) < 1)
-            odometry.AddVisionMeasurement(limelight3->GetRobotPose(), frc::Timer::GetFPGATimestamp());
     }
     if (cycle < 10)
     {
@@ -65,6 +67,13 @@ void Drivetrain::Periodic()
     field.SetRobotPose(GetPose());
 
     UpdateTelemetry();
+}
+
+frc::Pose2d Drivetrain::UpdateAccelOdom() 
+{
+    double timeDif = (double) accelTimer.Get();
+    accelTimer.Reset();
+    return GetPose().TransformBy(frc::Transform2d{(units::meter_t) GetXAcceleration() * (timeDif * timeDif), (units::meter_t) GetYAcceleration() * (timeDif * timeDif), frc::Rotation2d()});
 }
 
 void Drivetrain::DriveWithInput(double fwd, double stf, double rot, bool limitSpeed)
