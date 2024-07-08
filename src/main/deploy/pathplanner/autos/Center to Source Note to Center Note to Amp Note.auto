@@ -8,7 +8,7 @@
         {
           "type": "named",
           "data": {
-            "name": null
+            "name": "Shoot"
           }
         },
         {
@@ -44,12 +44,6 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
-          }
-        },
-        {
           "type": "race",
           "data": {
             "commands": [
@@ -64,9 +58,22 @@
                 "data": {
                   "commands": [
                     {
-                      "type": "path",
+                      "type": "parallel",
                       "data": {
-                        "pathName": "Source Note to Center Note"
+                        "commands": [
+                          {
+                            "type": "path",
+                            "data": {
+                              "pathName": "Source Note to Center Note"
+                            }
+                          },
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "Shoot"
+                            }
+                          }
+                        ]
                       }
                     },
                     {
@@ -102,9 +109,22 @@
                 "data": {
                   "commands": [
                     {
-                      "type": "path",
+                      "type": "parallel",
                       "data": {
-                        "pathName": "Center Note to Amp Note"
+                        "commands": [
+                          {
+                            "type": "path",
+                            "data": {
+                              "pathName": "Center Note to Amp Note"
+                            }
+                          },
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "Shoot"
+                            }
+                          }
+                        ]
                       }
                     },
                     {
