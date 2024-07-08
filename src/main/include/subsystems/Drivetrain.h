@@ -166,7 +166,6 @@ private:
     bool fieldRelative = true;
 
     frc::Timer accelTimer;
-    frc::Pose2d accelOdom;
 
     frc::ChassisSpeeds chassisSpeeds;
 
