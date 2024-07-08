@@ -51,6 +51,7 @@ void Drivetrain::Periodic()
 {
     odometry.Update(gyro.GetRotation2d(), {frontLeft.GetModulePosition(), frontRight.GetModulePosition(), backLeft.GetModulePosition(), backRight.GetModulePosition()});
     // odometry.AddVisionMeasurement(UpdateAccelOdom(), frc::Timer::GetFPGATimestamp());
+    // For testing purposes only
     ResetPose(UpdateAccelOdom());
     limelight3->UpdateLimelightTracking();
     if (cycle % 5 == 0)
@@ -71,9 +72,8 @@ void Drivetrain::Periodic()
 frc::Pose2d Drivetrain::UpdateAccelOdom() 
 {
     double timeDif = (double) accelTimer.Get();
-    accelOdom.TransformBy(frc::Transform2d{(units::meter_t) GetXAcceleration() / (timeDif * timeDif), (units::meter_t) GetYAcceleration() / (timeDif * timeDif), gyro.GetRotation2d()});
     accelTimer.Reset();
-    return accelOdom;
+    return GetPose().TransformBy(frc::Transform2d{(units::meter_t) GetXAcceleration() * (timeDif * timeDif), (units::meter_t) GetYAcceleration() * (timeDif * timeDif), frc::Rotation2d()});
 }
 
 void Drivetrain::DriveWithInput(double fwd, double stf, double rot, bool limitSpeed)
