@@ -63,5 +63,5 @@ private:
 
     double elevatorSpeed = 0.75;
 
-    double hardEncoderLimit = 170;
+    double hardEncoderLimit = 240;
 };
