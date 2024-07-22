@@ -40,10 +40,7 @@ void Controls::DriveControls()
         swerve->AlignSwerveDrive();
     else
     {
-        double rot = swerve->RotationControl(gamepad.GetRightX(), 
-                                controlBoard.GetRawButton(ControlBoardConstants::SHOOT)
-                                && GetSelectedRotaryIndex() != ControlBoardConstants::MANUAL_SCORE
-                                && GetSelectedRotaryIndex() != ControlBoardConstants::POS_MID);
+        double rot = swerve->RotationControl(gamepad.GetRightX(), false);
         swerve->DriveWithInput(gamepad.GetLeftY(), gamepad.GetLeftX(), rot, gamepad.GetRightTriggerAxis() > 0.2);
     }
 }
@@ -53,16 +50,16 @@ void Controls::ShooterControls()
     switch (GetSelectedRotaryIndex())
     {
         case ControlBoardConstants::POS_AMP_2:
-            shooter->SetAmpRPM(2200);
+            shooter->SetAmpRPM(1150);
             break;
         case ControlBoardConstants::POS_AMP_3:
-            shooter->SetAmpRPM(2000);
+            shooter->SetAmpRPM(1100);
             break;
         case ControlBoardConstants::POS_AMP_4:
-            shooter->SetAmpRPM(1900);
+            shooter->SetAmpRPM(1000);
             break;
         default:
-            shooter->SetAmpRPM(2100);
+            shooter->SetAmpRPM(1200);
             break;
     }
     if (controlBoard.GetRawButton(ControlBoardConstants::SHOOTER_MOTORS))
@@ -73,8 +70,8 @@ void Controls::ShooterControls()
         || GetSelectedRotaryIndex() == ControlBoardConstants::POS_AMP_4
         || GetSelectedRotaryIndex() == ControlBoardConstants::MANUAL_AMP)
             shooter->ShootAtAmp();
-        else if (GetSelectedRotaryIndex() == ControlBoardConstants::POS_TRAP)
-            shooter->ShootAtTrap();
+        else if (GetSelectedRotaryIndex() == ControlBoardConstants::PASS)
+            shooter->Pass();
         else
             shooter->ShootAtSpeaker();
     }
@@ -147,19 +144,17 @@ void Controls::FeederControls()
         || GetSelectedRotaryIndex() == ControlBoardConstants::POS_AMP_4
         || GetSelectedRotaryIndex() == ControlBoardConstants::MANUAL_AMP)
             feeder->ShootAtAmp();
-        else if (GetSelectedRotaryIndex() == ControlBoardConstants::AUTO_SCORE
+        else if (GetSelectedRotaryIndex() == ControlBoardConstants::PASS
         || GetSelectedRotaryIndex() == ControlBoardConstants::POS_STAGE
         || GetSelectedRotaryIndex() == ControlBoardConstants::POS_TRAP)
         {
-            bool swerveAlignment = swerve->AtSetpoint();
-            bool atAlignment = swerveAlignment;
             bool rpmSet;
             if (GetSelectedRotaryIndex() == ControlBoardConstants::POS_TRAP)
                 rpmSet = shooter->GetAverageRPM() >= shooter->GetTrapRPM() - 50;
             else
                 rpmSet = shooter->GetShooter1RPM() >= shooter->GetSpeakerRPM() - 100;
             
-            if (rpmSet && atAlignment)
+            if (rpmSet)
                 feeder->ShootAtSpeaker();
         }
         else if (GetSelectedRotaryIndex() == ControlBoardConstants::MANUAL_SCORE

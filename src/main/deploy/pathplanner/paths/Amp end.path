@@ -8,44 +8,44 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.673751943995116,
-        "y": 7.301330542510709
+        "x": 8.021045756377228,
+        "y": 7.47632352407562
       },
       "isLocked": false,
       "linkedName": "Note 1"
     },
     {
       "anchor": {
-        "x": 4.7498094996189995,
-        "y": 6.7729235458470916
+        "x": 6.862948583040024,
+        "y": 7.47632352407562
       },
       "prevControl": {
-        "x": 6.0210820421640845,
-        "y": 7.122174244348489
+        "x": 7.28807286186001,
+        "y": 7.4909829819659635
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Amp Shoot"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.5,
-    "maxAcceleration": 3.5,
+    "maxVelocity": 1.75,
+    "maxAcceleration": 1.75,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
-    "velocity": 1.5,
-    "rotation": 15.0,
+    "velocity": 0,
+    "rotation": 0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "5 Far Top Notes",
+  "folder": "1 Amp Start",
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": 0.0,
     "velocity": 0
   },
   "useDefaultConstraints": false

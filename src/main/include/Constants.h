@@ -90,7 +90,7 @@ namespace SwerveModuleConstants
 
     inline constexpr double kDriveP = 0.54;                                                                                     
     inline constexpr double kDriveI = 0.0;
-    inline constexpr double kDriveD = 0.09;
+    inline constexpr double kDriveD = 0.1;
     inline constexpr double kDriveF = 0.2;
 
     inline constexpr double kAngleP = 15;
@@ -230,7 +230,7 @@ namespace ControlBoardConstants
     // Scoring position for the amp speed 4
     inline constexpr int POS_AMP_4 = 8;
     // Auto alignment scoring position
-    inline constexpr int AUTO_SCORE = 4;
+    inline constexpr int PASS = 4;
     // Manual control for angle and elevator
     inline constexpr int MANUAL_SCORE = 5;
     // Manual control for amp scoring
