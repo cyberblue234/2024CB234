@@ -51,14 +51,14 @@ void Drivetrain::Periodic()
 {
     odometry.Update(gyro.GetRotation2d(), {frontLeft.GetModulePosition(), frontRight.GetModulePosition(), backLeft.GetModulePosition(), backRight.GetModulePosition()});
     odometry.AddVisionMeasurement(UpdateAccelOdom(), frc::Timer::GetFPGATimestamp());
-    // For testing purposes only
-    // ResetPose(UpdateAccelOdom());
+    
     limelight3->UpdateLimelightTracking();
     if (cycle % 5 == 0)
     {
         limelight3->UpdateTelemetry();
-        if (limelight3->GetTargetValid() == 1 && abs((double)limelight3->GetRobotPose().X() - (double)odometry.GetEstimatedPosition().X()) < 1)
+        if (limelight3->GetTargetValid() == 1 && abs((double)limelight3->GetRobotPose().X() - (double)odometry.GetEstimatedPosition().X()) < 1) {
             odometry.AddVisionMeasurement(limelight3->GetRobotPose(), frc::Timer::GetFPGATimestamp());
+        }
     }
     if (cycle < 10)
     {
