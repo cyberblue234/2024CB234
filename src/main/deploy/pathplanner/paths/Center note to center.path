@@ -3,50 +3,50 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.270256540513081,
-        "y": 7.47632352407562
+        "x": 2.87557603686636,
+        "y": 5.5542831962242065
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.673751943995116,
-        "y": 7.301330542510709
+        "x": 2.2598788054718972,
+        "y": 5.570593998330854
       },
       "isLocked": false,
-      "linkedName": "Note 1"
+      "linkedName": "Center Note"
     },
     {
       "anchor": {
-        "x": 4.7498094996189995,
-        "y": 6.7729235458470916
+        "x": 1.43,
+        "y": 5.5542831962242065
       },
       "prevControl": {
-        "x": 6.0210820421640845,
-        "y": 7.122174244348489
+        "x": 2.289197721252586,
+        "y": 5.541275082550166
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Amp Shoot"
+      "linkedName": "Center Starting"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.5,
-    "maxAcceleration": 3.5,
+    "maxVelocity": 2.0,
+    "maxAcceleration": 1.75,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
-    "velocity": 1.5,
-    "rotation": 15.0,
+    "velocity": 0,
+    "rotation": 0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "5 Far Top Notes",
+  "folder": null,
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": -1.6602823689828479,
     "velocity": 0
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }

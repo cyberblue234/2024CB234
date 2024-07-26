@@ -8,7 +8,7 @@
         {
           "type": "named",
           "data": {
-            "name": "FirstShoot"
+            "name": "Shoot"
           }
         },
         {
@@ -44,9 +44,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "sequential",
           "data": {
-            "name": "Shoot"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Source Note to Shoot"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Shoot"
+                }
+              }
+            ]
           }
         },
         {
@@ -64,9 +77,16 @@
                 "data": {
                   "commands": [
                     {
-                      "type": "path",
+                      "type": "parallel",
                       "data": {
-                        "pathName": "Source Note to Center Note"
+                        "commands": [
+                          {
+                            "type": "path",
+                            "data": {
+                              "pathName": "Source Shoot to Center Note"
+                            }
+                          }
+                        ]
                       }
                     },
                     {
@@ -82,9 +102,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "sequential",
           "data": {
-            "name": "Shoot"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Center Note to Center Shoot"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Shoot"
+                }
+              }
+            ]
           }
         },
         {
@@ -102,9 +135,16 @@
                 "data": {
                   "commands": [
                     {
-                      "type": "path",
+                      "type": "parallel",
                       "data": {
-                        "pathName": "Center Note to Amp Note"
+                        "commands": [
+                          {
+                            "type": "path",
+                            "data": {
+                              "pathName": "Center Shoot to Amp Note"
+                            }
+                          }
+                        ]
                       }
                     },
                     {
@@ -120,9 +160,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "sequential",
           "data": {
-            "name": "Shoot"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Amp Note to Shoot"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Shoot"
+                }
+              }
+            ]
           }
         }
       ]

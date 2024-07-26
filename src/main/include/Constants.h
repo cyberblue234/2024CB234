@@ -74,29 +74,13 @@ namespace AutoConstants
 {
     const std::string kAutoShoot = "Shoot";
 
-    const std::array<std::string, 21> kAutoArray = 
+    const std::array<std::string, 5> kAutoArray = 
     {
+        "Amp",
+        "Center",
+        "Source",
         "Center to Center Note",
-        "Center to Center Note to Amp Note" ,
-        "Center to Center Note to Source Note" ,
-        "Center to Amp Note" ,
-        "Center to Amp Note to Center Note" ,
-        "Center to Amp Note to Center Note to Source Note" ,
-        "Center to Source Note" ,
-        "Center to Source Note to Center Note" ,
-        "Center to Source Note to Center Note to Amp Note" ,
-        "Amp to Amp Note" ,
-        "Amp to Amp Note to Center Note",
-        "Amp to Amp Note to Center Note to Source Note",
-        "Amp to Amp Note to Note 1",
-        "Amp to Amp Note to Note 1 to Note 2",
-        "Source to Source Note",
-        "Source to Source Note to Center Note",
-        "Source to Source Note to Center Note to Amp Note",
-        "Source to Note 5",
-        "Source to Note 5 to Note 4",
-        "Amp to Note 1",
-        "Amp to Note 1 to Note 2"
+        "Center to Source Note to Center Note to Amp Note"
     };
 }
 
@@ -106,7 +90,7 @@ namespace SwerveModuleConstants
 
     inline constexpr double kDriveP = 0.54;                                                                                     
     inline constexpr double kDriveI = 0.0;
-    inline constexpr double kDriveD = 0.09;
+    inline constexpr double kDriveD = 0.1;
     inline constexpr double kDriveF = 0.2;
 
     inline constexpr double kAngleP = 15;
@@ -246,7 +230,7 @@ namespace ControlBoardConstants
     // Scoring position for the amp speed 4
     inline constexpr int POS_AMP_4 = 8;
     // Auto alignment scoring position
-    inline constexpr int AUTO_SCORE = 4;
+    inline constexpr int PASS = 4;
     // Manual control for angle and elevator
     inline constexpr int MANUAL_SCORE = 5;
     // Manual control for amp scoring

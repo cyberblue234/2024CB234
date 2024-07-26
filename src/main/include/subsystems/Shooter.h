@@ -18,7 +18,7 @@ public:
     Shooter();
     void Periodic() override;
     void ShootAtSpeaker();
-    void ShootAtTrap();
+    void Pass();
     void ShootAtAmp();
     void IntakeFromSource();
 
@@ -46,6 +46,7 @@ public:
     double GetShooter2RPM() { return shooter2Encoder.GetVelocity(); };
     double GetSpeakerRPM() { return speakerRPM; };
     double GetAmpRPM() { return ampRPM; };
+    double GetPassRPM() { return passRPM; };
     double GetTrapRPM() { return trapRPM; };
 
     double GetIntakeSpeed() { return intakeSpeed; };
@@ -59,6 +60,7 @@ private:
     rev::SparkPIDController shooter2PID = shooter2Motor.GetPIDController();
 
     double speakerRPM = 4500;
+    double passRPM = 3000;
     double trapRPM = 3000;
     double ampRPM = 2200;
     double intakeSpeed = 0.225;

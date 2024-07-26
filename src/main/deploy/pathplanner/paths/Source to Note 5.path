@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.1318999926676083,
-        "y": 1.6015760994839368
+        "x": 2.3185166370332744,
+        "y": 0.43978373671033105
       },
       "isLocked": false,
       "linkedName": "Source Starting"
@@ -20,8 +20,8 @@
         "y": 0.785663676590511
       },
       "prevControl": {
-        "x": 7.7896385617332635,
-        "y": 0.7493906215882605
+        "x": 7.097499909285533,
+        "y": 0.6303566892848077
       },
       "nextControl": null,
       "isLocked": false,
@@ -29,19 +29,7 @@
     }
   ],
   "rotationTargets": [],
-  "constraintZones": [
-    {
-      "name": "Slow Down at End",
-      "minWaypointRelativePos": 0.85,
-      "maxWaypointRelativePos": 1.0,
-      "constraints": {
-        "maxVelocity": 2.5,
-        "maxAcceleration": 3.0,
-        "maxAngularVelocity": 540.0,
-        "maxAngularAcceleration": 720.0
-      }
-    }
-  ],
+  "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 2.0,
@@ -50,7 +38,7 @@
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
-    "velocity": 0.5,
+    "velocity": 0.0,
     "rotation": -3.521453376922242,
     "rotateFast": false
   },
