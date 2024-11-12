@@ -3,10 +3,6 @@
 #include <optional>
 
 #include <frc/TimedRobot.h>
-#include <frc2/command/CommandPtr.h>
-#include <frc2/command/CommandScheduler.h>
-
-#include <wpinet/PortForwarder.h>
 
 #include "RobotContainer.h"
 #include "Constants.h"
@@ -28,6 +24,5 @@ public:
     void SimulationPeriodic() override;
 
 private:
-    std::optional<frc2::CommandPtr> autonomousCommand;
     RobotContainer container;
 };
