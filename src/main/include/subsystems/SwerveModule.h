@@ -6,6 +6,7 @@
 #include <frc/controller/PIDController.h>
 #include <frc/controller/ProfiledPIDController.h>
 #include <frc/controller/SimpleMotorFeedforward.h>
+#include <frc/smartdashboard/SmartDashboard.h>
 
 #include <units/angular_velocity.h>
 #include <units/time.h>

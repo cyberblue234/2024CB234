@@ -28,3 +28,8 @@ void Drivetrain::UpdateOdometry()
                     {frontLeft.GetPosition(), frontRight.GetPosition(),
                      backLeft.GetPosition(), backRight.GetPosition()});
 }
+
+void Drivetrain::UpdateTelemetry()
+{
+    
+}

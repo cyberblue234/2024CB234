@@ -81,6 +81,12 @@ frc::SwerveModulePosition SwerveModule::GetPosition()
 
 void SwerveModule::SetDesiredState(const frc::SwerveModuleState &referenceState)
 {
+    frc::SmartDashboard::PutNumber(std::to_string(driveMotor.GetDeviceID()) + " encoderDistance", GetPosition().distance.value());
+    frc::SmartDashboard::PutNumber(std::to_string(turnMotor.GetDeviceID()) + " canCoderDistance", GetPosition().angle.Degrees().value());
+    frc::SmartDashboard::PutNumber(std::to_string(driveMotor.GetDeviceID()) + " encoderVelocity", (double)GetState().speed);
+
+    
+
     frc::Rotation2d encoderRotation{units::radian_t{GetCanCoderDistance()}};
 
     // Optimize the reference state to avoid spinning further than 90 degrees
@@ -102,6 +108,11 @@ void SwerveModule::SetDesiredState(const frc::SwerveModuleState &referenceState)
     const auto turnFeedforwardValue = turnFeedforward.Calculate(turnPIDController.GetSetpoint().velocity);
 
     // Set the motor outputs.
-    driveMotor.SetVoltage(units::volt_t{driveOutput} + driveFeedforwardValue);
-    turnMotor.SetVoltage(units::volt_t{turnOutput} + turnFeedforwardValue);
+    // driveMotor.SetVoltage(units::volt_t{driveOutput} + driveFeedforwardValue);
+    // turnMotor.SetVoltage(units::volt_t{turnOutput} + turnFeedforwardValue);
+
+    frc::SmartDashboard::PutNumber(std::to_string(driveMotor.GetDeviceID()) + " driveOutput", driveOutput);
+    frc::SmartDashboard::PutNumber(std::to_string(turnMotor.GetDeviceID()) + " turnOutput", turnOutput);
+    frc::SmartDashboard::PutNumber(std::to_string(driveMotor.GetDeviceID()) + " driveFeedforward", (double)driveFeedforwardValue);
+    frc::SmartDashboard::PutNumber(std::to_string(turnMotor.GetDeviceID()) + " turnOutput", (double)turnFeedforwardValue);
 }

@@ -36,6 +36,7 @@ public:
              units::meters_per_second_t ySpeed, units::radians_per_second_t rot,
              bool fieldRelative, units::second_t period);
     void UpdateOdometry();
+    void UpdateTelemetry();
 private:
     SwerveModule frontLeft{RobotMap::kFrontLeftDriveID, RobotMap::kFrontLeftTurnID, RobotMap::kFrontLeftCanCoderID, kFrontLeftMagnetOffset};
     SwerveModule frontRight{RobotMap::kFrontRightDriveID, RobotMap::kFrontRightTurnID, RobotMap::kFrontRightCanCoderID, kFrontRightMagnetOffset};
