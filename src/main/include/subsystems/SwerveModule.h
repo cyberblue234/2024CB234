@@ -38,10 +38,6 @@ public:
     double GetDriveCurrent() { return driveMotor.GetMotorVoltage().GetValueAsDouble(); };
     // Returns the current being pulled by the turn motor
     double GetTurnCurrent() { return turnMotor.GetMotorVoltage().GetValueAsDouble(); };
-    // Sets the drive motor to a provided speed
-    void SetDriveMotor(double speed) { driveMotor.Set(speed); };
-    // Sets the turn motor to a provided speed
-    void SetTurnMotor(double speed) { turnMotor.Set(speed); };
     // Returns a pointer to the drive motor
     const hardware::TalonFX *GetDriveMotor() { return &driveMotor; };
     // Returns a pointer to the turn motor

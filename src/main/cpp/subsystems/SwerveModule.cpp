@@ -61,10 +61,11 @@ SwerveModule::SwerveModule(int driveMotorID, int turnMotorID, int canCoderID, do
 
     configs::MagnetSensorConfigs canCoderMagnetSensor{};
     canCoderMagnetSensor.WithMagnetOffset(canCoderMagnetOffset);
-    canCoderMagnetSensor.WithAbsoluteSensorRange(signals::AbsoluteSensorRangeValue::Unsigned_0To1);
+    canCoderMagnetSensor.WithAbsoluteSensorRange(signals::AbsoluteSensorRangeValue::Signed_PlusMinusHalf);
 
     canCoderConfig.WithMagnetSensor(canCoderMagnetSensor);
     canCoder.GetConfigurator().Apply(canCoderConfig);
+    ResetCanCoder();
 
     turnPIDController.EnableContinuousInput(-units::radian_t{std::numbers::pi}, units::radian_t{std::numbers::pi});
 }
@@ -82,9 +83,8 @@ frc::SwerveModulePosition SwerveModule::GetPosition()
 void SwerveModule::SetDesiredState(const frc::SwerveModuleState &referenceState)
 {
     frc::SmartDashboard::PutNumber(std::to_string(driveMotor.GetDeviceID()) + " encoderDistance", GetPosition().distance.value());
-    frc::SmartDashboard::PutNumber(std::to_string(turnMotor.GetDeviceID()) + " canCoderDistance", GetPosition().angle.Degrees().value());
+    frc::SmartDashboard::PutNumber(std::to_string(driveMotor.GetDeviceID()) + " canCoderDistance", GetPosition().angle.Degrees().value());
     frc::SmartDashboard::PutNumber(std::to_string(driveMotor.GetDeviceID()) + " encoderVelocity", (double)GetState().speed);
-
     
 
     frc::Rotation2d encoderRotation{units::radian_t{GetCanCoderDistance()}};
@@ -92,6 +92,8 @@ void SwerveModule::SetDesiredState(const frc::SwerveModuleState &referenceState)
     // Optimize the reference state to avoid spinning further than 90 degrees
     auto state = frc::SwerveModuleState::Optimize(referenceState, encoderRotation);
 
+    frc::SmartDashboard::PutNumber(std::to_string(driveMotor.GetDeviceID()) + " setEncoderVelocity", state.speed.value());
+    frc::SmartDashboard::PutNumber(std::to_string(driveMotor.GetDeviceID()) + " setCancoderDistance", state.angle.Degrees().value());
     // Scale speed by cosine of angle error. This scales down movement
     // perpendicular to the desired direction of travel that can occur when
     // modules change directions. This results in smoother driving.
@@ -112,7 +114,7 @@ void SwerveModule::SetDesiredState(const frc::SwerveModuleState &referenceState)
     // turnMotor.SetVoltage(units::volt_t{turnOutput} + turnFeedforwardValue);
 
     frc::SmartDashboard::PutNumber(std::to_string(driveMotor.GetDeviceID()) + " driveOutput", driveOutput);
-    frc::SmartDashboard::PutNumber(std::to_string(turnMotor.GetDeviceID()) + " turnOutput", turnOutput);
+    frc::SmartDashboard::PutNumber(std::to_string(driveMotor.GetDeviceID()) + " turnOutput", turnOutput);
     frc::SmartDashboard::PutNumber(std::to_string(driveMotor.GetDeviceID()) + " driveFeedforward", (double)driveFeedforwardValue);
-    frc::SmartDashboard::PutNumber(std::to_string(turnMotor.GetDeviceID()) + " turnOutput", (double)turnFeedforwardValue);
+    frc::SmartDashboard::PutNumber(std::to_string(driveMotor.GetDeviceID()) + " turnOutput", (double)turnFeedforwardValue);
 }

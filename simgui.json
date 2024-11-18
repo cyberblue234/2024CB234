@@ -16,7 +16,37 @@
           "open": true
         }
       },
+      " Talon FX (v6)[8]": {
+        "header": {
+          "open": true
+        }
+      },
+      " Talon FX (v6)[9]": {
+        "header": {
+          "open": true
+        }
+      },
       "DutyCycleEncoder[0]": {
+        "header": {
+          "open": true
+        }
+      },
+      "Talon FX (v6)[8]/Fwd Limit": {
+        "header": {
+          "open": true
+        }
+      },
+      "Talon FX (v6)[8]/Rev Limit": {
+        "header": {
+          "open": true
+        }
+      },
+      "Talon FX (v6)[8]/Rotor Sensor": {
+        "header": {
+          "open": true
+        }
+      },
+      "Talon FX (v6)[9]/Rotor Sensor": {
         "header": {
           "open": true
         }
@@ -51,11 +81,6 @@
       "/SmartDashboard/Test Auto": "Command"
     },
     "windows": {
-      "/SmartDashboard/Auto Chooser": {
-        "window": {
-          "visible": true
-        }
-      },
       "/SmartDashboard/Field": {
         "Robot": {
           "arrowSize": 44,
@@ -163,6 +188,9 @@
         "open": true
       },
       "LiveWindow": {
+        "open": true
+      },
+      "SmartDashboard": {
         "open": true
       }
     }
