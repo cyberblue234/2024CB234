@@ -1,6 +1,6 @@
-#include "subsystems/SwerveModule.h"
+#include "subsystems\simulation\SimulatedSwerveModule.h"
 
-SwerveModule::SwerveModule(int driveMotorID, int turnMotorID, int canCoderID, double canCoderMagnetOffset)
+SimulatedSwerveModule::SimulatedSwerveModule(int driveMotorID, int turnMotorID, int canCoderID, double canCoderMagnetOffset)
     : driveMotor(driveMotorID, "rio"),
       turnMotor(turnMotorID, "rio"),
       canCoder(canCoderID, "rio")
@@ -35,7 +35,7 @@ SwerveModule::SwerveModule(int driveMotorID, int turnMotorID, int canCoderID, do
     driveMotor.GetConfigurator().Apply(configs::TalonFXConfiguration{});
     configs::TalonFXConfiguration driveMotorConfig{};
 
-    ResetEncoder();
+    SetEncoder(0);
 
     // TODO: find replacement
     // driveMotor.ConfigVoltageCompSaturation(11.0);
@@ -65,15 +65,16 @@ SwerveModule::SwerveModule(int driveMotorID, int turnMotorID, int canCoderID, do
 
     canCoderConfig.WithMagnetSensor(canCoderMagnetSensor);
     canCoder.GetConfigurator().Apply(canCoderConfig);
-    ResetCanCoder();
+    ResetCanCoder(0);
 
     turnPIDController.EnableContinuousInput(-units::radian_t{std::numbers::pi}, units::radian_t{std::numbers::pi});
 }
 
-void SwerveModule::SetDesiredState(const frc::SwerveModuleState &referenceState)
+void SimulatedSwerveModule::SetDesiredState(const frc::SwerveModuleState &referenceState)
 {
     frc::SmartDashboard::PutNumber(std::to_string(driveMotor.GetDeviceID()) + " encoderDistance", GetPosition().distance.value());
     frc::SmartDashboard::PutNumber(std::to_string(driveMotor.GetDeviceID()) + " canCoderDistance", GetPosition().angle.Degrees().value());
+    frc::SmartDashboard::PutNumber(std::to_string(driveMotor.GetDeviceID()) + " canCoderDistance2", GetCanCoderDistance().value());
     frc::SmartDashboard::PutNumber(std::to_string(driveMotor.GetDeviceID()) + " encoderVelocity", (double)GetState().speed);
     
 
@@ -106,5 +107,35 @@ void SwerveModule::SetDesiredState(const frc::SwerveModuleState &referenceState)
     frc::SmartDashboard::PutNumber(std::to_string(driveMotor.GetDeviceID()) + " driveOutput", driveOutput);
     frc::SmartDashboard::PutNumber(std::to_string(driveMotor.GetDeviceID()) + " turnOutput", turnOutput);
     frc::SmartDashboard::PutNumber(std::to_string(driveMotor.GetDeviceID()) + " driveFeedforward", (double)driveFeedforwardValue);
-    frc::SmartDashboard::PutNumber(std::to_string(driveMotor.GetDeviceID()) + " turnOutput", (double)turnFeedforwardValue);
+    frc::SmartDashboard::PutNumber(std::to_string(driveMotor.GetDeviceID()) + " turnFeedForward", (double)turnFeedforwardValue);
+
+    sim::TalonFXSimState& driveMotorSim = driveMotor.GetSimState();
+    sim::TalonFXSimState& turnMotorSim = turnMotor.GetSimState();
+    sim::CANcoderSimState& canCoderSim = canCoder.GetSimState();
+
+   // set the supply voltage of the TalonFX
+   driveMotorSim.SetSupplyVoltage(frc::RobotController::GetBatteryVoltage());
+   turnMotorSim.SetSupplyVoltage(frc::RobotController::GetBatteryVoltage());
+   canCoderSim.SetSupplyVoltage(frc::RobotController::GetBatteryVoltage());
+
+   // get the motor voltage of the TalonFX
+   auto driveMotorVoltage = driveMotorSim.GetMotorVoltage();
+   auto turnMotorVoltage = turnMotorSim.GetMotorVoltage();
+
+   // use the motor voltage to calculate new position and velocity
+   // using WPILib's DCMotorSim class for physics simulation
+   driveMotorSimModel.SetInputVoltage(driveMotorVoltage);
+   driveMotorSimModel.Update(20_ms); // assume 20 ms loop time
+   turnMotorSimModel.SetInputVoltage(turnMotorVoltage);
+   turnMotorSimModel.Update(20_ms); // assume 20 ms loop time
+
+   // apply the new rotor position and velocity to the TalonFX;
+   // note that this is rotor position/velocity (before gear ratio), but
+   // DCMotorSim returns mechanism position/velocity (after gear ratio)
+   driveMotorSim.SetRawRotorPosition(kDriveGearRatio * driveMotorSimModel.GetAngularPosition());
+   driveMotorSim.SetRotorVelocity(kDriveGearRatio * driveMotorSimModel.GetAngularVelocity());
+   turnMotorSim.SetRawRotorPosition(turnMotorSimModel.GetAngularPosition());
+   canCoderSim.SetRawPosition(turnMotorSimModel.GetAngularPosition() / 360 * 2 * std::numbers::pi);
+   turnMotorSim.SetRotorVelocity(turnMotorSimModel.GetAngularVelocity());
+   canCoderSim.SetVelocity(turnMotorSimModel.GetAngularVelocity());
 }

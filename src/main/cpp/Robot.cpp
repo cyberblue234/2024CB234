@@ -16,17 +16,20 @@ void Robot::TeleopInit() {}
 
 void Robot::TeleopPeriodic()
 {
-	container.Periodic(GetPeriod());
+	controls.Periodic(GetPeriod());
 }
 
 void Robot::TestPeriodic()
 {
-	container.Periodic(GetPeriod());
+	controls.Periodic(GetPeriod());
 }
 
 void Robot::SimulationInit() {}
 
-void Robot::SimulationPeriodic() {}
+void Robot::SimulationPeriodic() 
+{
+	controlsSim.Periodic(GetPeriod());
+}
 
 #ifndef RUNNING_FRC_TESTS
 int main()

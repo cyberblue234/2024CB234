@@ -26,6 +26,11 @@
           "open": true
         }
       },
+      "CANcoder (v6)[21]": {
+        "header": {
+          "open": true
+        }
+      },
       "DutyCycleEncoder[0]": {
         "header": {
           "open": true

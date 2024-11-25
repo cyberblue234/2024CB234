@@ -3,8 +3,11 @@
 #include <optional>
 
 #include <frc/TimedRobot.h>
+#include <frc/PowerDistribution.h>
 
-#include "RobotContainer.h"
+#include "subsystems/Drivetrain.h"
+#include "subsystems/simulation/SimulatedDrivetrain.h"
+#include "Controls.h"
 #include "Constants.h"
 
 class Robot : public frc::TimedRobot
@@ -24,5 +27,11 @@ public:
     void SimulationPeriodic() override;
 
 private:
-    RobotContainer container;
+    Drivetrain swerve;
+    SimulatedDrivetrain swerveSim;
+
+	frc::PowerDistribution pdp{1, frc::PowerDistribution::ModuleType::kRev};
+
+	Controls controls{&swerve};
+    Controls controlsSim{&swerveSim};
 };

@@ -42,20 +42,23 @@ namespace RobotMap
 
 namespace SwerveModuleConstants
 {
-    inline constexpr double kDriveP = 1.0;
+    inline constexpr double kDriveP = 0.0;
     inline constexpr double kDriveI = 0.0;
     inline constexpr double kDriveD = 0.0;
-    inline constexpr auto kDrive_kS = 1_V;
-    inline constexpr auto kDrive_kV = 3_V / 1_mps;
+    inline constexpr auto kDrive_kS = 0_V; //1_V;
+    inline constexpr auto kDrive_kV = 0_V / 1_mps; //3_V / 1_mps;
 
     inline constexpr double kTurnP = 1.0;
     inline constexpr double kTurnI = 0.0;
-    inline constexpr double kTurnD = 0.0;
-    inline constexpr auto kTurn_kS = 1_V;
-    inline constexpr auto kTurn_kV = 0.5_V / 1_rad_per_s;
+    inline constexpr double kTurnD = 0.2;
+    inline constexpr auto kTurn_kS = 0_V; //1_V;
+    inline constexpr auto kTurn_kV = 0_V / 1_rad_per_s; //0.5_V / 1_rad_per_s;
 
     inline constexpr double kDriveGearRatio = 6.54;
     inline constexpr double kWheelRadius = 0.0491;
+
+    inline constexpr double kDriveDistanceRatio = kWheelRadius * 2 * std::numbers::pi / kDriveGearRatio;
+    inline constexpr double kTurnDistanceRatio = 2 * std::numbers::pi;
 
     inline constexpr units::radians_per_second_t kModuleMaxAngularVelocity = std::numbers::pi * 1_rad_per_s;
     inline constexpr units::radians_per_second_squared_t kModuleMaxAngularAcceleration = std::numbers::pi * 2_rad_per_s / 1_s;

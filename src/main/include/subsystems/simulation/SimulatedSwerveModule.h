@@ -20,13 +20,20 @@
 #include <ctre/phoenix6/configs/Configurator.hpp>
 #include "Constants.h"
 
+#include <ctre/phoenix6/sim/CANcoderSimState.hpp>
+#include <ctre/phoenix6/sim/TalonFXSimState.hpp>
+#include <frc/simulation/DCMotorSim.h>
+#include <frc/simulation/EncoderSim.h>
+#include <frc/simulation/AnalogGyroSim.h>
+
+
 using namespace ctre::phoenix6;
 using namespace SwerveModuleConstants;
 
-class SwerveModule
+class SimulatedSwerveModule
 {
 public:
-    SwerveModule(int driveMotorID, int turnMotorID, int canCoderID, double canCoderMagnetOffset);
+    SimulatedSwerveModule(int driveMotorID, int turnMotorID, int canCoderID, double canCoderMagnetOffset);
 
     frc::SwerveModuleState GetState() { return {units::meters_per_second_t{GetDriveVelocity()}, units::radian_t{GetCanCoderDistance()}}; };
     frc::SwerveModulePosition GetPosition() { return {units::meter_t{GetEncoderDistance()}, units::radian_t{GetCanCoderDistance()}}; };
@@ -49,9 +56,9 @@ public:
     // Returns the distance driven by the module
     double GetEncoderDistance() { return driveMotor.GetPosition().GetValueAsDouble() * kDriveDistanceRatio; };
     // Resets the turn motor's cancoder
-    void ResetCanCoder() { canCoder.SetPosition(units::angle::turn_t(0)); }
+    void ResetCanCoder(double value) { canCoder.SetPosition(units::angle::turn_t(value)); }
     // Resets the drive motor's encoder
-    void ResetEncoder() { driveMotor.SetPosition(units::angle::turn_t(0)); };
+    void SetEncoder(double value) { driveMotor.SetPosition(units::angle::turn_t(value)); };
 
 private:
     hardware::TalonFX driveMotor;
@@ -63,4 +70,7 @@ private:
 
     frc::SimpleMotorFeedforward<units::meters> driveFeedforward{kDrive_kS, kDrive_kV};
     frc::SimpleMotorFeedforward<units::radians> turnFeedforward{kTurn_kS, kTurn_kV};
+
+    frc::sim::DCMotorSim driveMotorSimModel{frc::DCMotor::KrakenX60(1), kDriveGearRatio, 0.001_kg_sq_m};
+    frc::sim::DCMotorSim turnMotorSimModel{frc::DCMotor::KrakenX60(1), 1, 0.001_kg_sq_m};
 };
