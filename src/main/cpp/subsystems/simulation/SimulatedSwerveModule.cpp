@@ -78,7 +78,7 @@ void SimulatedSwerveModule::SetDesiredState(const frc::SwerveModuleState &refere
     frc::SmartDashboard::PutNumber(std::to_string(driveMotor.GetDeviceID()) + " encoderVelocity", (double)GetState().speed);
     
 
-    frc::Rotation2d encoderRotation{units::radian_t{GetCanCoderDistance()}};
+    frc::Rotation2d encoderRotation{GetCanCoderDistance()};
 
     // Optimize the reference state to avoid spinning further than 90 degrees
     auto state = frc::SwerveModuleState::Optimize(referenceState, encoderRotation);
@@ -113,29 +113,32 @@ void SimulatedSwerveModule::SetDesiredState(const frc::SwerveModuleState &refere
     sim::TalonFXSimState& turnMotorSim = turnMotor.GetSimState();
     sim::CANcoderSimState& canCoderSim = canCoder.GetSimState();
 
-   // set the supply voltage of the TalonFX
-   driveMotorSim.SetSupplyVoltage(frc::RobotController::GetBatteryVoltage());
-   turnMotorSim.SetSupplyVoltage(frc::RobotController::GetBatteryVoltage());
-   canCoderSim.SetSupplyVoltage(frc::RobotController::GetBatteryVoltage());
+    // set the supply voltage of the TalonFX
+    driveMotorSim.SetSupplyVoltage(frc::RobotController::GetBatteryVoltage());
+    turnMotorSim.SetSupplyVoltage(frc::RobotController::GetBatteryVoltage());
+    canCoderSim.SetSupplyVoltage(frc::RobotController::GetBatteryVoltage());
 
-   // get the motor voltage of the TalonFX
-   auto driveMotorVoltage = driveMotorSim.GetMotorVoltage();
-   auto turnMotorVoltage = turnMotorSim.GetMotorVoltage();
+    // get the motor voltage of the TalonFX
+    auto driveMotorVoltage = driveMotorSim.GetMotorVoltage();
+    auto turnMotorVoltage = turnMotorSim.GetMotorVoltage();
 
-   // use the motor voltage to calculate new position and velocity
-   // using WPILib's DCMotorSim class for physics simulation
-   driveMotorSimModel.SetInputVoltage(driveMotorVoltage);
-   driveMotorSimModel.Update(20_ms); // assume 20 ms loop time
-   turnMotorSimModel.SetInputVoltage(turnMotorVoltage);
-   turnMotorSimModel.Update(20_ms); // assume 20 ms loop time
+    // use the motor voltage to calculate new position and velocity
+    // using WPILib's DCMotorSim class for physics simulation
+    driveMotorSimModel.SetInputVoltage(driveMotorVoltage);
+    driveMotorSimModel.Update(20_ms); // assume 20 ms loop time
+    turnMotorSimModel.SetInputVoltage(turnMotorVoltage);
+    turnMotorSimModel.Update(20_ms); // assume 20 ms loop time
 
-   // apply the new rotor position and velocity to the TalonFX;
-   // note that this is rotor position/velocity (before gear ratio), but
-   // DCMotorSim returns mechanism position/velocity (after gear ratio)
-   driveMotorSim.SetRawRotorPosition(kDriveGearRatio * driveMotorSimModel.GetAngularPosition());
-   driveMotorSim.SetRotorVelocity(kDriveGearRatio * driveMotorSimModel.GetAngularVelocity());
-   turnMotorSim.SetRawRotorPosition(turnMotorSimModel.GetAngularPosition());
-   canCoderSim.SetRawPosition(turnMotorSimModel.GetAngularPosition() / 360 * 2 * std::numbers::pi);
-   turnMotorSim.SetRotorVelocity(turnMotorSimModel.GetAngularVelocity());
-   canCoderSim.SetVelocity(turnMotorSimModel.GetAngularVelocity());
+    // apply the new rotor position and velocity to the TalonFX;
+    // note that this is rotor position/velocity (before gear ratio), but
+    // DCMotorSim returns mechanism position/velocity (after gear ratio)
+    driveMotorSim.SetRawRotorPosition(kDriveGearRatio * driveMotorSimModel.GetAngularPosition());
+    driveMotorSim.SetRotorVelocity(kDriveGearRatio * driveMotorSimModel.GetAngularVelocity());
+    turnMotorSim.SetRawRotorPosition(turnMotorSimModel.GetAngularPosition());
+    double canCoderPosInt;
+    double canCoderPos = std::modf(turnMotorSimModel.GetAngularPosition().value(), &canCoderPosInt);
+    if (canCoderPos < 0) canCoderPos += 1.0;
+    canCoderSim.SetRawPosition(units::angle::turn_t(canCoderPos));
+    turnMotorSim.SetRotorVelocity(turnMotorSimModel.GetAngularVelocity());
+    canCoderSim.SetVelocity(turnMotorSimModel.GetAngularVelocity());
 }

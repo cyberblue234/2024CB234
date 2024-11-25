@@ -60,6 +60,11 @@
         "header": {
           "open": true
         }
+      },
+      "navX-Sensor[4]": {
+        "header": {
+          "open": true
+        }
       }
     },
     "PowerDistributions": {
@@ -201,6 +206,9 @@
     }
   },
   "NetworkTables Info": {
+    "Clients": {
+      "open": true
+    },
     "Connections": {
       "open": true
     },

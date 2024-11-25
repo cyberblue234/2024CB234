@@ -20,7 +20,7 @@ void SimulatedDrivetrain::Drive(units::meters_per_second_t xSpeed,
     frontRight.SetDesiredState(fr);
     backLeft.SetDesiredState(bl);
     backRight.SetDesiredState(br);
-    angle.Set(gyro.GetRotation2d().Degrees().value() + 0.1);
+    
 }
 
 void SimulatedDrivetrain::UpdateOdometry()

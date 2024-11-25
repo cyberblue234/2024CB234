@@ -19,8 +19,6 @@
 #include <frc/geometry/Translation2d.h>
 
 #include "AHRS.h"
-#include <hal/SimDevice.h>
-#include <hal/simulation/SimDeviceData.h>
 
 #include "subsystems/simulation/SimulatedSwerveModule.h"
 #include "Constants.h"
@@ -43,8 +41,6 @@ private:
     SimulatedSwerveModule backRight{RobotMap::kBackRightDriveID, RobotMap::kBackRightTurnID, RobotMap::kBackRightCanCoderID, kBackRightMagnetOffset};
 
     AHRS gyro{frc::SPI::Port::kMXP};
-    HAL_SimDeviceHandle dev = HALSIM_GetSimDeviceHandle("navX-Sensor[0]");
-    hal::SimDouble angle = HALSIM_GetSimValueHandle(dev, "Yaw");
     
 
     frc::SwerveDriveKinematics<4> kinematics{

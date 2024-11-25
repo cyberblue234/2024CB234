@@ -50,7 +50,7 @@ namespace SwerveModuleConstants
 
     inline constexpr double kTurnP = 1.0;
     inline constexpr double kTurnI = 0.0;
-    inline constexpr double kTurnD = 0.2;
+    inline constexpr double kTurnD = 0.5;
     inline constexpr auto kTurn_kS = 0_V; //1_V;
     inline constexpr auto kTurn_kV = 0_V / 1_rad_per_s; //0.5_V / 1_rad_per_s;
 

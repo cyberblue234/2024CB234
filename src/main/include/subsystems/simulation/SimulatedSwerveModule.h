@@ -72,5 +72,5 @@ private:
     frc::SimpleMotorFeedforward<units::radians> turnFeedforward{kTurn_kS, kTurn_kV};
 
     frc::sim::DCMotorSim driveMotorSimModel{frc::DCMotor::KrakenX60(1), kDriveGearRatio, 0.001_kg_sq_m};
-    frc::sim::DCMotorSim turnMotorSimModel{frc::DCMotor::KrakenX60(1), 1, 0.001_kg_sq_m};
+    frc::sim::DCMotorSim turnMotorSimModel{frc::DCMotor::KrakenX60(1), 1, 10_kg_sq_m};
 };
