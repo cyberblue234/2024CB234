@@ -73,17 +73,17 @@ SwerveModule::SwerveModule(int driveMotorID, int turnMotorID, int canCoderID, do
 void SwerveModule::SetDesiredState(const frc::SwerveModuleState &referenceState)
 {
     frc::SmartDashboard::PutNumber(std::to_string(driveMotor.GetDeviceID()) + " encoderDistance", GetPosition().distance.value());
-    frc::SmartDashboard::PutNumber(std::to_string(driveMotor.GetDeviceID()) + " canCoderDistance", GetPosition().angle.Degrees().value());
+    frc::SmartDashboard::PutNumber(std::to_string(driveMotor.GetDeviceID()) + " canCoderDistance", GetPosition().angle.Radians().value());
     frc::SmartDashboard::PutNumber(std::to_string(driveMotor.GetDeviceID()) + " encoderVelocity", (double)GetState().speed);
     
 
-    frc::Rotation2d encoderRotation{units::radian_t{GetCanCoderDistance()}};
+    frc::Rotation2d encoderRotation{GetCanCoderDistance()};
 
     // Optimize the reference state to avoid spinning further than 90 degrees
     auto state = frc::SwerveModuleState::Optimize(referenceState, encoderRotation);
 
     frc::SmartDashboard::PutNumber(std::to_string(driveMotor.GetDeviceID()) + " setEncoderVelocity", state.speed.value());
-    frc::SmartDashboard::PutNumber(std::to_string(driveMotor.GetDeviceID()) + " setCancoderDistance", state.angle.Degrees().value());
+    frc::SmartDashboard::PutNumber(std::to_string(driveMotor.GetDeviceID()) + " setCancoderDistance", state.angle.Radians().value());
     // Scale speed by cosine of angle error. This scales down movement
     // perpendicular to the desired direction of travel that can occur when
     // modules change directions. This results in smoother driving.
