@@ -6,7 +6,6 @@
 #include <frc/PowerDistribution.h>
 
 #include "subsystems/Drivetrain.h"
-#include "subsystems/simulation/SimulatedDrivetrain.h"
 #include "Controls.h"
 #include "Constants.h"
 
@@ -28,10 +27,8 @@ public:
 
 private:
     Drivetrain swerve;
-    SimulatedDrivetrain swerveSim;
 
 	frc::PowerDistribution pdp{1, frc::PowerDistribution::ModuleType::kRev};
 
 	Controls controls{&swerve};
-    Controls controlsSim{&swerveSim};
 };
