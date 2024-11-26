@@ -26,6 +26,8 @@
 #include <frc/simulation/EncoderSim.h>
 #include <frc/simulation/AnalogGyroSim.h>
 
+#include <wpi/sendable/SendableRegistry.h>
+
 
 using namespace ctre::phoenix6;
 using namespace SwerveModuleConstants;
@@ -71,6 +73,6 @@ private:
     frc::SimpleMotorFeedforward<units::meters> driveFeedforward{kDrive_kS, kDrive_kV};
     frc::SimpleMotorFeedforward<units::radians> turnFeedforward{kTurn_kS, kTurn_kV};
 
-    frc::sim::DCMotorSim driveMotorSimModel{frc::DCMotor::KrakenX60(1), kDriveGearRatio, 0.001_kg_sq_m};
-    frc::sim::DCMotorSim turnMotorSimModel{frc::DCMotor::KrakenX60(1), 1, 10_kg_sq_m};
+    frc::sim::DCMotorSim driveMotorSimModel{frc::DCMotor::KrakenX60(1), kDriveGearRatio, 500_kg_sq_m};
+    frc::sim::DCMotorSim turnMotorSimModel{frc::DCMotor::KrakenX60(1), kTurnGearRatio, 500_kg_sq_m};
 };

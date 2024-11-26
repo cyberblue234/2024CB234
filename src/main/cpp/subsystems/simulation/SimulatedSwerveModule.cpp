@@ -62,12 +62,16 @@ SimulatedSwerveModule::SimulatedSwerveModule(int driveMotorID, int turnMotorID, 
     configs::MagnetSensorConfigs canCoderMagnetSensor{};
     canCoderMagnetSensor.WithMagnetOffset(canCoderMagnetOffset);
     canCoderMagnetSensor.WithAbsoluteSensorRange(signals::AbsoluteSensorRangeValue::Unsigned_0To1);
+    canCoderMagnetSensor.WithSensorDirection(signals::SensorDirectionValue::Clockwise_Positive);
 
     canCoderConfig.WithMagnetSensor(canCoderMagnetSensor);
     canCoder.GetConfigurator().Apply(canCoderConfig);
     ResetCanCoder(0);
 
-    turnPIDController.EnableContinuousInput(-units::radian_t{std::numbers::pi}, units::radian_t{std::numbers::pi});
+    turnPIDController.EnableContinuousInput(units::radian_t(0.0), units::radian_t{2.0 * std::numbers::pi});
+
+    wpi::SendableRegistry::SetName(&drivePIDController, "Drive PIDS", driveMotor.GetDeviceID() + " Drive PID");
+    wpi::SendableRegistry::SetName(&turnPIDController, "Turn PIDS", driveMotor.GetDeviceID() + " Turn PID");
 }
 
 void SimulatedSwerveModule::SetDesiredState(const frc::SwerveModuleState &referenceState)
@@ -134,11 +138,11 @@ void SimulatedSwerveModule::SetDesiredState(const frc::SwerveModuleState &refere
     // DCMotorSim returns mechanism position/velocity (after gear ratio)
     driveMotorSim.SetRawRotorPosition(kDriveGearRatio * driveMotorSimModel.GetAngularPosition());
     driveMotorSim.SetRotorVelocity(kDriveGearRatio * driveMotorSimModel.GetAngularVelocity());
-    turnMotorSim.SetRawRotorPosition(turnMotorSimModel.GetAngularPosition());
+    turnMotorSim.SetRawRotorPosition(kTurnGearRatio * turnMotorSimModel.GetAngularPosition());
     double canCoderPosInt;
     double canCoderPos = std::modf(turnMotorSimModel.GetAngularPosition().value(), &canCoderPosInt);
     if (canCoderPos < 0) canCoderPos += 1.0;
     canCoderSim.SetRawPosition(units::angle::turn_t(canCoderPos));
-    turnMotorSim.SetRotorVelocity(turnMotorSimModel.GetAngularVelocity());
+    turnMotorSim.SetRotorVelocity(kTurnGearRatio * turnMotorSimModel.GetAngularVelocity());
     canCoderSim.SetVelocity(turnMotorSimModel.GetAngularVelocity());
 }

@@ -36,6 +36,7 @@ void Controls::DriveControls(units::time::second_t period)
     const auto rot = -frc::ApplyDeadband(std::pow(gamepad.GetRightX(), 3), 0.02) *
                      DrivetrainConstants::kMaxAngularSpeed;
 
+
     if (swerve) swerve->Drive(xSpeed, ySpeed, rot, true, period);
     if (swerveSim) swerveSim->Drive(xSpeed, ySpeed, rot, true, period);
 }

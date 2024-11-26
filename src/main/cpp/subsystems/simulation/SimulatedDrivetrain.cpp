@@ -1,5 +1,10 @@
 #include "subsystems/simulation/SimulatedDrivetrain.h"
 
+SimulatedDrivetrain::SimulatedDrivetrain()
+{
+
+}
+
 void SimulatedDrivetrain::Drive(units::meters_per_second_t xSpeed,
                        units::meters_per_second_t ySpeed,
                        units::radians_per_second_t rot, bool fieldRelative,

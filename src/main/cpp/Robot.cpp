@@ -1,6 +1,9 @@
 #include "Robot.h"
 
-void Robot::RobotInit() {}
+void Robot::RobotInit() 
+{
+	EnableLiveWindowInTest(true);
+}
 
 void Robot::RobotPeriodic() {}
 

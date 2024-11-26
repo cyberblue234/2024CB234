@@ -86,6 +86,19 @@
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
+      "/LiveWindow/Ungrouped/CANcoder (v6) [21]": "Gyro",
+      "/LiveWindow/Ungrouped/CANcoder (v6) [22]": "Gyro",
+      "/LiveWindow/Ungrouped/CANcoder (v6) [23]": "Gyro",
+      "/LiveWindow/Ungrouped/CANcoder (v6) [24]": "Gyro",
+      "/LiveWindow/Ungrouped/Talon FX (v6) [2]": "Motor Controller",
+      "/LiveWindow/Ungrouped/Talon FX (v6) [3]": "Motor Controller",
+      "/LiveWindow/Ungrouped/Talon FX (v6) [4]": "Motor Controller",
+      "/LiveWindow/Ungrouped/Talon FX (v6) [5]": "Motor Controller",
+      "/LiveWindow/Ungrouped/Talon FX (v6) [6]": "Motor Controller",
+      "/LiveWindow/Ungrouped/Talon FX (v6) [7]": "Motor Controller",
+      "/LiveWindow/Ungrouped/Talon FX (v6) [8]": "Motor Controller",
+      "/LiveWindow/Ungrouped/Talon FX (v6) [9]": "Motor Controller",
+      "/LiveWindow/Ungrouped/navX-Sensor[4]": "Gyro",
       "/SmartDashboard/Auto Chooser": "String Chooser",
       "/SmartDashboard/Field": "Field2d",
       "/SmartDashboard/Test Auto": "Command"
