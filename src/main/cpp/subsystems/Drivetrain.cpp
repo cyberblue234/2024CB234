@@ -24,6 +24,27 @@ void Drivetrain::Drive(units::meters_per_second_t xSpeed,
     frontRight.SetDesiredState(fr);
     backLeft.SetDesiredState(bl);
     backRight.SetDesiredState(br);
+
+    // frontLeft.SetDesiredState( {4_mps, frc::Rotation2d(units::angle::degree_t(45))});
+    // frontRight.SetDesiredState({4_mps, frc::Rotation2d(units::angle::degree_t(45))});
+    // backLeft.SetDesiredState(  {4_mps, frc::Rotation2d(units::angle::degree_t(45))});
+    // backRight.SetDesiredState( {4_mps, frc::Rotation2d(units::angle::degree_t(45))});
+
+    frc::SmartDashboard::PutData("Field", &field);
+}
+
+units::volt_t Drivetrain::FindDrive_kS(units::volt_t testVoltage)
+{
+
+    
+    return 0_V;
+}
+
+units::volt_t Drivetrain::FindDrive_kV(units::volt_t testVoltage)
+{
+
+
+    return 0_V;
 }
 
 void Drivetrain::UpdateOdometry()
@@ -31,6 +52,7 @@ void Drivetrain::UpdateOdometry()
     odometry.Update(gyro.GetRotation2d(),
                     {frontLeft.GetPosition(), frontRight.GetPosition(),
                      backLeft.GetPosition(), backRight.GetPosition()});
+    field.SetRobotPose(odometry.GetEstimatedPosition());
 }
 
 void Drivetrain::UpdateTelemetry()
@@ -39,6 +61,9 @@ void Drivetrain::UpdateTelemetry()
     frontRight.UpdateTelemetry();
     backLeft.UpdateTelemetry();
     backRight.UpdateTelemetry();
+
+    frc::SmartDashboard::PutNumber("X Acceleration", GetXAcceleration());
+    frc::SmartDashboard::PutNumber("Y Acceleration", GetYAcceleration());
 }
 
 void Drivetrain::SimMode()

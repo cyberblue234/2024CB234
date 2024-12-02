@@ -86,6 +86,18 @@
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
+      "/LiveWindow/Back Left/CANCoder": "Gyro",
+      "/LiveWindow/Back Left/Drive": "Motor Controller",
+      "/LiveWindow/Back Left/Turn": "Motor Controller",
+      "/LiveWindow/Back Right/CANCoder": "Gyro",
+      "/LiveWindow/Back Right/Drive": "Motor Controller",
+      "/LiveWindow/Back Right/Turn": "Motor Controller",
+      "/LiveWindow/Front Left/CANCoder": "Gyro",
+      "/LiveWindow/Front Left/Drive": "Motor Controller",
+      "/LiveWindow/Front Left/Turn": "Motor Controller",
+      "/LiveWindow/Front Right/CANCoder": "Gyro",
+      "/LiveWindow/Front Right/Drive": "Motor Controller",
+      "/LiveWindow/Front Right/Turn": "Motor Controller",
       "/LiveWindow/Ungrouped/CANcoder (v6) [21]": "Gyro",
       "/LiveWindow/Ungrouped/CANcoder (v6) [22]": "Gyro",
       "/LiveWindow/Ungrouped/CANcoder (v6) [23]": "Gyro",
@@ -241,6 +253,9 @@
       "open": true
     },
     "Server": {
+      "open": true
+    },
+    "shuffleboard@1": {
       "open": true
     },
     "visible": true

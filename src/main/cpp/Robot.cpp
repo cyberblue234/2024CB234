@@ -20,18 +20,19 @@ void Robot::TeleopInit() {}
 void Robot::TeleopPeriodic()
 {
 	controls.Periodic(GetPeriod());
+	swerve.UpdateOdometry();
 }
 
 void Robot::TestPeriodic()
 {
 	controls.Periodic(GetPeriod());
+	swerve.UpdateOdometry();
 }
 
 void Robot::SimulationInit() {}
 
 void Robot::SimulationPeriodic() 
 {
-	controls.Periodic(GetPeriod());
 	swerve.SimMode();
 }
 
