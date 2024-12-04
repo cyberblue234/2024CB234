@@ -5,7 +5,10 @@ void Robot::RobotInit()
 	EnableLiveWindowInTest(true);
 }
 
-void Robot::RobotPeriodic() {}
+void Robot::RobotPeriodic() 
+{
+	swerve.UpdateTelemetry();
+}
 
 void Robot::DisabledInit() {}
 

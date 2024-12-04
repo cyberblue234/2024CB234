@@ -42,15 +42,15 @@ namespace RobotMap
 
 namespace SwerveModuleConstants
 {
-    inline constexpr double kDriveP = 10.0;
+    inline constexpr double kDriveP = 0.50;
     inline constexpr double kDriveI = 0.0;
-    inline constexpr double kDriveD = 2.0;
-    inline constexpr auto kDrive_kS = 1.5_V;
+    inline constexpr double kDriveD = 0.1;
+    inline constexpr auto kDrive_kS = 1_V;
     inline constexpr auto kDrive_kV = 0.5_V / 1_tps;
 
-    inline constexpr double kTurnP = 5.0;
+    inline constexpr double kTurnP = 1.0;
     inline constexpr double kTurnI = 0.0;
-    inline constexpr double kTurnD = 3.0;
+    inline constexpr double kTurnD = 0.5;
 
     inline constexpr double kDriveGearRatio = 6.54;
     inline constexpr double kTurnGearRatio = 11.31;

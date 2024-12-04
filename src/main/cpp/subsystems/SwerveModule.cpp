@@ -62,11 +62,10 @@ SwerveModule::SwerveModule(std::string name, int driveMotorID, int turnMotorID, 
     configs::CANcoderConfiguration canCoderConfig{};
 
     canCoderConfig.MagnetSensor.MagnetOffset = canCoderMagnetOffset;
-    canCoderConfig.MagnetSensor.AbsoluteSensorRange = signals::AbsoluteSensorRangeValue::Signed_PlusMinusHalf;
-    canCoderConfig.MagnetSensor.SensorDirection = signals::SensorDirectionValue::Clockwise_Positive;
+    canCoderConfig.MagnetSensor.AbsoluteSensorRange = signals::AbsoluteSensorRangeValue::Unsigned_0To1;
 
     canCoder.GetConfigurator().Apply(canCoderConfig);
-    SetCanCoder(0);
+    
 
     wpi::SendableRegistry::SetName(&driveMotor, name, "Drive");
     wpi::SendableRegistry::SetName(&turnMotor, name, "Turn");
@@ -95,14 +94,13 @@ void SwerveModule::SetDesiredState(const frc::SwerveModuleState &referenceState)
     TelemetryHelperNumber("SetMotorSpeed", setVelocity.value());
     TelemetryHelperNumber("SetAngle", state.angle.Degrees().value());
     TelemetryHelperNumber("Drive FF", driveMotor.GetClosedLoopFeedForward().GetValue());
-
-    UpdateTelemetry();
 }
 
 void SwerveModule::UpdateTelemetry()
 {
     TelemetryHelperNumber("Distance (m)", GetDistance().value());
     TelemetryHelperNumber("Angle (degrees)", GetAngle().Degrees().value());
+    TelemetryHelperNumber("Raw Cancoder", GetRawCANcoderPosition().value());
     TelemetryHelperNumber("Velocity", GetVelocity().value());
     TelemetryHelperNumber("Drive Output Voltage", GetDriveOutputVoltage().value());
     TelemetryHelperNumber("Turn Output Voltage",  GetTurnOutputVoltage().value());

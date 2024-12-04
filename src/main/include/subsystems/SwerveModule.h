@@ -71,9 +71,13 @@ public:
     /// @return Velocity in meters per second
     units::meters_per_second_t GetVelocity() { return units::meters_per_second_t(driveMotor.GetRotorVelocity().GetValueAsDouble() * kDriveDistanceRatio); };
     /// @brief Returns the angle of the module
-    /// @return Rotation2d of the angle; domain: [-π, π), [-180°, 180°)
+    /// @return Rotation2d of the angle; domain: [0, 2π), [0°, 360°)
     frc::Rotation2d GetAngle() { return frc::Rotation2d{units::radian_t(canCoder.GetAbsolutePosition().GetValueAsDouble() * kTurnDistanceRatio)}; };
+    /// @brief Returns the raw position of the CANcoder
+    /// @return units::turn_t CANcoder position 
+    units::angle::turn_t GetRawCANcoderPosition() { return canCoder.GetAbsolutePosition().GetValue(); };
     
+
     /// @brief Returns the supply voltage of the drive motor
     /// @return Supply voltage
     units::voltage::volt_t GetDriveSupplyVoltage() { return driveMotor.GetSupplyVoltage().GetValue(); };

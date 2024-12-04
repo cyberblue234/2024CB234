@@ -24,12 +24,7 @@ void Drivetrain::Drive(units::meters_per_second_t xSpeed,
     frontRight.SetDesiredState(fr);
     backLeft.SetDesiredState(bl);
     backRight.SetDesiredState(br);
-
-    // frontLeft.SetDesiredState( {4_mps, frc::Rotation2d(units::angle::degree_t(45))});
-    // frontRight.SetDesiredState({4_mps, frc::Rotation2d(units::angle::degree_t(45))});
-    // backLeft.SetDesiredState(  {4_mps, frc::Rotation2d(units::angle::degree_t(45))});
-    // backRight.SetDesiredState( {4_mps, frc::Rotation2d(units::angle::degree_t(45))});
-
+    
     frc::SmartDashboard::PutData("Field", &field);
 }
 
