@@ -65,6 +65,8 @@ SwerveModule::SwerveModule(std::string name, int driveMotorID, int turnMotorID, 
     canCoderConfig.MagnetSensor.AbsoluteSensorRange = signals::AbsoluteSensorRangeValue::Unsigned_0To1;
 
     canCoder.GetConfigurator().Apply(canCoderConfig);
+
+    SetCanCoder(0);
     
 
     wpi::SendableRegistry::SetName(&driveMotor, name, "Drive");
@@ -82,25 +84,27 @@ void SwerveModule::SetDesiredState(const frc::SwerveModuleState &referenceState)
     // modules change directions. This results in smoother driving.
     state.speed *= (state.angle - GetAngle()).Cos();
 
+    units::degree_t deltaAngle = (state.angle.operator-(GetAngle())).Degrees();
+    TelemetryHelperNumber("DeltaAngle", deltaAngle.value());
+    units::angle::turn_t desiredCount = units::angle::turn_t(deltaAngle.value() / 360) + GetCANcoderPosition();
+    TelemetryHelperNumber("DesiredCount", desiredCount.value());
     // Calculate the turning motor output from the turning PID controller.
-    controls::PositionVoltage& turnPos = turnPositionOut.WithPosition(units::angle::turn_t(state.angle.Degrees().value() / 360));
+    controls::PositionVoltage& turnPos = turnPositionOut.WithPosition(desiredCount);
     turnMotor.SetControl(turnPos.WithSlot(0));
     // Set the motor outputs.
-    auto setVelocity = units::angular_velocity::turns_per_second_t(state.speed.value() / kDriveDistanceRatio);
-    controls::VelocityVoltage& driveVelocity = driveVelocityOut.WithVelocity(setVelocity);
-    driveMotor.SetControl(driveVelocity.WithSlot(0));
+    units::volt_t setVoltage = (state.speed / DrivetrainConstants::kMaxSpeed) * kVoltageComp;
+    driveMotor.SetVoltage(setVoltage);
 
     TelemetryHelperNumber("SetSpeed", state.speed.value());
-    TelemetryHelperNumber("SetMotorSpeed", setVelocity.value());
     TelemetryHelperNumber("SetAngle", state.angle.Degrees().value());
-    TelemetryHelperNumber("Drive FF", driveMotor.GetClosedLoopFeedForward().GetValue());
 }
 
 void SwerveModule::UpdateTelemetry()
 {
     TelemetryHelperNumber("Distance (m)", GetDistance().value());
     TelemetryHelperNumber("Angle (degrees)", GetAngle().Degrees().value());
-    TelemetryHelperNumber("Raw Cancoder", GetRawCANcoderPosition().value());
+    TelemetryHelperNumber("Raw Cancoder", GetAbsoluteCANcoderPosition().value());
+    TelemetryHelperNumber("Position Cancoder", GetCANcoderPosition().value());
     TelemetryHelperNumber("Velocity", GetVelocity().value());
     TelemetryHelperNumber("Drive Output Voltage", GetDriveOutputVoltage().value());
     TelemetryHelperNumber("Turn Output Voltage",  GetTurnOutputVoltage().value());
@@ -145,11 +149,7 @@ void SwerveModule::SimMode()
     driveMotorSim.SetRawRotorPosition(kDriveGearRatio * driveMotorSimModel.GetAngularPosition());
     driveMotorSim.SetRotorVelocity(kDriveGearRatio * driveMotorSimModel.GetAngularVelocity());
     turnMotorSim.SetRawRotorPosition(kTurnGearRatio * turnMotorSimModel.GetAngularPosition());
-    double intp;
-    auto canCoderPos = std::modf(turnMotorSimModel.GetAngularPosition().value(), &intp);
-    if (canCoderPos < -0.5) canCoderPos += 1;
-    else if (canCoderPos > 0.5) canCoderPos -= 1;
-    canCoderSim.SetRawPosition(units::angle::turn_t(canCoderPos));
+    canCoderSim.SetRawPosition(units::angle::turn_t(turnMotorSimModel.GetAngularPosition().value()));
     turnMotorSim.SetRotorVelocity(kTurnGearRatio * turnMotorSimModel.GetAngularVelocity());
     canCoderSim.SetVelocity(turnMotorSimModel.GetAngularVelocity());
 

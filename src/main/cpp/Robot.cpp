@@ -26,11 +26,7 @@ void Robot::TeleopPeriodic()
 	swerve.UpdateOdometry();
 }
 
-void Robot::TestPeriodic()
-{
-	controls.Periodic(GetPeriod());
-	swerve.UpdateOdometry();
-}
+void Robot::TestPeriodic() {}
 
 void Robot::SimulationInit() {}
 

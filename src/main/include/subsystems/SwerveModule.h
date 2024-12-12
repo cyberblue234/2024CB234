@@ -73,9 +73,12 @@ public:
     /// @brief Returns the angle of the module
     /// @return Rotation2d of the angle; domain: [0, 2π), [0°, 360°)
     frc::Rotation2d GetAngle() { return frc::Rotation2d{units::radian_t(canCoder.GetAbsolutePosition().GetValueAsDouble() * kTurnDistanceRatio)}; };
-    /// @brief Returns the raw position of the CANcoder
+    /// @brief Returns the position of the CANcoder
     /// @return units::turn_t CANcoder position 
-    units::angle::turn_t GetRawCANcoderPosition() { return canCoder.GetAbsolutePosition().GetValue(); };
+    units::angle::turn_t GetCANcoderPosition() { return canCoder.GetPosition().GetValue(); };
+    /// @brief Returns the absolute position of the CANcoder
+    /// @return units::turn_t CANcoder position 
+    units::angle::turn_t GetAbsoluteCANcoderPosition() { return canCoder.GetAbsolutePosition().GetValue(); };
     
 
     /// @brief Returns the supply voltage of the drive motor
@@ -146,7 +149,6 @@ private:
     hardware::CANcoder canCoder;
 
     controls::PositionVoltage turnPositionOut{0_tr, 0_tps, false, 0_V, 0, false};
-    controls::VelocityVoltage driveVelocityOut{0_tps};
 
     frc::sim::DCMotorSim driveMotorSimModel{frc::DCMotor::KrakenX60(1), kDriveGearRatio, 0.1_kg_sq_m};
     frc::sim::DCMotorSim turnMotorSimModel{frc::DCMotor::KrakenX60(1), kTurnGearRatio, 0.1_kg_sq_m};
