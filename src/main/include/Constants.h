@@ -74,10 +74,10 @@ namespace DrivetrainConstants
     inline constexpr units::meters_per_second_t kMaxSpeed = 4.0_mps;
     inline constexpr units::radians_per_second_t kMaxAngularSpeed = std::numbers::pi * 2_rad_per_s;
 
-    inline constexpr double kFrontLeftMagnetOffset  = 0.5; //-0.666016;
-    inline constexpr double kFrontRightMagnetOffset = -0.014; //-0.78125;
-    inline constexpr double kBackLeftMagnetOffset   = 0.517; //0.8852546;
-    inline constexpr double kBackRightMagnetOffset  = -0.992; //-0.251953;
+    inline constexpr double kFrontLeftMagnetOffset  = -0.547; //-0.666016;
+    inline constexpr double kFrontRightMagnetOffset = -0.846; //-0.78125;
+    inline constexpr double kBackLeftMagnetOffset   = -0.023; //0.8852546;
+    inline constexpr double kBackRightMagnetOffset  = -0.245; //-0.251953;
 
     inline constexpr double kDriveSlowAdjustment = 0.20;
 }
