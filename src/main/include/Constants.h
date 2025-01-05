@@ -60,6 +60,8 @@ namespace SwerveModuleConstants
 
     inline constexpr units::radians_per_second_t kModuleMaxAngularVelocity = std::numbers::pi * 4_rad_per_s;
     inline constexpr units::radians_per_second_squared_t kModuleMaxAngularAcceleration = std::numbers::pi * 2_rad_per_s / 1_s;
+
+    inline constexpr units::volt_t kVoltageComp = 11.5_V;
 }
 
 namespace DrivetrainConstants
@@ -79,3 +81,9 @@ namespace DrivetrainConstants
 
     inline constexpr double kDriveSlowAdjustment = 0.20;
 }
+
+template <typename T>
+constexpr T clamp(T val, T low, T high) 
+{
+    return val > low && val < high ? val : val <= low ? low : high; 
+};
