@@ -26,8 +26,6 @@ SwerveModule::SwerveModule(std::string name, int driveMotorID, int turnMotorID, 
     driveMotorConfig.Slot0.kP = kDriveP;
     driveMotorConfig.Slot0.kI = kDriveI;
     driveMotorConfig.Slot0.kD = kDriveD;
-    driveMotorConfig.Slot0.kS = kDrive_kS.value();
-    driveMotorConfig.Slot0.kV = kDrive_kV.value();
 
     driveMotor.GetConfigurator().Apply(driveMotorConfig);
 
@@ -35,7 +33,7 @@ SwerveModule::SwerveModule(std::string name, int driveMotorID, int turnMotorID, 
     configs::TalonFXConfiguration turnMotorConfig{};
 
     turnMotorConfig.Feedback.FeedbackRemoteSensorID = canCoder.GetDeviceID();
-    turnMotorConfig.Feedback.FeedbackSensorSource = signals::FeedbackSensorSourceValue::FusedCANcoder;
+    turnMotorConfig.Feedback.FeedbackSensorSource = signals::FeedbackSensorSourceValue::RemoteCANcoder;
     turnMotorConfig.Feedback.SensorToMechanismRatio = 1.0;
     // turnMotorConfig.Feedback.RotorToSensorRatio = kTurnGearRatio;
 
@@ -48,15 +46,19 @@ SwerveModule::SwerveModule(std::string name, int driveMotorID, int turnMotorID, 
     turnMotorConfig.OpenLoopRamps.VoltageOpenLoopRampPeriod = 0.15;
     turnMotorConfig.ClosedLoopRamps.VoltageClosedLoopRampPeriod = 0.15;
 
-    turnMotorConfig.Slot0.kP = kTurnP;
-    turnMotorConfig.Slot0.kI = kTurnI;
-    turnMotorConfig.Slot0.kD = kTurnD;
-
     // TODO: find replacement -- try configs::MotorOutputConfigs::WithPeakForwardDutyCycle and configs::MotorOutputConfigs::WithPeakReverseDutyCycle
     // turnMotor.ConfigVoltageCompSaturation(11.0);
     // turnMotor.EnableVoltageCompensation(true);
 
     turnMotor.GetConfigurator().Apply(turnMotorConfig);
+
+    configs::SlotConfigs turnPIDConfig{};
+
+    turnPIDConfig.kP = kTurnP;
+    turnPIDConfig.kI = kTurnI;
+    turnPIDConfig.kD = kTurnD;
+
+    turnMotor.GetConfigurator().Apply(turnPIDConfig);
 
     canCoder.GetConfigurator().Apply(configs::CANcoderConfiguration{});
     configs::CANcoderConfiguration canCoderConfig{};
@@ -65,7 +67,6 @@ SwerveModule::SwerveModule(std::string name, int driveMotorID, int turnMotorID, 
     canCoderConfig.MagnetSensor.AbsoluteSensorRange = signals::AbsoluteSensorRangeValue::Unsigned_0To1;
 
     canCoder.GetConfigurator().Apply(canCoderConfig);
-    
 
     wpi::SendableRegistry::SetName(&driveMotor, name, "Drive");
     wpi::SendableRegistry::SetName(&turnMotor, name, "Turn");
@@ -82,18 +83,20 @@ void SwerveModule::SetDesiredState(const frc::SwerveModuleState &referenceState)
     // modules change directions. This results in smoother driving.
     state.speed *= (state.angle - GetAngle()).Cos();
 
+    auto deltaAngle = units::angle::turn_t(state.angle.operator-(GetAngle()).Degrees().value() / 360);
+
     // Calculate the turning motor output from the turning PID controller.
-    controls::PositionVoltage& turnPos = turnPositionOut.WithPosition(units::angle::turn_t(state.angle.Degrees().value() / 360));
-    turnMotor.SetControl(turnPos.WithSlot(0));
+    controls::PositionVoltage& turnPos = turnPositionOut.WithPosition(deltaAngle + GetCANcoderPosition());
+    turnMotor.SetControl(turnPos);
     // Set the motor outputs.
-    auto setVelocity = units::angular_velocity::turns_per_second_t(state.speed.value() / kDriveDistanceRatio);
-    controls::VelocityVoltage& driveVelocity = driveVelocityOut.WithVelocity(setVelocity);
-    driveMotor.SetControl(driveVelocity.WithSlot(0));
+    // auto setVelocity = units::angular_velocity::turns_per_second_t(state.speed.value() / kDriveDistanceRatio);
+    // controls::VelocityVoltage& driveVelocity = driveVelocityOut.WithVelocity(setVelocity);
+    // driveMotor.SetControl(driveVelocity.WithSlot(0));
+    driveMotor.Set(state.speed.value() / DrivetrainConstants::kMaxSpeed.value() * 0.6);
 
     TelemetryHelperNumber("SetSpeed", state.speed.value());
-    TelemetryHelperNumber("SetMotorSpeed", setVelocity.value());
+    // TelemetryHelperNumber("SetMotorSpeed", setVelocity.value());
     TelemetryHelperNumber("SetAngle", state.angle.Degrees().value());
-    TelemetryHelperNumber("Drive FF", driveMotor.GetClosedLoopFeedForward().GetValue());
 }
 
 void SwerveModule::UpdateTelemetry()

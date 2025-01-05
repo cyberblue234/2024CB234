@@ -40,6 +40,10 @@ public:
     void UpdateOdometry();
     void UpdateTelemetry();
     void SimMode();
+    void ResetGyro()
+    {
+        gyro.Reset();
+    }
 
     void ResetDriveDistances() 
     {

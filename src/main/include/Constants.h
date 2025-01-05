@@ -48,7 +48,7 @@ namespace SwerveModuleConstants
     inline constexpr auto kDrive_kS = 1_V;
     inline constexpr auto kDrive_kV = 0.5_V / 1_tps;
 
-    inline constexpr double kTurnP = 1.0;
+    inline constexpr double kTurnP = 15.0;
     inline constexpr double kTurnI = 0.0;
     inline constexpr double kTurnD = 0.5;
 
@@ -69,13 +69,13 @@ namespace DrivetrainConstants
     inline constexpr frc::Translation2d kBackLeftLocation{-0.3016_m, +0.2699_m};
     inline constexpr frc::Translation2d kBackRightLocation{-0.3016_m, -0.2699_m};
 
-    inline constexpr units::meters_per_second_t kMaxSpeed = 6.0_mps;
-    inline constexpr units::radians_per_second_t kMaxAngularSpeed = std::numbers::pi * 4_rad_per_s;
+    inline constexpr units::meters_per_second_t kMaxSpeed = 4.0_mps;
+    inline constexpr units::radians_per_second_t kMaxAngularSpeed = std::numbers::pi * 2_rad_per_s;
 
-    inline constexpr double kFrontLeftMagnetOffset  = 0.0; //-0.666016;
-    inline constexpr double kFrontRightMagnetOffset = 0.0; //-0.78125;
-    inline constexpr double kBackLeftMagnetOffset   = 0.0; //0.8852546;
-    inline constexpr double kBackRightMagnetOffset  = 0.0; //-0.251953;
+    inline constexpr double kFrontLeftMagnetOffset  = 0.5; //-0.666016;
+    inline constexpr double kFrontRightMagnetOffset = -0.014; //-0.78125;
+    inline constexpr double kBackLeftMagnetOffset   = 0.517; //0.8852546;
+    inline constexpr double kBackRightMagnetOffset  = -0.992; //-0.251953;
 
     inline constexpr double kDriveSlowAdjustment = 0.20;
 }

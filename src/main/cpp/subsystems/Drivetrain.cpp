@@ -9,12 +9,18 @@ void Drivetrain::Drive(units::meters_per_second_t xSpeed,
     frc::SmartDashboard::PutNumber("ySpeed", ySpeed.value());
     frc::SmartDashboard::PutNumber("rot", rot.value());
     
+    // auto states =
+    //     kinematics.ToSwerveModuleStates(frc::ChassisSpeeds::Discretize(
+    //         fieldRelative ? frc::ChassisSpeeds::FromFieldRelativeSpeeds(
+    //                             xSpeed, ySpeed, rot, gyro.GetRotation2d())
+    //                       : frc::ChassisSpeeds{xSpeed, ySpeed, rot},
+    //         period));
     auto states =
-        kinematics.ToSwerveModuleStates(frc::ChassisSpeeds::Discretize(
+        kinematics.ToSwerveModuleStates(
             fieldRelative ? frc::ChassisSpeeds::FromFieldRelativeSpeeds(
                                 xSpeed, ySpeed, rot, gyro.GetRotation2d())
-                          : frc::ChassisSpeeds{xSpeed, ySpeed, rot},
-            period));
+                          : frc::ChassisSpeeds{xSpeed, ySpeed, rot}
+            );
 
     kinematics.DesaturateWheelSpeeds(&states, kMaxSpeed);
 
@@ -59,6 +65,8 @@ void Drivetrain::UpdateTelemetry()
 
     frc::SmartDashboard::PutNumber("X Acceleration", GetXAcceleration());
     frc::SmartDashboard::PutNumber("Y Acceleration", GetYAcceleration());
+    frc::SmartDashboard::PutNumber("Gyro Yaw", gyro.GetRotation2d().Degrees().value());
+
 }
 
 void Drivetrain::SimMode()

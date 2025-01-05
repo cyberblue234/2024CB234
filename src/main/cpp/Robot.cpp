@@ -18,7 +18,9 @@ void Robot::AutonomousInit() {}
 
 void Robot::AutonomousPeriodic() {}
 
-void Robot::TeleopInit() {}
+void Robot::TeleopInit() {
+	swerve.ResetGyro();
+}
 
 void Robot::TeleopPeriodic()
 {
