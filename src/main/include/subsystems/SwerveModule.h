@@ -78,10 +78,7 @@ public:
     units::angle::turn_t GetCANcoderPosition() { return canCoder.GetPosition().GetValue(); };
     /// @brief Returns the absolute position of the CANcoder
     /// @return units::turn_t CANcoder position 
-    units::angle::turn_t GetRawCANcoderPosition() { return canCoder.GetAbsolutePosition().GetValue(); };
-    /// @brief Returns the position of the CANcoder
-    /// @return units::turn_t CANcoder position 
-    units::angle::turn_t GetCANcoderPosition() { return canCoder.GetPosition().GetValue(); };
+    units::angle::turn_t GetAbsoluteCANcoderPosition() { return canCoder.GetAbsolutePosition().GetValue(); };
 
     /// @brief Returns the supply voltage of the drive motor
     /// @return Supply voltage

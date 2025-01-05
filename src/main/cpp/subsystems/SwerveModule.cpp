@@ -84,14 +84,9 @@ void SwerveModule::SetDesiredState(const frc::SwerveModuleState &referenceState)
     state.speed *= (state.angle - GetAngle()).Cos();
 
     auto deltaAngle = units::angle::turn_t(state.angle.operator-(GetAngle()).Degrees().value() / 360);
-
-    units::degree_t deltaAngle = (state.angle.operator-(GetAngle())).Degrees();
-    TelemetryHelperNumber("DeltaAngle", deltaAngle.value());
-    units::angle::turn_t desiredCount = units::angle::turn_t(deltaAngle.value() / 360) + GetCANcoderPosition();
-    TelemetryHelperNumber("DesiredCount", desiredCount.value());
     // Calculate the turning motor output from the turning PID controller.
-    controls::PositionVoltage& turnPos = turnPositionOut.WithPosition(desiredCount);
-    turnMotor.SetControl(turnPos.WithSlot(0));
+    controls::PositionVoltage& turnPos = turnPositionOut.WithPosition(deltaAngle + GetCANcoderPosition());
+    turnMotor.SetControl(turnPos);
     // Set the motor outputs.
     units::volt_t setVoltage = (state.speed / DrivetrainConstants::kMaxSpeed) * kVoltageComp;
     driveMotor.SetVoltage(setVoltage);
